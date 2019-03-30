@@ -1,0 +1,25 @@
+header {
+  grid-area: header;
+  height: 2.5em;
+  background: rgb(48, 49, 51);
+  display: flex;
+  justify-content: flex-end;
+}
+
+header ul.menu {
+  display: flex;
+}
+
+header ul.menu li {
+  display: flex;
+  align-items: center;
+  padding-right: 1.5em;
+}
+
+header ul.menu li a {
+  color: #fff;
+}
+
+header ul.menu span:before {
+  content: " ";
+}

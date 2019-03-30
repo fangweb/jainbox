@@ -1,0 +1,36 @@
+.compose {
+  width: 75%;
+}
+
+.compose form {
+  display: flex;
+  flex-direction: column;
+}
+
+.compose form > * {
+  margin-bottom: 10px;
+  padding: 5px 10px;
+}
+
+.compose form > input.to {
+  width: 25%;
+}
+
+.compose form > textarea.message {
+  height: 300px;
+  resize: none;
+}
+
+.compose form > button.send {
+  padding: 10px 20px;
+  color: #fff;
+  cursor: pointer;
+  background: rgb(25, 127, 37);
+}
+
+.compose form > button.send i {
+  margin-right: 10px;
+}
+
+
+

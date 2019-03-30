@@ -1,0 +1,100 @@
+.messages-panel {
+}
+
+.messages-panel .control {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.messages-panel .control .multiselect {
+  position: relative;
+  border: 1px solid rgb(197, 200, 204);
+  margin-right: 10px;  
+  padding: 5px 10px;  
+  display: flex;
+  align-items: center;
+}
+
+.messages-panel .control .multiselect .dropdown {
+}
+
+.messages-panel .control .multiselect .dropdown > button {
+  display: flex;
+  align-items: flex-end;
+}
+
+.messages-panel .control .multiselect .dropdown > button > i {
+  padding: 0 0 0 5px;
+}
+
+.messages-panel .control .multiselect ul.options {
+  display: none;
+  position: absolute;
+  top: 90%;
+  left: 10%;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid rgb(197, 200, 204); 
+}
+
+.messages-panel .control .multiselect ul.options.show {
+  display: block;
+}
+
+.messages-panel .control .multiselect ul.options li {
+  padding: 10px 30px;
+  cursor: pointer;
+}
+
+.messages-panel .control .multiselect ul.options li:hover {
+  background: rgb(213, 218, 226);
+}
+
+.messages-panel .control .trash {
+  border: 1px solid rgb(197, 200, 204);
+  padding: 5px 10px;    
+}
+
+.messages-panel .control .divider {
+  flex: 1;
+}
+
+.messages-panel .control .pagination > span {
+  margin-right: 10px;
+}
+
+.messages-panel .control .pagination .prev-page {
+  border: 1px solid rgb(197, 200, 204);
+  margin-right: 10px;
+  padding: 5px 10px;    
+}
+
+.messages-panel .control .pagination .next-page {
+  border: 1px solid rgb(197, 200, 204);
+  padding: 5px 10px;    
+}
+
+.messages-panel .messages {
+  border: 1px solid rgb(197, 200, 204);
+}
+
+.messages-panel .messages .message {
+  vertical-align: top;
+  display: flex;
+}
+
+.messages-panel .messages .message:not(:first-child) {
+  border-top: 1px solid rgb(197, 200, 204);
+}
+
+.messages-panel .messages .message > * {
+  padding: 10px;
+}
+
+.messages-panel .messages .message .flex-auto {
+  flex: 1;
+}
+
+.messages-panel .messages .message .time-sent {
+  text-align: right;
+}

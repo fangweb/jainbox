@@ -1,0 +1,31 @@
+.side-menu {
+  grid-area: sidemenu;
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+}
+
+.side-menu button.side-menu__compose {
+  background-color: rgb(188, 24, 24);
+  color: #fff;
+  padding: 10px 20px;
+  margin-left: 15px;
+}
+
+.side-menu ul {
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+.side-menu ul a.link {
+  color: inherit;
+}
+
+.side-menu ul a.link.active {
+  font-size: 18px;
+  color: rgb(188, 24, 24);
+}
+
+.side-menu ul a.link i {
+  width: 25px;
+}
