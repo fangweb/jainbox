@@ -3,7 +3,7 @@ import * as messageQueries from './queries/messages.queries';
 import * as panelQueries from './queries/panel.queries';
 import { Db } from '../db';
 
-export class MessageRepository {
+export class MessagesRepository {
   public static compose({
     createdById,
     receiverName,
@@ -15,7 +15,6 @@ export class MessageRepository {
   }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       Db.tx(async t => {
-        const createdTime = new Date();
         const createdMessage = await t.one(messageQueries.createMessage, {
           createdById,
           receiverName,

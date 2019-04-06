@@ -4,7 +4,7 @@ import {
   UserNotFoundError,
   UserExistsError
 } from '../../common/errors';
-import { UserRepository } from '../../repository';
+import { UserRepository, MessagesRepository, PanelRepository } from '../../repository';
 import { UserService, TokenService } from '../../services';
 import { Db } from '../../db';
 import { QueryFile } from 'pg-promise';
@@ -21,22 +21,21 @@ beforeAll(async done => {
   }
 });
 
-test('create a user', async () => {
+test('create a user, reject an existing user', async () => {
   try {
     const data = await UserRepository.create({ username: 'testname', hash: 'fakehashstring' });
     expect(data.username).toEqual('testname');
   } catch (error) {
     throw error;
   }
-});
 
-test('reject an existing user', async () => {
   try {
-    const data = await UserRepository.create({ username: 'testname', hash: 'fakehashstring' });
+    await UserRepository.create({ username: 'testname', hash: 'fakehashstring' });
     throw new Error('Resolved');
   } catch (error) {
     expect(error).toBeInstanceOf(UserExistsError);
   }
+  
 });
 
 test('get user details', async () => {
@@ -117,6 +116,51 @@ test('test errors for user service', async () => {
   } catch (error) {
     expect(error).toBeInstanceOf(IncorrectPasswordError);
   }
+});
+
+test('messages and panel repository', async() => {
+  let payloadC, payloadD;
+
+  try {
+    const tokenC = await UserService.create('testUserC', 'passwordzy');
+    const tokenD = await UserService.create('testUserD', 'passwordab');
+    payloadC = await TokenService.verify(tokenC);
+    payloadD = await TokenService.verify(tokenD);
+  } catch (error) {
+    throw error;
+  }  
+  
+  try {
+    const msg1 = await MessagesRepository.compose({ createdById: payloadC.username_id, receiverName: 'testUserD', messageText: 'test message 1' });
+    expect(msg1).not.toBeNaN();
+    const msg2 = await MessagesRepository.compose({ createdById: payloadC.username_id, receiverName: 'testUserD', messageText: 'test message 2' });
+    const msg3 = await MessagesRepository.compose({ createdById: payloadC.username_id, receiverName: 'testUserD', messageText: 'test message 3' });
+    const msg4 = await MessagesRepository.compose({ createdById: payloadD.username_id, receiverName: 'testUserC', messageText: 'test message 4' });
+    const msg5 = await MessagesRepository.compose({ createdById: payloadD.username_id, receiverName: 'testUserC', messageText: 'test message 5' });
+    
+    let inboxC = await PanelRepository.getInboxMessages({ usernameId: payloadC.username_id, offset: 0, limit: 10 });
+    let inboxD = await PanelRepository.getInboxMessages({ usernameId: payloadD.username_id, offset: 0, limit: 10 });
+    expect(inboxC.length).toEqual(2);
+    expect(inboxD.length).toEqual(3);
+    
+    const sentC = await PanelRepository.getSentMessages({ usernameId: payloadC.username_id, offset: 0, limit: 10 });
+    const sentD = await PanelRepository.getSentMessages({ usernameId: payloadD.username_id, offset: 0, limit: 10 });   
+    expect(sentC.length).toEqual(3);
+    expect(sentD.length).toEqual(2);   
+    
+    await PanelRepository.putMessageIntoTrash({ usernameId: payloadD.username_id, messageId: msg1.id });
+    await PanelRepository.putMessageIntoTrash({ usernameId: payloadD.username_id, messageId: msg2.id });
+    inboxD = await PanelRepository.getInboxMessages({ usernameId: payloadD.username_id, offset: 0, limit: 10 });  
+    expect(inboxD.length).toEqual(1); 
+    
+    await PanelRepository.putMessageIntoTrash({ usernameId: payloadC.username_id, messageId: msg4.id });     
+    inboxC = await PanelRepository.getInboxMessages({ usernameId: payloadC.username_id, offset: 0, limit: 10 }); 
+    expect(inboxC.length).toEqual(1);     
+    
+  } catch (error) {
+    throw error;
+  }  
+    
 });
 
 afterAll(() => {

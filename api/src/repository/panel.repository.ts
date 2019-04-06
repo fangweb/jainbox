@@ -2,6 +2,7 @@ import * as pgPromise from 'pg-promise';
 import * as panelQueries from './queries/panel.queries';
 import { Db } from '../db';
 
+
 export class PanelRepository {
   public static getInboxMessages({
     usernameId,
@@ -14,11 +15,8 @@ export class PanelRepository {
   }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await Db.any(panelQueries.getPanelMessages, {
+        const result = await Db.any(panelQueries.getPanelInboxMessages, {
           usernameId,
-          showInbox: true,
-          showSent: false,
-          archiveLevel: 0,
           offset,
           limit
         });
@@ -40,11 +38,8 @@ export class PanelRepository {
   }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await Db.any(panelQueries.getPanelMessages, {
+        const result = await Db.any(panelQueries.getPanelSentMessages, {
           usernameId,
-          showInbox: false,
-          showSent: true,
-          archiveLevel: 0,
           offset,
           limit
         });
@@ -66,11 +61,8 @@ export class PanelRepository {
   }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await Db.any(panelQueries.getPanelMessages, {
+        const result = await Db.any(panelQueries.getPanelTrashMessages, {
           usernameId,
-          showInbox: false,
-          showSent: false,
-          archiveLevel: 1,
           offset,
           limit
         });
