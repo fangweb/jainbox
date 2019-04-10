@@ -3,15 +3,20 @@ import {
   UpdateOnlineStatusError,
   UserNotFoundError,
   UserExistsError
-} from '../../common/errors';
-import { UserRepository, MessagesRepository, PanelRepository } from '../../repository';
-import { UserService, TokenService } from '../../services';
-import { Db } from '../../db';
+} from '../common/errors';
+import { Server } from '../server';
+import { IncorrectPasswordMessage, UserNotFoundMessage } from '../common/const';
+import { UserRepository, MessagesRepository, PanelRepository } from '../repository';
+import { UserService, TokenService } from '../services';
+import { Db } from '../db';
 import { QueryFile } from 'pg-promise';
 import * as Path from 'path';
+import * as request from 'supertest';
+
+const application = new Server().getApp();
 
 beforeAll(async done => {
-  const qf = new QueryFile(Path.resolve(__dirname, '../../setup/init.sql'), { minify: true });
+  const qf = new QueryFile(Path.resolve(__dirname, '../setup/init.sql'), { minify: true });
   try {
     await Db.any(qf);
   } catch (error) {
@@ -162,6 +167,87 @@ test('messages and panel repository', async() => {
   }  
     
 });
+
+test('not found', done => {
+  request(application)
+    .get('/notdefined')
+    .set('Accept', 'application/json')
+    .expect('Content-Type', /json/)
+    .expect(404)
+    .end(function(error, response) {
+      if (error) return done(error);
+      expect(response.body).toEqual({ message: 'Endpoint not found' });
+      done();
+    });
+});
+
+test('user controllers', async (done) => {
+  try {
+    const username = 'testuserA',
+          password = 'testPasswordA12';
+    await request(application)
+      .post('/user/create')
+      .send({ username, password })
+      .expect('Authorization', /Bearer/)
+      .expect(200);
+
+    await request(application)
+      .get('/user/sign-in')
+      .send({ username, password })
+      .expect('Authorization', /Bearer/)
+      .expect(200);
+
+    const signinResponse = await request(application)
+      .get('/user/sign-in')
+      .send({ username, password: 'wrongPassword' })
+      .expect(401);
+
+    expect(signinResponse.body.message).toEqual(IncorrectPasswordMessage);
+
+    await request(application)
+      .put('/user/deactivate')
+      .send({ username, password })
+      .expect(200);
+
+    const deactivateResponse = await request(application)
+      .put('/user/deactivate')
+      .send({ username, password })
+      .expect(401);
+
+    expect(deactivateResponse.body.message).toEqual(UserNotFoundMessage);
+    done();
+  } catch (error) {
+    done(error);
+  }
+});
+
+test('panel controllers', async (done) => {
+  try {
+    const username = 'testuserB',
+      password = 'passwordB';
+
+    const createResponse = await request(application)
+      .post('/user/create')
+      .send({ username, password })
+      .expect('Authorization', /Bearer/)
+      .expect(200);
+
+    let inboxResponse = await request(application)
+      .get('/panel/inbox')
+      .expect(401);
+
+    inboxResponse = await request(application)
+      .get('/panel/inbox')
+      .set('Authorization', createResponse.get('Authorization'))
+      .send({ page: 1 })
+      .expect(200);
+    
+    done();
+  } catch (error) {
+    done(error);
+  }
+});
+
 
 afterAll(() => {
   Db.$pool.end();
