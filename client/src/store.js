@@ -7,26 +7,18 @@ import createRootReducer from './modules';
 export const history = createBrowserHistory();
 
 const initialState = {};
-const enhancers = [];
 const middleware = [routerMiddleware(history), thunk];
 
-if (process.env.NODE_ENV === 'development') {
-  const { devToolsExtension } = window.devToolsExtension;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-  if (typeof devToolsExtension === 'function') {
-    enhancers.push(devToolsExtension());
-  }
-}
-
-const composedEnhancers = compose(
+const enhancer = composeEnhancers(
   applyMiddleware(...middleware),
-  ...enhancers
 );
 
 const store = createStore(
   createRootReducer(history),
   initialState,
-  composedEnhancers
+  enhancer
 );
 
 export default store;
