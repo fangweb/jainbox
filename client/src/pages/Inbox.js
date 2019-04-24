@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
-
+import { openModal } from '../pkg/modal';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import '../assets/css/messages-panel.css';
 
 class Inbox extends Component {
@@ -12,7 +14,7 @@ class Inbox extends Component {
     };
   }
 
-  onToggleDropdown = () => {
+  toggleDropdown = () => {
     this.setState(prevState => ({
       dropdownSelected: !prevState.dropdownSelected
     }));
@@ -24,13 +26,17 @@ class Inbox extends Component {
   }
   */
 
-  onHandleOutsideClickForDropdown = () => {
+  handleOutsideClickForDropdown = () => {
     const { dropdownSelected } = this.state;
     if (dropdownSelected) {
-      this.onToggleDropdown();
+      this.toggleDropdown();
     }
   };
-
+  
+  handleTrash = () => {
+    this.props.openModal('CONFIRMATION_MODAL', { title: 'test title' });
+  };
+  
   render() {
     const { dropdownSelected } = this.state;
     return (
@@ -39,10 +45,10 @@ class Inbox extends Component {
           <div className="multiselect">
             <input type="checkbox" />
             <OutsideClickHandler
-              onOutsideClick={this.onHandleOutsideClickForDropdown}
+              onOutsideClick={this.handleOutsideClickForDropdown}
             >
               <div className="dropdown">
-                <button onClick={this.onToggleDropdown}>
+                <button onClick={this.toggleDropdown}>
                   <i className="fas fa-angle-down" />
                 </button>
                 <ul className={`options ${dropdownSelected ? 'show' : ''}`}>
@@ -53,7 +59,7 @@ class Inbox extends Component {
               </div>
             </OutsideClickHandler>
           </div>
-          <button className="trash">
+          <button className="trash" onClick={this.handleTrash}>
             <i className="fas fa-trash-alt" />
           </button>
           <div className="divider" />
@@ -96,4 +102,8 @@ class Inbox extends Component {
   }
 }
 
-export default Inbox;
+const mapDispatchToProps = dispatch => bindActionCreators({
+  openModal
+}, dispatch);
+
+export default connect(null, mapDispatchToProps)(Inbox);

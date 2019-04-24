@@ -19,7 +19,7 @@ class Sent extends Component {
     this.props.testAction();
   }
 
-  onToggleDropdown = () => {
+  toggleDropdown = () => {
     this.setState(prevState => ({
       dropdownSelected: !prevState.dropdownSelected
     }));
@@ -34,7 +34,7 @@ class Sent extends Component {
   onHandleOutsideClickForDropdown = () => {
     const { dropdownSelected } = this.state;
     if (dropdownSelected) {
-      this.onToggleDropdown();
+      this.toggleDropdown();
     }
   };
 
