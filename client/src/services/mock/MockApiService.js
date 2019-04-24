@@ -1,4 +1,4 @@
-import { GetInbox } from './mockApiServiceResponses';
+import { GetInbox } from './Response';
 
 export class MockApiService {
   getInbox() {
