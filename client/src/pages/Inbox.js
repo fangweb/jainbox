@@ -3,6 +3,7 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { openModal } from '../pkg/modal';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { ServiceContainer } from '../services';
 import '../assets/css/messages-panel.css';
 
 class Inbox extends Component {
@@ -13,7 +14,13 @@ class Inbox extends Component {
       dropdownSelected: false
     };
   }
-
+  
+  async componentDidMount() {
+    const api = new ServiceContainer().api();
+    const inboxMessages = await api.getInbox();
+    this.setState({ messages: inboxMessages });
+  }
+  
   toggleDropdown = () => {
     this.setState(prevState => ({
       dropdownSelected: !prevState.dropdownSelected

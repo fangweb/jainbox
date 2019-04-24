@@ -1,13 +1,17 @@
-export default class ApiService {
+import { ApiConst } from '../const';
+import { ServiceContainer } from '../services';
+
+export class ApiService {
   constructor() {
+    const SessionService = ServiceContainer().session();
     this.headers = {
-      Accept: Const.HeaderAcceptValue,
-      Authorization: `${Const.AuthScheme} ${SessionService.GetJwt().token}`,
-      'Content-Type': Const.HeaderContentTypeValue
+      Accept: ApiConst.HeaderAcceptValue,
+      Authorization: `${ApiConst.AuthScheme} ${SessionService.getJwt()}`,
+      'Content-Type': ApiConst.HeaderContentTypeValue
     };
   }
 
-  getInbox() {
+  async getInbox() {
   
   }
 }

@@ -1,9 +1,9 @@
 export class SessionService {
-  public static StoreJwt(token) {
+  static storeJwt(token) {
     localStorage.setItem("jwt", token);
   }
   
-  public static GetJwt() {
+  static getJwt() {
     return localStorage.getItem("jwt");
   }
 
