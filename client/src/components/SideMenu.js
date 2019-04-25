@@ -3,30 +3,14 @@ import { Link, withRouter } from 'react-router-dom';
 import '../assets/css/side-menu.css';
 
 class SideMenu extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      selectedValue: 'inbox'
-    };
-  }
-
-  onSelect = value => {
-    this.setState({ selectedValue: value });
-  };
-
-  isSelected = value => {
-    const { selectedValue } = this.state;
-    return value === selectedValue;
-  };
 
   navigateCompose = () => {
     const { history } = this.props;
-    this.onSelect('compose');
     history.push('/compose');
   };
 
   render() {
+    const { pathname } = this.props.location;
     return (
       <div className="side-menu">
         <div className="compose">
@@ -38,8 +22,7 @@ class SideMenu extends Component {
           <li>
             <Link
               to="/inbox"
-              onClick={() => this.onSelect('inbox')}
-              className={`link ${this.isSelected('inbox') ? 'active' : ''}`}
+              className={`link ${pathname === '/' || pathname === '/inbox' ? 'active' : ''}`}
             >
               <i className="fas fa-inbox" />
               <span>Inbox</span>
@@ -48,8 +31,7 @@ class SideMenu extends Component {
           <li>
             <Link
               to="/sent"
-              onClick={() => this.onSelect('sent')}
-              className={`link ${this.isSelected('sent') ? 'active' : ''}`}
+              className={`link ${pathname === '/sent'  ? 'active' : ''}`}
             >
               <i className="fas fa-envelope-square" />
               <span>Sent Messages</span>
@@ -58,8 +40,7 @@ class SideMenu extends Component {
           <li>
             <Link
               to="/trash"
-              onClick={() => this.onSelect('trash')}
-              className={`link ${this.isSelected('trash') ? 'active' : ''}`}
+              className={`link ${pathname === '/trash'  ? 'active' : ''}`}
             >
               <i className="fas fa-trash-alt" />
               <span>Trash</span>
