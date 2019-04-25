@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { ServiceContainer } from '../services';
+import NoMessages from '../components/NoMessages';
 
 import '../assets/css/messages-panel.css';
 
@@ -8,8 +10,15 @@ class Trash extends Component {
     super(props);
 
     this.state = {
-      dropdownSelected: false
+      dropdownSelected: false,
+      trashMessages: []
     };
+  }
+
+  async componentDidMount() {
+    const api = new ServiceContainer().api();
+    const trashMessages = await api.getTrash();
+    this.setState({ trashMessages });
   }
 
   onToggleDropdown = () => {
@@ -32,7 +41,7 @@ class Trash extends Component {
   };
 
   render() {
-    const { dropdownSelected } = this.state;
+    const { dropdownSelected, trashMessages } = this.state;
     return (
       <div className="trash messages-panel">
         <div className="control">
@@ -67,32 +76,46 @@ class Trash extends Component {
           </div>
         </div>
         <div className="messages">
-          <div className="message">
-            <div className="checkbox">
-              <input type="checkbox" />
-            </div>
-            <div className="sender flex-auto">
-              <b>Test name 123456</b>
-            </div>
-            <div className="title flex-auto">
-              <b>Welcome to the group</b>
-            </div>
-            <div className="time-sent flex-auto">
-              <b>6:30 AM</b>
-            </div>
-          </div>
-          <div className="message">
-            <div className="checkbox">
-              <input type="checkbox" />
-            </div>
-            <div className="sender flex-auto">Test name 123456</div>
-            <div className="title flex-auto">Welcome to the group</div>
-            <div className="time-sent flex-auto">6:30 AM</div>
-          </div>
+          {this.displayTrashMessages(trashMessages, "You have no messages")}
         </div>
       </div>
     );
   }
+  
+  displayTrashMessages(trashMessages, notice) {
+    if (trashMessages.length >= 1) {
+      return (
+        <React.Fragment>
+          {
+            trashMessages.map(message => {
+              const e = new Date(message.created_at);
+              const timeSent = e.toLocaleTimeString();
+              return (
+                <div key={message.panel_id} className="message">
+                  <div className="checkbox">
+                    <input type="checkbox" />
+                  </div>
+                  <div className={`sender flex-auto`}>
+                    {message.username}
+                  </div>
+                  <div className={`title flex-auto`}>
+                    {message.title}
+                  </div>
+                  <div className={`time-sent flex-auto`}>
+                    {timeSent}
+                  </div>
+                </div>  
+              );
+            })
+          }
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <NoMessages notice={notice} />
+      );
+    }
+  }  
 }
 
 export default Trash;

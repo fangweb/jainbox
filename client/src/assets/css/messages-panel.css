@@ -98,3 +98,9 @@
 .messages-panel .messages .message .time-sent {
   text-align: right;
 }
+
+.messages-panel .messages .message .bold-view {
+  font-weight: bold;
+}
+
+

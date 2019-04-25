@@ -4,6 +4,7 @@ import { openModal } from '../pkg/modal';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ServiceContainer } from '../services';
+import NoMessages from '../components/NoMessages';
 import '../assets/css/messages-panel.css';
 
 class Inbox extends Component {
@@ -11,14 +12,15 @@ class Inbox extends Component {
     super(props);
 
     this.state = {
-      dropdownSelected: false
+      dropdownSelected: false,
+      inboxMessages: []
     };
   }
   
   async componentDidMount() {
     const api = new ServiceContainer().api();
     const inboxMessages = await api.getInbox();
-    this.setState({ messages: inboxMessages });
+    this.setState({ inboxMessages });
   }
   
   toggleDropdown = () => {
@@ -45,7 +47,8 @@ class Inbox extends Component {
   };
   
   render() {
-    const { dropdownSelected } = this.state;
+    const { dropdownSelected, inboxMessages } = this.state;
+
     return (
       <div className="inbox messages-panel">
         <div className="control">
@@ -81,31 +84,45 @@ class Inbox extends Component {
           </div>
         </div>
         <div className="messages">
-          <div className="message">
-            <div className="checkbox">
-              <input type="checkbox" />
-            </div>
-            <div className="sender flex-auto">
-              <b>Test name 123456</b>
-            </div>
-            <div className="title flex-auto">
-              <b>Welcome to the group</b>
-            </div>
-            <div className="time-sent flex-auto">
-              <b>6:30 AM</b>
-            </div>
-          </div>
-          <div className="message">
-            <div className="checkbox">
-              <input type="checkbox" />
-            </div>
-            <div className="sender flex-auto">Test name 123456</div>
-            <div className="title flex-auto">Welcome to the group</div>
-            <div className="time-sent flex-auto">6:30 AM</div>
-          </div>
+          {this.displayInboxMessages(inboxMessages, "You have no messages")}
         </div>
       </div>
     );
+  }
+  
+  displayInboxMessages(inboxMessages, notice) {
+    if (inboxMessages.length >= 1) {
+      return (
+        <React.Fragment>
+          {
+            inboxMessages.map(message => {
+              const e = new Date(message.created_at);
+              const timeSent = e.toLocaleTimeString();
+              return (
+                <div key={message.panel_id} className="message">
+                  <div className="checkbox">
+                    <input type="checkbox" />
+                  </div>
+                  <div className={`sender flex-auto ${!message.viewed ? "bold-view" : ""}`}>
+                    {message.username}
+                  </div>
+                  <div className={`title flex-auto ${!message.viewed ? "bold-view" : ""}`}>
+                    {message.title}
+                  </div>
+                  <div className={`time-sent flex-auto ${!message.viewed ? "bold-view" : ""}`}>
+                    {timeSent}
+                  </div>
+                </div>  
+              );
+            })
+          }
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <NoMessages notice={notice} />
+      );
+    }
   }
 }
 

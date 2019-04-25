@@ -3,6 +3,8 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { testAction } from '../modules/inbox';
+import { ServiceContainer } from '../services';
+import NoMessages from '../components/NoMessages';
 
 import '../assets/css/messages-panel.css';
 
@@ -11,12 +13,15 @@ class Sent extends Component {
     super(props);
 
     this.state = {
-      dropdownSelected: false
+      dropdownSelected: false,
+      sentMessages: []
     };
   }
 
-  componentDidMount() {
-    this.props.testAction();
+  async componentDidMount() {
+    const api = new ServiceContainer().api();
+    const sentMessages = await api.getSent();
+    this.setState({ sentMessages });
   }
 
   toggleDropdown = () => {
@@ -39,7 +44,7 @@ class Sent extends Component {
   };
 
   render() {
-    const { dropdownSelected } = this.state;
+    const { dropdownSelected, sentMessages } = this.state;
     return (
       <div className="sent-messages messages-panel">
         <div className="control">
@@ -74,32 +79,47 @@ class Sent extends Component {
           </div>
         </div>
         <div className="messages">
-          <div className="message">
-            <div className="checkbox">
-              <input type="checkbox" />
-            </div>
-            <div className="sender flex-auto">
-              <b>Test name 123456</b>
-            </div>
-            <div className="title flex-auto">
-              <b>Welcome to the group</b>
-            </div>
-            <div className="time-sent flex-auto">
-              <b>6:30 AM</b>
-            </div>
-          </div>
-          <div className="message">
-            <div className="checkbox">
-              <input type="checkbox" />
-            </div>
-            <div className="sender flex-auto">Test name 123456</div>
-            <div className="title flex-auto">Welcome to the group</div>
-            <div className="time-sent flex-auto">6:30 AM</div>
-          </div>
+          {this.displaySentMessages(sentMessages, "You have no messages")}
         </div>
       </div>
     );
   }
+
+  displaySentMessages(sentMessages, notice) {
+    if (sentMessages.length >= 1) {
+      return (
+        <React.Fragment>
+          {
+            sentMessages.map(message => {
+              const e = new Date(message.created_at);
+              const timeSent = e.toLocaleTimeString();
+              return (
+                <div key={message.panel_id} className="message">
+                  <div className="checkbox">
+                    <input type="checkbox" />
+                  </div>
+                  <div className={`sender flex-auto`}>
+                    {message.username}
+                  </div>
+                  <div className={`title flex-auto`}>
+                    {message.title}
+                  </div>
+                  <div className={`time-sent flex-auto`}>
+                    {timeSent}
+                  </div>
+                </div>  
+              );
+            })
+          }
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <NoMessages notice={notice} />
+      );
+    }
+  }
+  
 }
 
 const mapDispatchToProps = dispatch =>
