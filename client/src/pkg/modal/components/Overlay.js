@@ -30,9 +30,7 @@ class OverlayC extends React.Component {
   
   render() {
     return (
-      <div className={styles.overlay} onClick={this.onOverlayClick}>
-        {this.props.children}
-      </div>
+      <div className={styles.overlay} onClick={this.onOverlayClick} />
     );
   }
   
