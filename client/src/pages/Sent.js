@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { testAction } from '../modules/inbox';
+import { testAction } from '../modules/inbox-module';
 import { ServiceContainer } from '../services';
 import NoMessages from '../components/NoMessages';
 
@@ -14,7 +14,8 @@ class Sent extends Component {
 
     this.state = {
       dropdownSelected: false,
-      sentMessages: []
+      sentMessages: [],
+      selectAll: false
     };
   }
 
@@ -42,6 +43,10 @@ class Sent extends Component {
       this.toggleDropdown();
     }
   };
+  
+  selectCheckboxes = (selectAll) => {
+    this.setState({ selectAll })
+  };
 
   render() {
     const { dropdownSelected, sentMessages } = this.state;
@@ -58,8 +63,8 @@ class Sent extends Component {
                   <i className="fas fa-angle-down" />
                 </button>
                 <ul className={`options ${dropdownSelected ? 'show' : ''}`}>
-                  <li>All</li>
-                  <li>None</li>
+                  <li onClick={() => this.selectCheckboxes(true)}>All</li>
+                  <li onClick={() => this.selectCheckboxes(false)}>None</li>
                 </ul>
               </div>
             </OutsideClickHandler>
@@ -86,6 +91,7 @@ class Sent extends Component {
   }
 
   displaySentMessages(sentMessages, notice) {
+    const { selectAll } = this.state;
     if (sentMessages.length >= 1) {
       return (
         <React.Fragment>
@@ -96,7 +102,7 @@ class Sent extends Component {
               return (
                 <div key={message.panel_id} className="message">
                   <div className="checkbox">
-                    <input type="checkbox" />
+                    <input defaultChecked={selectAll} type="checkbox" />
                   </div>
                   <div className={`sender flex-auto`}>
                     {message.username}

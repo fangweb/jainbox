@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { openModal } from '../pkg/modal';
+import { getInbox, selectAll, selectNone, selectAllUnread, selectSingle } from '../modules/inbox-module';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { ServiceContainer } from '../services';
+import Checkbox from '../components/Checkbox';
 import NoMessages from '../components/NoMessages';
 import '../assets/css/messages-panel.css';
 
@@ -13,22 +14,19 @@ class Inbox extends Component {
 
     this.state = {
       dropdownSelected: false,
-      inboxMessages: []
     };
   }
-  
+
   async componentDidMount() {
-    const api = new ServiceContainer().api();
-    const inboxMessages = await api.getInbox();
-    this.setState({ inboxMessages });
+    await this.props.getInbox();
   }
   
   toggleDropdown = () => {
     this.setState(prevState => ({
       dropdownSelected: !prevState.dropdownSelected
     }));
-  };
-
+  }
+  
   /* TODO:
   onDropdownSelect = (value) => {
     // switch, no need to store state value of selected option 
@@ -40,20 +38,39 @@ class Inbox extends Component {
     if (dropdownSelected) {
       this.toggleDropdown();
     }
-  };
+  }
   
-  handleTrash = () => {
+  selectAll = () => {
+    this.props.selectAll();
+    this.toggleDropdown();
+  }
+  
+  selectNone = () => {
+    this.props.selectNone();
+    this.toggleDropdown();
+  }
+  
+  selectAllUnread = () => {
+    this.props.selectAllUnread();
+    this.toggleDropdown();
+  }
+  
+  selectSingle = (panelId, isSelected) => {
+    this.props.selectSingle(panelId, isSelected);
+  }
+  
+  handleTrashAction = () => {
     this.props.openModal('CONFIRMATION_MODAL', { title: 'test title' });
-  };
+  }
   
   render() {
-    const { dropdownSelected, inboxMessages } = this.state;
-
+    const { dropdownSelected } = this.state;
+    const { inboxMessages } = this.props.inbox;
+    
     return (
       <div className="inbox messages-panel">
         <div className="control">
           <div className="multiselect">
-            <input type="checkbox" />
             <OutsideClickHandler
               onOutsideClick={this.handleOutsideClickForDropdown}
             >
@@ -62,14 +79,14 @@ class Inbox extends Component {
                   <i className="fas fa-angle-down" />
                 </button>
                 <ul className={`options ${dropdownSelected ? 'show' : ''}`}>
-                  <li>All</li>
-                  <li>Unread</li>
-                  <li>None</li>
+                  <li onClick={() => this.selectAll()}>All</li>
+                  <li onClick={() => this.selectAllUnread()}>Unread</li>
+                  <li onClick={() => this.selectNone()}>None</li>
                 </ul>
               </div>
             </OutsideClickHandler>
           </div>
-          <button className="trash" onClick={this.handleTrash}>
+          <button className="trash" onClick={this.handleTrashAction}>
             <i className="fas fa-trash-alt" />
           </button>
           <div className="divider" />
@@ -101,7 +118,7 @@ class Inbox extends Component {
               return (
                 <div key={message.panel_id} className="message">
                   <div className="checkbox">
-                    <input type="checkbox" />
+                    <Checkbox checked={message.selected} panelId={message.panel_id} selectSingle={this.selectSingle} />
                   </div>
                   <div className={`sender flex-auto ${!message.viewed ? "bold-view" : ""}`}>
                     {message.username}
@@ -126,8 +143,17 @@ class Inbox extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  inbox: state.inboxReducer
+}); 
+
 const mapDispatchToProps = dispatch => bindActionCreators({
-  openModal
+  openModal,
+  getInbox,
+  selectAll,
+  selectNone,
+  selectAllUnread,
+  selectSingle
 }, dispatch);
 
-export default connect(null, mapDispatchToProps)(Inbox);
+export default connect(mapStateToProps, mapDispatchToProps)(Inbox);
