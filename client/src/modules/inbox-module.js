@@ -1,7 +1,5 @@
 import { ServiceContainer } from '../services';
 
-export const TEST_CONST = 'timeline/TEST_CONST';
-
 export const GET_INBOX = 'inbox/GET_INBOX';
 export const SELECT_ALL = 'inbox/SELECT_ALL';
 export const SELECT_ALL_UNREAD ='inbox/SELECT_ALL_UNREAD';
@@ -66,12 +64,6 @@ export default (state = initialState, action) => {
     default:
       return state;
   }
-};
-
-export const testAction = () => {
-  return dispatch => {
-    dispatch({ type: 'TEST' });
-  };
 };
 
 export const getInbox = () => {
