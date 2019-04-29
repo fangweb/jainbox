@@ -26,12 +26,6 @@ class Inbox extends Component {
       dropdownSelected: !prevState.dropdownSelected
     }));
   }
-  
-  /* TODO:
-  onDropdownSelect = (value) => {
-    // switch, no need to store state value of selected option 
-  }
-  */
 
   handleOutsideClickForDropdown = () => {
     const { dropdownSelected } = this.state;
