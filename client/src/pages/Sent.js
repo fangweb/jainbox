@@ -1,77 +1,23 @@
 import React, { Component } from 'react';
-import OutsideClickHandler from 'react-outside-click-handler';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { testAction } from '../modules/inbox-module';
-import { ServiceContainer } from '../services';
+import { getSent } from '../modules/sent-module';
 import NoMessages from '../components/NoMessages';
 
 import '../assets/css/messages-panel.css';
 
 class Sent extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      dropdownSelected: false,
-      sentMessages: [],
-      selectAll: false
-    };
-  }
 
   async componentDidMount() {
-    const api = new ServiceContainer().api();
-    const sentMessages = await api.getSent();
-    this.setState({ sentMessages });
+    await this.props.getSent();
   }
-
-  toggleDropdown = () => {
-    this.setState(prevState => ({
-      dropdownSelected: !prevState.dropdownSelected
-    }));
-  };
-
-  /** TODO
-  onDropdownSelect = (value) => {
-    // switch, no need to store state value of selected option 
-  }
-  */
-
-  onHandleOutsideClickForDropdown = () => {
-    const { dropdownSelected } = this.state;
-    if (dropdownSelected) {
-      this.toggleDropdown();
-    }
-  };
   
-  selectCheckboxes = (selectAll) => {
-    this.setState({ selectAll })
-  };
 
   render() {
-    const { dropdownSelected, sentMessages } = this.state;
+    const { sentMessages } = this.props.sent;
     return (
       <div className="sent-messages messages-panel">
         <div className="control">
-          <div className="multiselect">
-            <input type="checkbox" />
-            <OutsideClickHandler
-              onOutsideClick={this.onHandleOutsideClickForDropdown}
-            >
-              <div className="dropdown">
-                <button onClick={this.onToggleDropdown}>
-                  <i className="fas fa-angle-down" />
-                </button>
-                <ul className={`options ${dropdownSelected ? 'show' : ''}`}>
-                  <li onClick={() => this.selectCheckboxes(true)}>All</li>
-                  <li onClick={() => this.selectCheckboxes(false)}>None</li>
-                </ul>
-              </div>
-            </OutsideClickHandler>
-          </div>
-          <button className="trash">
-            <i className="fas fa-trash-alt" />
-          </button>
           <div className="divider" />
           <div className="pagination">
             <span>Displaying 1-10 of 57</span>
@@ -91,7 +37,6 @@ class Sent extends Component {
   }
 
   displaySentMessages(sentMessages, notice) {
-    const { selectAll } = this.state;
     if (sentMessages.length >= 1) {
       return (
         <React.Fragment>
@@ -101,9 +46,6 @@ class Sent extends Component {
               const timeSent = e.toLocaleTimeString();
               return (
                 <div key={message.panel_id} className="message">
-                  <div className="checkbox">
-                    <input defaultChecked={selectAll} type="checkbox" />
-                  </div>
                   <div className={`sender flex-auto`}>
                     {message.username}
                   </div>
@@ -128,15 +70,19 @@ class Sent extends Component {
   
 }
 
+const mapStateToProps = (state) => ({
+  sent: state.sentReducer
+});
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      testAction
+      getSent
     },
     dispatch
   );
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Sent);
