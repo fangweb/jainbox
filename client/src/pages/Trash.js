@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { ServiceContainer } from '../services';
+import { getTrash, selectAll, selectNone, selectSingle } from '../modules/trash-module';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import Checkbox from '../components/Checkbox';
 import NoMessages from '../components/NoMessages';
 
 import '../assets/css/messages-panel.css';
@@ -11,52 +14,58 @@ class Trash extends Component {
 
     this.state = {
       dropdownSelected: false,
-      trashMessages: []
     };
   }
 
   async componentDidMount() {
-    const api = new ServiceContainer().api();
-    const trashMessages = await api.getTrash();
-    this.setState({ trashMessages });
+    await this.props.getTrash();
   }
 
-  onToggleDropdown = () => {
+  toggleDropdown = () => {
     this.setState(prevState => ({
       dropdownSelected: !prevState.dropdownSelected
     }));
   };
 
-  /* TODO:
-  onDropdownSelect = (value) => {
-    // switch, no need to store state value of selected option 
-  }
-  */
-
-  onHandleOutsideClickForDropdown = () => {
+  handleOutsideClickForDropdown = () => {
     const { dropdownSelected } = this.state;
     if (dropdownSelected) {
-      this.onToggleDropdown();
+      this.toggleDropdown();
     }
   };
 
+  selectAll = () => {
+    this.props.selectAll();
+    this.toggleDropdown();
+  }
+  
+  selectNone = () => {
+    this.props.selectNone();
+    this.toggleDropdown();
+  }
+  
+  selectSingle = (panelId, isSelected) => {
+    this.props.selectSingle(panelId, isSelected);
+  }
+
   render() {
-    const { dropdownSelected, trashMessages } = this.state;
+    const { dropdownSelected } = this.state;
+    const { trashMessages } = this.props.trash;
+    
     return (
       <div className="trash messages-panel">
         <div className="control">
           <div className="multiselect">
-            <input type="checkbox" />
             <OutsideClickHandler
-              onOutsideClick={this.onHandleOutsideClickForDropdown}
+              onOutsideClick={this.handleOutsideClickForDropdown}
             >
               <div className="dropdown">
-                <button onClick={this.onToggleDropdown}>
+                <button onClick={this.toggleDropdown}>
                   <i className="fas fa-angle-down" />
                 </button>
                 <ul className={`options ${dropdownSelected ? 'show' : ''}`}>
-                  <li>All</li>
-                  <li>None</li>
+                  <li onClick={() => this.selectAll()}>All</li>
+                  <li onClick={() => this.selectNone()}>None</li>
                 </ul>
               </div>
             </OutsideClickHandler>
@@ -93,9 +102,9 @@ class Trash extends Component {
               return (
                 <div key={message.panel_id} className="message">
                   <div className="checkbox">
-                    <input type="checkbox" />
+                    <Checkbox checked={message.selected} panelId={message.panel_id} selectSingle={this.selectSingle} />
                   </div>
-                  <div className={`sender flex-auto`}>
+                  <div clas1sName={`sender flex-auto`}>
                     {message.username}
                   </div>
                   <div className={`title flex-auto`}>
@@ -115,7 +124,18 @@ class Trash extends Component {
         <NoMessages notice={notice} />
       );
     }
-  }  
+  }
 }
 
-export default Trash;
+const mapStateToProps = (state) => ({
+  trash: state.trashReducer
+}); 
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getTrash,
+  selectAll,
+  selectNone,
+  selectSingle
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Trash);
