@@ -21,6 +21,10 @@ class Inbox extends Component {
     await this.props.getInbox();
   }
   
+  componentWillUnmount() {
+    this.props.selectNone();
+  }
+  
   toggleDropdown = () => {
     this.setState(prevState => ({
       dropdownSelected: !prevState.dropdownSelected
@@ -114,7 +118,7 @@ class Inbox extends Component {
                   <div className="checkbox">
                     <Checkbox checked={message.selected} panelId={message.panel_id} selectSingle={this.selectSingle} />
                   </div>
-                  <div className={`sender flex-auto ${!message.viewed ? "bold-view" : ""}`}>
+                  <div className={`username flex-auto ${!message.viewed ? "bold-view" : ""}`}>
                     {message.username}
                   </div>
                   <div className={`title flex-auto ${!message.viewed ? "bold-view" : ""}`}>

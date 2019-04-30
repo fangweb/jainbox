@@ -4,7 +4,7 @@ export const GET_TRASH = 'trash/GET_TRASH';
 export const SELECT_ALL = 'trash/SELECT_ALL';
 export const SELECT_NONE = 'trash/SELECT_NONE';
 export const SELECT_SINGLE = 'trash/SELECT_SINGLE';
-export const TRASH_SELECTED = 'trash/TRASH_SELECTED';
+export const DELETE_SELECTED = 'trash/DELETE_SELECTED';
 
 const initialState = {
   trashMessages: []
@@ -83,7 +83,7 @@ export const selectSingle = (panelId, isSelected) => {
 
 export const trashSelected = () => {
   return {
-    type: TRASH_SELECTED
+    type: DELETE_SELECTED
   };
 };
 

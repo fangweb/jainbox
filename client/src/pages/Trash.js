@@ -21,18 +21,22 @@ class Trash extends Component {
     await this.props.getTrash();
   }
 
+  componentWillUnmount() {
+    this.props.selectNone();
+  }
+
   toggleDropdown = () => {
     this.setState(prevState => ({
       dropdownSelected: !prevState.dropdownSelected
     }));
-  };
+  }
 
   handleOutsideClickForDropdown = () => {
     const { dropdownSelected } = this.state;
     if (dropdownSelected) {
       this.toggleDropdown();
     }
-  };
+  }
 
   selectAll = () => {
     this.props.selectAll();
@@ -104,7 +108,7 @@ class Trash extends Component {
                   <div className="checkbox">
                     <Checkbox checked={message.selected} panelId={message.panel_id} selectSingle={this.selectSingle} />
                   </div>
-                  <div clas1sName={`sender flex-auto`}>
+                  <div className={`username flex-auto`}>
                     {message.username}
                   </div>
                   <div className={`title flex-auto`}>
