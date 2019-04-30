@@ -2,4 +2,7 @@ footer {
   grid-area: footer;
   display: flex;
   justify-content: center;
+  align-items: center;
+  color: #e3e5ea;
+  background: rgb(48, 49, 51);
 }
