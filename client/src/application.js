@@ -8,7 +8,9 @@ import Sent from './pages/Sent';
 import Trash from './pages/Trash';
 import Message from './pages/Message';
 import Layout from './components/Layout';
+import { TestArea } from './pkg/testArea';
 import { Modal } from './pkg/modal';
+import { Toast } from './pkg/toast';
 
 function Application() {
   return (
@@ -50,10 +52,17 @@ function Application() {
             key="message"
             component={Message}
           />
+          <Route
+            path="/testarea"
+            name="testArea"
+            key="testArea"
+            component={TestArea}
+          />
           {/* TODO: not found */}
         </Switch>
       </Layout>
       <Modal />
+      <Toast />
     </React.Fragment>
   );
 }

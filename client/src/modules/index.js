@@ -5,6 +5,7 @@ import inboxReducer from './inbox-module';
 import sentReducer from './sent-module';
 import trashReducer from './trash-module';
 import { reducer as modalReducer } from '../pkg/modal';
+import { reducer as toastReducer } from '../pkg/toast';
 
 export default history =>
   combineReducers({
@@ -12,5 +13,6 @@ export default history =>
     sentReducer,
     trashReducer,
     modalReducer,
+    toastReducer,
     router: connectRouter(history)
   });
