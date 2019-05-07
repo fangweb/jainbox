@@ -1,6 +1,8 @@
 import { MockApiService } from './mock/mockApiService';
-import { SessionService } from './sessionService';
+import { MockWsService } from './mock/mockWsService';
 import { ApiService } from './apiService';
+import { WsService } from './wsService';
+import { SessionService } from './sessionService';
 
 export class ServiceContainer {
   constructor() {
@@ -10,8 +12,13 @@ export class ServiceContainer {
   api() {
     return this.devEnv ? new MockApiService() : new ApiService();
   }
+
+  ws() {
+    return this.devEnv ? new MockWsService() : new WsService();
+  }
   
   session() {
     return SessionService;
   }
+  
 }
