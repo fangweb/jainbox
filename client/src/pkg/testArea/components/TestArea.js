@@ -21,7 +21,8 @@ class TestAreaC extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: ''
+      message: '',
+      dropdownTitle: null
     };
   }
 
@@ -31,6 +32,21 @@ class TestAreaC extends Component {
   
   activateToast = () => {
     this.props.activateToast("SUCCESS_TOAST", { message: this.state.message });
+  }
+  
+  setDropdownTitle = (dropdownTitle) => {
+    if (this.state.dropdownTitle !== dropdownTitle) {
+      this.setState({ dropdownTitle });
+    }      
+  }
+  
+  getDropdownTitle = () => {
+    const { dropdownTitle } = this.state;
+    if (dropdownTitle === null) {
+      return "Select a user";
+    } else {
+      return dropdownTitle;
+    }
   }
   
   render() {
@@ -43,7 +59,7 @@ class TestAreaC extends Component {
           </button>
         </section>
         <section className={styles.section}>
-          <Dropdown title="Select a user" data={dropdownData} onSelectItem={(value) => console.log(value)} />
+          <Dropdown title={this.getDropdownTitle()} data={dropdownData} onSelectItem={(value) => this.setDropdownTitle(value.username)} />
         </section>
       </div>
     );

@@ -8,7 +8,7 @@ export class Dropdown extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     onSelectItem: PropTypes.func.isRequired,
-    data: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })) 
+    data: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })),
   }
   
   constructor(props) {
