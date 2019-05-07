@@ -1,0 +1,40 @@
+.menu {
+  position: absolute;
+  margin-top: 5px;
+  top: 100%;
+  min-width: 150%;
+  box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.25);
+  z-index: 99997;
+  display: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.opened {
+  display: block;
+}
+
+.dropdownBtn {
+  background: rgb(113, 103, 117);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.toggleDropdown {
+
+}
+
+.item {
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.item:hover {
+  background: rgb(113, 103, 117);
+  color: #fff;
+}
+
