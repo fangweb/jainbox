@@ -1,9 +1,9 @@
 .success {
-  align-items: center;
-  border-radius: 10px;
   display: flex;
+  align-items: center;
+  justify-content: space-between;  
+  border-radius: 10px;
   height: 50px;
-  justify-content: space-between;
   left: 50%;
   position: fixed;
   transform: translateX(-50%) translateY(150%);
