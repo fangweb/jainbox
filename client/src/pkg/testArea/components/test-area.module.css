@@ -2,6 +2,10 @@
 
 }
 
+.section {
+  padding-bottom: 20px;
+}
+
 .toastButton {
   border: 1px solid rgb(9, 63, 5);
   color: rgb(9, 63, 5);

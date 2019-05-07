@@ -3,7 +3,18 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styles from './test-area.module.css';
 import { activateToast } from '../../toast';
+import { Dropdown } from '../../dropdown';
 
+const dropdownData = [{
+  id: 1,
+  username: 'testUserA'
+}, {
+  id: 2,
+  username: 'testingForB'
+}, {
+  id: 3,
+  username: 'tester3forOne'
+}];
 
 class TestAreaC extends Component {
   
@@ -25,12 +36,15 @@ class TestAreaC extends Component {
   render() {
     return (
       <div className={styles.testArea}>
-        <div className={styles.toastArea}>
+        <section className={styles.section}>
           <input type="text" value={this.state.message} onChange={this.handleMessage} />
           <button className={styles.toastButton} onClick={this.activateToast}>
             Activate Toast
           </button>
-        </div>
+        </section>
+        <section className={styles.section}>
+          <Dropdown title="Select a user" data={dropdownData} onSelectItem={(value) => console.log(value)} />
+        </section>
       </div>
     );
   }
