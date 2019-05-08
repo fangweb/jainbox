@@ -1,6 +1,6 @@
 export class WsService {
 
-  async getOnlineUsers() {
+  async initialize() {
   
   }
 }

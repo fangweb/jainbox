@@ -1,31 +1,73 @@
 import React, { Component } from 'react';
-
+import { Dropdown } from '../pkg/dropdown';
 import '../assets/css/compose.css';
-
-const dropDown = () => {
-  return <input placeholder="To" type="text" className="to" />;
-};
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { setForm, clearForm, sendForm } from '../modules/compose-module';
 
 class Compose extends Component {
-  /* TODO:
-  constructor(props) {
-    super(props);
-    this.state = {
-      sending: false
-    };
+  
+  componentWillUnmount() {
+    if (this.props.sending) {
+      
+    } else {
+      this.props.clearForm();
+    }
   }
-  */
-
-  onSend = e => {
+  
+  send = e => {
     e.preventDefault();
   };
-
+  
+  selectedFromDropdown = selected => {
+     this.props.setForm({ 'to': selected.username });
+  }
+  
+  setForm = e => {
+    const target = e.target;
+    const { name, value } = target;
+    
+    this.props.setForm({ [name]: value });
+  }
+  
+  onClearForm = e => {
+    e.preventDefault();
+    this.props.clearForm();
+  }
+  
+  getDropdownTitle = () => {
+    const { form } = this.props.compose;
+    if (!form.to) {
+      return (
+        <React.Fragment>
+          <i className="fas fa-user cfa"></i>
+          <span>Select a user</span>
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <React.Fragment>
+          <i className="fas fa-user cfa"></i>
+          <span>{form.to}</span>
+        </React.Fragment>
+      );
+    }
+  }
+  
   render() {
+    const { ws, compose } = this.props;
+    
     return (
       <div className="compose">
         <form onSubmit={this.onSend}>
-          {dropDown()}
-          <textarea placeholder="Message" className="message" />
+          <div className="compose-ctrl">
+            <Dropdown title={this.getDropdownTitle()} data={ws.onlineUsers} onSelectItem={this.selectedFromDropdown} />
+            <button onClick={this.onClearForm} type="submit" className="clear">
+              <i className="fas fa-eraser cfa"></i><span>Clear Form</span>
+            </button>
+          </div>
+          <input name="title" onChange={this.setForm} value={compose.form.title} placeholder="Title" type="text" />
+          <textarea name="message" onChange={this.setForm} value={compose.form.message} placeholder="Message" className="message" />
           <button type="submit" className="send">
             <i className="fas fa-share-square" />
             <span>Send</span>
@@ -36,4 +78,22 @@ class Compose extends Component {
   }
 }
 
-export default Compose;
+const mapStateToProps = state => ({
+  ws: state.wsReducer,
+  compose: state.composeReducer
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      setForm,
+      clearForm,
+      sendForm
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Compose);;

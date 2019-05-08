@@ -1,4 +1,5 @@
 import { getInbox, getSent, getTrash } from './response';
+import { wait } from '../../helpers';
 
 export class MockApiService {
   getInbox() {
@@ -11,5 +12,10 @@ export class MockApiService {
   
   getTrash() {
     return Promise.resolve(getTrash);
+  }
+  
+  async compose(form) {
+    await wait(3000);
+    return true;
   }
 }

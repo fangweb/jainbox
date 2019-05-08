@@ -12,6 +12,23 @@
   padding: 5px 10px;
 }
 
+.compose form > .compose-ctrl {
+  padding-left: 0px;
+  padding-right: 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.compose form > .compose-ctrl i.cfa {
+  margin-right: 5px;
+}
+
+.compose form > .compose-ctrl button.clear {
+  background: rgb(170, 17, 22);
+  color: #fff;
+  border-radius: 3px;
+}
+
 .compose form > input.to {
   width: 25%;
 }
@@ -31,6 +48,5 @@
 .compose form > button.send i {
   margin-right: 10px;
 }
-
 
 

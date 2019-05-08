@@ -1,8 +1,10 @@
 import { getOnlineUsers } from './response';
 
 export class MockWsService {
-  getOnlineUsers() {
-    return Promise.resolve(getOnlineUsers);
+  initialize() {
+    return Promise.resolve({
+      onlineUsers: getOnlineUsers
+    });
   }
 
 }
