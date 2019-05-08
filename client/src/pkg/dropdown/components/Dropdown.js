@@ -6,7 +6,7 @@ import { Item } from './Item';
 export class Dropdown extends React.Component {  
   
   static propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.node.isRequired,
     onSelectItem: PropTypes.func.isRequired,
     data: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })),
   }
