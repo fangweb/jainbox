@@ -7,7 +7,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { hot } from 'react-hot-loader';
 import * as serviceWorker from './serviceWorker';
 import store, { history } from './store';
-import Application from './application';
+import Application from './Application';
 
 const Root = () => (
   <Provider store={store}>
