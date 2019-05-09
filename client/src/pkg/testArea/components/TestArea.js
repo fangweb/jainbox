@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import styles from './test-area.module.css';
 import { activateToast } from '../../toast';
 import { Dropdown } from '../../dropdown';
+import { openModal, closeModal } from '../../modal/';
 
 const dropdownData = [{
   id: 1,
@@ -49,17 +50,30 @@ class TestAreaC extends Component {
     }
   }
   
+  onSelectModal = (value) => {
+    this.props.closeModal();
+  }
+  
+  openModal = () => {
+    this.props.openModal('CONFIRMATION_MODAL', { title: 'Would you like to proceed?', onSelect: this.onSelectModal });
+  }
+  
   render() {
     return (
       <div className={styles.testArea}>
         <section className={styles.section}>
           <input type="text" value={this.state.message} onChange={this.handleMessage} />
-          <button className={styles.toastButton} onClick={this.activateToast}>
+          <button className={styles.btn} onClick={this.activateToast}>
             Activate Toast
           </button>
         </section>
         <section className={styles.section}>
           <Dropdown title={this.getDropdownTitle()} data={dropdownData} onSelectItem={(value) => this.setDropdownTitle(value.username)} />
+        </section>
+        <section className={styles.section}>
+          <button className={styles.btn} onClick={this.openModal}>
+            Confirmation Modal
+          </button>
         </section>
       </div>
     );
@@ -73,6 +87,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      openModal,
+      closeModal,
       activateToast
     },
     dispatch
