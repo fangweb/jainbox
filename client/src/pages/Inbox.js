@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { openModal } from '../pkg/modal';
 import { getInbox, selectAll, selectNone, selectAllUnread, selectSingle } from '../modules/inbox-module';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -58,7 +57,6 @@ class Inbox extends Component {
   }
   
   handleTrashAction = () => {
-    this.props.openModal('CONFIRMATION_MODAL', { title: 'test title' });
   }
   
   render() {
@@ -146,7 +144,6 @@ const mapStateToProps = (state) => ({
 }); 
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  openModal,
   getInbox,
   selectAll,
   selectNone,

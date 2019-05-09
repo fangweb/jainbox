@@ -17,7 +17,7 @@
   transform: translate(-50%, -50%);
   width: 500px;
   z-index: 99999;
-  background: green;
+  background: #fff;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 5px 15px;
   padding: 30px;
   color: #fff;
@@ -26,3 +26,33 @@
 .body-modal {
   
 }
+
+.ctrl {
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  color: rgba(0, 0, 0, .55);
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.btn {
+  cursor: pointer;
+  padding: 10px;
+  color: #fff;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+.proceed {
+  background: rgb(65, 115, 193);
+}
+
+.cancel {
+  background: rgb(48, 49, 51);
+}
+
+
