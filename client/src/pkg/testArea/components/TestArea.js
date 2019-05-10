@@ -51,6 +51,7 @@ class TestAreaC extends Component {
   }
   
   onSelectModal = (value) => {
+    console.log(value);
     this.props.closeModal();
   }
   
