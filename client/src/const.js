@@ -5,3 +5,5 @@ export const ApiConst = {
     HeaderContentTypeValue: 'application/json; charset=utf-8'
   }
 };
+
+export const ResultsPerPage = 10;
