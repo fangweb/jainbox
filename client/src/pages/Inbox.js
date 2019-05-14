@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
+import Pagination from '../components/Pagination';
 import { getInbox, selectAll, selectNone, selectAllUnread, selectSingle } from '../modules/inbox-module';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -13,6 +14,7 @@ class Inbox extends Component {
 
     this.state = {
       dropdownSelected: false,
+      page: 1
     };
   }
 
@@ -86,15 +88,7 @@ class Inbox extends Component {
             <i className="fas fa-trash-alt" />
           </button>
           <div className="divider" />
-          <div className="pagination">
-            <span>Displaying 1-10 of 57</span>
-            <button className="prev-page">
-              <i className="fas fa-angle-left" />
-            </button>
-            <button className="next-page">
-              <i className="fas fa-angle-right" />
-            </button>
-          </div>
+          <Pagination page={2} totalResults={57} />
         </div>
         <div className="messages">
           {this.displayInboxMessages(inboxMessages, "You have no messages")}
