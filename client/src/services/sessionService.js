@@ -6,5 +6,5 @@ export class SessionService {
   static getJwt() {
     return localStorage.getItem("jwt");
   }
-
+  
 }

@@ -1,0 +1,4 @@
+button.pagination-btn:disabled,
+button.pagination-btn[disabled] {
+  cursor: not-allowed;
+}

@@ -1,11 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { ResultsPerPage } from '../const';
+import '../assets/css/pagination.css';
 
-function Pagination({ page, totalResults }) {
+function Pagination({ page, totalResults, onNextPage, onPreviousPage, loading }) {
   const startDisplayOfResults = ( page - 1 ) * ResultsPerPage + 1;
-  if ( startDisplayOfResults > totalResults ) {
+  const disableNextPage = (page * ResultsPerPage + 1 > totalResults ) || loading || totalResults <= 0;
+  const disablePrevPage = ( ( startDisplayOfResults - ResultsPerPage ) < 1 ) || loading || totalResults <= 0 ;
+  if ( startDisplayOfResults > totalResults && totalResults > 0 ) {
     throw new Error("The page can not exist");
   }
   let endDisplayOfResults = startDisplayOfResults + ResultsPerPage - 1;
@@ -13,13 +15,26 @@ function Pagination({ page, totalResults }) {
     endDisplayOfResults = totalResults;
   }
   const displayString = `Displaying ${startDisplayOfResults}-${endDisplayOfResults} of ${totalResults}`;
+  const nextPage = () => {
+    if (disableNextPage) {
+      return;
+    }
+    onNextPage();
+  };
+  const prevPage = () => {
+    if (disablePrevPage) {
+      return;
+    }
+    onPreviousPage();
+  }  
+  
   return (
     <div className="pagination">
-      <span>{displayString}</span>
-      <button className="prev-page">
+      <span>{!loading && totalResults > 0 && displayString}</span>                  
+      <button disabled={disablePrevPage} onClick={prevPage} className="pagination-btn prev-page">
         <i className="fas fa-angle-left" />
       </button>
-      <button className="next-page">
+      <button disabled={disableNextPage} onClick={nextPage} className="pagination-btn next-page">
         <i className="fas fa-angle-right" />
       </button>
     </div>
@@ -28,9 +43,10 @@ function Pagination({ page, totalResults }) {
 
 Pagination.propTypes = {
   page: PropTypes.number,
-  results: PropTypes.number.isRequired,
+  totalResults: PropTypes.number.isRequired,
   onNextPage: PropTypes.func.isRequired,
-  onPreviousPage: PropTypes.func.isRequired
+  onPreviousPage: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 Pagination.defaultProps = {
