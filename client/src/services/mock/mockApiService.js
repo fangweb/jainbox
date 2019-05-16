@@ -1,4 +1,4 @@
-import { inboxPage1, inboxPage2, inboxPage3, getSent, getTrash } from './response';
+import { inboxPage1, inboxPage2, inboxPage3, sentPage1, trashPage1 } from './response';
 import { wait } from '../../helpers';
 
 export class MockApiService {
@@ -10,15 +10,25 @@ export class MockApiService {
       return Promise.resolve(inboxPage2);
     } else if ( page === 3 ) {
       return Promise.resolve(inboxPage3);
+    } else {
+      return Promise.reject();
     }
   }
   
-  getSent() {
-    return Promise.resolve(getSent);
+  getSent({ page }) {
+    if ( page === 1 ) {
+      return Promise.resolve(sentPage1);
+    } else {
+      return Promise.reject();
+    }
   }
   
-  getTrash() {
-    return Promise.resolve(getTrash);
+  getTrash({ page }) {
+    if ( page === 1 ) {
+      return Promise.resolve(trashPage1);
+    } else {
+      return Promise.reject();
+    }
   }
   
   async compose(form) {

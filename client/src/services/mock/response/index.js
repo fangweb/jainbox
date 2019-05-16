@@ -1,4 +1,4 @@
 export * from './inbox';
-export * from './getSent';
-export * from './getTrash';
+export * from './sent';
+export * from './trash';
 export * from './getOnlineUsers';

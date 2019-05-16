@@ -35,7 +35,7 @@ export default (state = initialState, action) => {
       };
     case SELECT_ALL: 
       if (state.inboxMessages.length === 0) {
-        return;
+        return state;
       }
       const selectAll = state.inboxMessages.map(message => Object.assign(message, { selected: true }));
       return {
@@ -46,7 +46,7 @@ export default (state = initialState, action) => {
       };
     case SELECT_NONE:
       if (state.inboxMessages.length === 0) {
-        return;
+        return state;
       }    
       const selectNone = state.inboxMessages.map(message => Object.assign(message, { selected: false }));
       return {
@@ -57,7 +57,7 @@ export default (state = initialState, action) => {
       };      
     case SELECT_ALL_UNREAD:
       if (state.inboxMessages.length === 0) {
-        return;
+        return state;
       }
       const selectUnread = state.inboxMessages.map(message => {
         if (message.viewed === false) {
@@ -75,7 +75,7 @@ export default (state = initialState, action) => {
       };
     case SELECT_SINGLE:
       if (state.inboxMessages.length === 0) {
-        return;
+        return state;
       };
       const selectSingle = state.inboxMessages.map(message => {
         if (message.panel_id === action.payload.panelId) {

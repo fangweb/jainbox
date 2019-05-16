@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
+import Pagination from '../components/Pagination';
+import Loader from '../components/Loader';
 import { getSent, selectAll, selectNone, selectSingle } from '../modules/sent-module';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -19,7 +21,7 @@ class Sent extends Component {
   }
 
   async componentDidMount() {
-    await this.props.getSent();
+    this.props.getSent({ page: 1 });
   }
 
   componentWillUnmount() {
@@ -52,10 +54,25 @@ class Sent extends Component {
   selectSingle = (panelId, isSelected) => {
     this.props.selectSingle(panelId, isSelected);
   }
+
+  handleTrashAction = () => {
+  }
+
+  onNextPage = async () => {
+    const { page }  = this.props.sent;
+    const nextPage = page + 1;
+    this.props.getInbox({ page: nextPage });
+  }
+  
+  onPreviousPage = async () => {
+    const { page }  = this.props.sent;
+    const prevPage = page - 1;
+    this.props.getInbox({ page: prevPage }); 
+  }
   
   render() {
     const { dropdownSelected } = this.state;
-    const { sentMessages } = this.props.sent;
+    const { sentMessages, loading, page, totalResults } = this.props.sent;
     
     return (
       <div className="sent messages-panel">
@@ -79,54 +96,55 @@ class Sent extends Component {
             <i className="fas fa-trash-alt" />
           </button>
           <div className="divider" />
-          <div className="pagination">
-            <span>Displaying 1-10 of 57</span>
-            <button className="prev-page">
-              <i className="fas fa-angle-left" />
-            </button>
-            <button className="next-page">
-              <i className="fas fa-angle-right" />
-            </button>
-          </div>
+          <Pagination onNextPage={this.onNextPage} onPreviousPage={this.onPreviousPage} page={page} totalResults={totalResults} loading={loading} />
         </div>
-        <div className="messages">
-          {this.displaySentMessages(sentMessages, "You have no messages")}
-        </div>
+        {this.displaySentMessages(sentMessages, loading, "You have no messages")}
       </div>
     );
   }
 
-  displaySentMessages(sentMessages, notice) {
+  displaySentMessages(sentMessages, loading, notice) {
+    if (loading) {
+      return (
+        <div className="messages">
+          <Loader />
+        </div>
+      );
+    }
     if (sentMessages.length >= 1) {
       return (
-        <React.Fragment>
-          {
-            sentMessages.map(message => {
-              const e = new Date(message.created_at);
-              const timeSent = e.toLocaleTimeString();
-              return (
-                <div key={message.panel_id} className="message">
-                  <div className="checkbox">
-                    <Checkbox checked={message.selected} panelId={message.panel_id} selectSingle={this.selectSingle} />
-                  </div>
-                  <div className={`username flex-auto`}>
-                    {message.username}
-                  </div>
-                  <div className={`title flex-auto`}>
-                    {message.title}
-                  </div>
-                  <div className={`time-sent flex-auto`}>
-                    {timeSent}
-                  </div>
-                </div>  
-              );
-            })
-          }
-        </React.Fragment>
+        <div className="messages">
+          <React.Fragment>
+            {
+              sentMessages.map(message => {
+                const e = new Date(message.created_at);
+                const timeSent = e.toLocaleTimeString();
+                return (
+                  <div key={message.panel_id} className="message">
+                    <div className="checkbox">
+                      <Checkbox checked={message.selected} panelId={message.panel_id} selectSingle={this.selectSingle} />
+                    </div>
+                    <div className={`username flex-auto`}>
+                      {message.username}
+                    </div>
+                    <div className={`title flex-auto`}>
+                      {message.title}
+                    </div>
+                    <div className={`time-sent flex-auto`}>
+                      {timeSent}
+                    </div>
+                  </div>  
+                );
+              })
+            }
+          </React.Fragment>
+        </div>
       );
     } else {
       return (
-        <NoMessages notice={notice} />
+        <div className="messages">
+          <NoMessages notice={notice} />
+        </div>
       );
     }
   }

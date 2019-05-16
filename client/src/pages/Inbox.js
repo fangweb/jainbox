@@ -146,7 +146,9 @@ class Inbox extends Component {
       );
     } else {
       return (
-        <NoMessages notice={notice} />
+        <div className="messages">
+          <NoMessages notice={notice} />
+        </div>
       );
     }
   }

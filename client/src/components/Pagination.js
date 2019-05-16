@@ -5,8 +5,9 @@ import '../assets/css/pagination.css';
 
 function Pagination({ page, totalResults, onNextPage, onPreviousPage, loading }) {
   const startDisplayOfResults = ( page - 1 ) * ResultsPerPage + 1;
-  const disableNextPage = (page * ResultsPerPage + 1 > totalResults ) || loading || totalResults <= 0;
+  const disableNextPage = ( ( page * ResultsPerPage + 1 ) > totalResults ) || loading || totalResults <= 0;
   const disablePrevPage = ( ( startDisplayOfResults - ResultsPerPage ) < 1 ) || loading || totalResults <= 0 ;
+  const bothButtonsDisabled = disableNextPage && disablePrevPage;
   if ( startDisplayOfResults > totalResults && totalResults > 0 ) {
     throw new Error("The page can not exist");
   }
@@ -26,11 +27,11 @@ function Pagination({ page, totalResults, onNextPage, onPreviousPage, loading })
       return;
     }
     onPreviousPage();
-  }  
+  };  
   
   return (
     <div className="pagination">
-      <span>{!loading && totalResults > 0 && displayString}</span>                  
+      <span>{!loading && !bothButtonsDisabled && displayString}</span>                  
       <button disabled={disablePrevPage} onClick={prevPage} className="pagination-btn prev-page">
         <i className="fas fa-angle-left" />
       </button>
