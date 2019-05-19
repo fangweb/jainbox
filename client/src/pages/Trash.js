@@ -41,20 +41,36 @@ class Trash extends Component {
   }
 
   selectAll = () => {
+    const { loading } = this.props.trash;
+    if (loading) {
+      return;
+    }
     this.props.selectAll();
     this.toggleDropdown();
   }
   
   selectNone = () => {
+    const { loading } = this.props.trash;
+    if (loading) {
+      return;
+    }
     this.props.selectNone();
     this.toggleDropdown();
   }
   
   selectSingle = (panelId, isSelected) => {
+    const { loading } = this.props.trash;
+    if (loading) {
+      return;
+    }
     this.props.selectSingle(panelId, isSelected);
   }
 
   handleDeleteAction = () => {
+    const { loading } = this.props.trash;
+    if (loading) {
+      return;
+    }
   }
 
   onNextPage = async () => {

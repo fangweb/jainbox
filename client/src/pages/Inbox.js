@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import OutsideClickHandler from 'react-outside-click-handler';
 import Pagination from '../components/Pagination';
 import Loader from '../components/Loader';
@@ -40,25 +41,45 @@ class Inbox extends Component {
   }
   
   selectAll = () => {
+    const { loading } = this.props.inbox;
+    if (loading) {
+      return;
+    }
     this.props.selectAll();
     this.toggleDropdown();
   }
   
   selectNone = () => {
+    const { loading } = this.props.inbox;
+    if (loading) {
+      return;
+    }
     this.props.selectNone();
     this.toggleDropdown();
   }
   
   selectAllUnread = () => {
+    const { loading } = this.props.inbox;
+    if (loading) {
+      return;
+    }
     this.props.selectAllUnread();
     this.toggleDropdown();
   }
   
   selectSingle = (panelId, isSelected) => {
+    const { loading } = this.props.inbox;
+    if (loading) {
+      return;
+    }
     this.props.selectSingle(panelId, isSelected);
   }
   
   handleTrashAction = () => {
+    const { loading } = this.props.inbox;
+    if (loading) {
+      return;
+    }
   }
   
   onNextPage = async () => {
@@ -127,6 +148,13 @@ class Inbox extends Component {
                   <div key={message.panel_id} className="message">
                     <div className="checkbox">
                       <Checkbox checked={message.selected} panelId={message.panel_id} selectSingle={this.selectSingle} />
+                    </div>
+                    <div className="view">
+                      <Link 
+                        to="/message/testId" 
+                        style={{ color: message.viewed ? 'rgb(163, 163, 163)' : 'rgb(25, 127, 37)' }}>
+                          <i className="fas fa-eye viewIcon"></i>
+                      </Link>
                     </div>
                     <div className={`username flex-auto ${!message.viewed ? "bold-view" : ""}`}>
                       {message.username}

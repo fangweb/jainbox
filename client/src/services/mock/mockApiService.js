@@ -31,6 +31,10 @@ export class MockApiService {
     }
   }
   
+  getMessage({ messageId }) {
+  
+  }
+  
   async compose(form) {
     await wait(3000);
     return true;

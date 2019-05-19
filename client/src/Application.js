@@ -5,7 +5,7 @@ import Inbox from './pages/Inbox';
 import Compose from './pages/Compose';
 import Sent from './pages/Sent';
 import Trash from './pages/Trash';
-import Message from './pages/Message';
+import ViewMessage from './pages/ViewMessage';
 import Layout from './components/Layout';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -55,10 +55,10 @@ class Application extends Component {
               component={Trash}
             />
             <Route
-              path="/message/:message_id"
+              path="/message/:messageId"
               name="message"
               key="message"
-              component={Message}
+              component={ViewMessage}
             />
             <Route
               path="/testarea"
