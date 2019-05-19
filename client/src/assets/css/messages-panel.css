@@ -83,10 +83,17 @@
   border-top: 1px solid rgb(197, 200, 204);
 }
 
+.messages-panel .messages .message:hover {
+  background: rgb(219, 219, 219);
+}
+
 .messages-panel .messages .message > * {
   padding: 10px;
 }
 
+.messages-panel .messages .message .view i.viewIcon {
+
+}
 .messages-panel .messages .message .flex-auto {
   flex: 1;
 }

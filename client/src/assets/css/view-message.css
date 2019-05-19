@@ -1,0 +1,37 @@
+.view-message {
+  width: 75%;
+}
+
+.view-message .top-bar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.view-message .top-bar .right {
+  display: flex;
+}
+
+.view-message .top-bar .right .view-message-time {
+  margin-right: 5px;
+}
+
+.view-message .top-bar .right .go-back i.backwardsIcon {
+ color: rgb(188, 24, 24);
+}
+
+.view-message .top-bar .handler {
+  font-weight: bold;
+}
+
+.view-message .title {
+  display: inline-block;
+}
+
+.view-message .top-bar, .view-message .title {
+  margin-bottom: 10px;
+}
+
+.view-message .message-segment {
+  padding: 7px 14px;
+  border: 1px solid rgb(191, 191, 191);
+}
