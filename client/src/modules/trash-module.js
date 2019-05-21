@@ -1,8 +1,9 @@
 import { ServiceContainer } from '../services';
 import { wait } from '../helpers';
 
-export const LOADING = 'inbox/LOADING';
-export const RESET = 'inbox/RESET';
+export const LOADING = 'trash/LOADING';
+export const RESET = 'trash/RESET';
+export const ERROR = 'trash/ERROR';
 export const GET_TRASH = 'trash/GET_TRASH';
 export const SELECT_ALL = 'trash/SELECT_ALL';
 export const SELECT_NONE = 'trash/SELECT_NONE';
@@ -12,8 +13,9 @@ export const DELETE_SELECTED = 'trash/DELETE_SELECTED';
 const initialState = {
   trashMessages: [],
   loading: false,
-  page: 1,
-  totalResults: 0    
+  page: null,
+  totalResults: 0,
+  error: false
 };
 
 export default (state = initialState, action) => {
@@ -27,10 +29,16 @@ export default (state = initialState, action) => {
       return {
         ...initialState
       };
+    case ERROR:
+      return {
+        ...state,
+        error: !state.error
+      };      
     case GET_TRASH:
       return {
         ...action.payload,
-        loading: false
+        loading: false,
+        error: false
       };
     case SELECT_ALL: 
       if (state.trashMessages.length === 0) {
@@ -38,10 +46,8 @@ export default (state = initialState, action) => {
       }
       const selectAll = state.trashMessages.map(message => Object.assign(message, { selected: true }));
       return {
-        trashMessages: selectAll,
-        loading: state.loading,
-        page: state.page,
-        totalResults: state.totalResults           
+        ...state,
+        trashMessages: selectAll    
       };
     case SELECT_NONE:
       if (state.trashMessages.length === 0) {
@@ -49,10 +55,8 @@ export default (state = initialState, action) => {
       }    
       const selectNone = state.trashMessages.map(message => Object.assign(message, { selected: false }));
       return {
-        trashMessages: selectNone,
-        loading: state.loading,
-        page: state.page,
-        totalResults: state.totalResults           
+        ...state,
+        trashMessages: selectNone    
       };      
     case SELECT_SINGLE:
       if (state.trashMessages.length === 0) {
@@ -65,10 +69,8 @@ export default (state = initialState, action) => {
         return Object.assign({}, message);
       });
       return {
-        trashMessages: selectSingle,
-        loading: state.loading,
-        page: state.page,
-        totalResults: state.totalResults           
+        ...state,
+        trashMessages: selectSingle        
       };
     default:
       return state;
@@ -79,7 +81,12 @@ export const getTrash = ({ page }) => {
   return async (dispatch) => {
     const api = new ServiceContainer().api();
     dispatch({ type: LOADING });
-    const  apiResult = await api.getTrash({ page });
+    let apiResult;
+    try {
+      apiResult = await api.getTrash({ page });
+    } catch (e) {
+      return dispatch(toggleError());
+    }
     const trashMessages = apiResult.messages.map( message => Object.assign(message, { selected: false }));
     await wait(300);
     dispatch({ 
@@ -125,6 +132,8 @@ export const reset = () => ({
   type: RESET
 });
 
-
+export const toggleError = () => ({
+  type: ERROR
+});
 
 

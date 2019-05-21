@@ -1,8 +1,9 @@
 import { ServiceContainer } from '../services';
 import { wait } from '../helpers';
 
-export const LOADING = 'inbox/LOADING';
-export const RESET = 'inbox/RESET';
+export const LOADING = 'sent/LOADING';
+export const RESET = 'sent/RESET';
+export const ERROR = 'sent/ERROR';
 export const GET_SENT = 'sent/GET_SENT';
 export const SELECT_ALL = 'sent/SELECT_ALL';
 export const SELECT_NONE = 'sent/SELECT_NONE';
@@ -12,8 +13,9 @@ export const DELETE_SELECTED = 'sent/DELETE_SELECTED';
 const initialState = {
   sentMessages: [],
   loading: false,
-  page: 1,
-  totalResults: 0  
+  page: null,
+  totalResults: 0,
+  error: false
 };
 
 export default (state = initialState, action) => {
@@ -27,10 +29,16 @@ export default (state = initialState, action) => {
       return {
         ...initialState
       };
+    case ERROR:
+      return {
+        ...state,
+        error: !state.error
+      };
     case GET_SENT:
       return {
         ...action.payload,
-        loading: false
+        loading: false,
+        error: false
       };
     case SELECT_ALL: 
       if (state.sentMessages.length === 0) {
@@ -38,10 +46,8 @@ export default (state = initialState, action) => {
       }
       const selectAll = state.sentMessages.map(message => Object.assign(message, { selected: true }));
       return {
-        sentMessages: selectAll,
-        loading: state.loading,
-        page: state.page,
-        totalResults: state.totalResults        
+        ...state,
+        sentMessages: selectAll
       };
     case SELECT_NONE:
       if (state.sentMessages.length === 0) {
@@ -49,10 +55,8 @@ export default (state = initialState, action) => {
       }    
       const selectNone = state.sentMessages.map(message => Object.assign(message, { selected: false }));
       return {
-        sentMessages: selectNone,
-        loading: state.loading,
-        page: state.page,
-        totalResults: state.totalResults        
+        ...state,
+        sentMessages: selectNone
       };      
     case SELECT_SINGLE:
       if (state.sentMessages.length === 0) {
@@ -65,10 +69,8 @@ export default (state = initialState, action) => {
         return Object.assign({}, message);
       });
       return {
-        sentMessages: selectSingle,
-        loading: state.loading,
-        page: state.page,
-        totalResults: state.totalResults        
+        ...state,
+        sentMessages: selectSingle    
       };
     default:
       return state;
@@ -79,7 +81,13 @@ export const getSent = ({ page }) => {
   return async (dispatch) => {
     const api = new ServiceContainer().api();
     dispatch({ type: LOADING });
-    const  apiResult = await api.getSent({ page });
+    let apiResult;
+    try { 
+      apiResult = await api.getSent({ page });
+    }
+    catch (e) {
+      return dispatch(toggleError());
+    }
     const sentMessages = apiResult.messages.map( message => Object.assign(message, { selected: false }));
     await wait(300);
     dispatch({ 
@@ -125,5 +133,8 @@ export const reset = () => ({
   type: RESET
 });
 
+export const toggleError = () => ({
+  type: ERROR
+});
 
 

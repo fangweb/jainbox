@@ -3,6 +3,7 @@ import { wait } from '../helpers';
 
 export const LOADING = 'inbox/LOADING';
 export const RESET = 'inbox/RESET';
+export const ERROR = 'inbox/ERROR';
 export const GET_INBOX = 'inbox/GET_INBOX';
 export const SELECT_ALL = 'inbox/SELECT_ALL';
 export const SELECT_ALL_UNREAD ='inbox/SELECT_ALL_UNREAD';
@@ -13,8 +14,9 @@ export const TRASH_SELECTED = 'inbox/TRASH_SELECTED';
 const initialState = {
   inboxMessages: [],
   loading: false,
-  page: 1,
-  totalResults: 0
+  page: null,
+  totalResults: 0,
+  error: false
 };
 
 export default (state = initialState, action) => {
@@ -28,10 +30,16 @@ export default (state = initialState, action) => {
       return {
         ...initialState
       };
+    case ERROR:
+      return {
+        ...initialState,
+        error: !state.error
+      };
     case GET_INBOX:
       return {
         ...action.payload,
-        loading: false
+        loading: false,
+        error: false
       };
     case SELECT_ALL: 
       if (state.inboxMessages.length === 0) {
@@ -39,10 +47,8 @@ export default (state = initialState, action) => {
       }
       const selectAll = state.inboxMessages.map(message => Object.assign(message, { selected: true }));
       return {
-        inboxMessages: selectAll,
-        loading: state.loading,
-        page: state.page,
-        totalResults: state.totalResults
+        ...state,
+        inboxMessages: selectAll
       };
     case SELECT_NONE:
       if (state.inboxMessages.length === 0) {
@@ -50,10 +56,8 @@ export default (state = initialState, action) => {
       }    
       const selectNone = state.inboxMessages.map(message => Object.assign(message, { selected: false }));
       return {
-        inboxMessages: selectNone,
-        loading: state.loading,
-        page: state.page,
-        totalResults: state.totalResults
+        ...state,
+        inboxMessages: selectNone
       };      
     case SELECT_ALL_UNREAD:
       if (state.inboxMessages.length === 0) {
@@ -68,10 +72,8 @@ export default (state = initialState, action) => {
         return Object.assign({}, message);
       });
       return {
-        inboxMessages: selectUnread,
-        loading: state.loading,
-        page: state.page,
-        totalResults: state.totalResults
+        ...state,
+        inboxMessages: selectUnread
       };
     case SELECT_SINGLE:
       if (state.inboxMessages.length === 0) {
@@ -84,10 +86,8 @@ export default (state = initialState, action) => {
         return Object.assign({}, message);
       });
       return {
-        inboxMessages: selectSingle,
-        loading: state.loading,
-        page: state.page,
-        totalResults: state.totalResults
+        ...state,
+        inboxMessages: selectSingle
       };
     default:
       return state;
@@ -98,7 +98,12 @@ export const getInbox = ({ page }) => {
   return async (dispatch) => {
     const api = new ServiceContainer().api();
     dispatch({ type: LOADING });
-    const apiResult = await api.getInbox({ page });
+    let apiResult;
+    try {
+      apiResult = await api.getInbox({ page });
+    } catch (e) {
+      return dispatch(toggleError());
+    }
     const inboxMessages = apiResult.messages.map( message => Object.assign(message, { selected: false }));
     await wait(300);
     dispatch({ 
@@ -106,7 +111,7 @@ export const getInbox = ({ page }) => {
       payload: { 
         inboxMessages, 
         page: apiResult.page, 
-        totalResults: apiResult.totalResults 
+        totalResults: apiResult.totalResults
       }
     });
   }
@@ -150,6 +155,8 @@ export const reset = () => ({
   type: RESET
 });
 
-
+export const toggleError = () => ({
+  type: ERROR
+});
 
 

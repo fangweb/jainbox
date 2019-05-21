@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom'
 import OutsideClickHandler from 'react-outside-click-handler';
 import Pagination from '../components/Pagination';
 import Loader from '../components/Loader';
-import { getInbox, selectAll, selectNone, selectAllUnread, selectSingle } from '../modules/inbox-module';
+import { getInbox, selectAll, selectNone, selectAllUnread, selectSingle, reset, toggleError } from '../modules/inbox-module';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Checkbox from '../components/Checkbox';
+import PanelError from '../components/PanelError';
 import NoMessages from '../components/NoMessages';
 import '../assets/css/messages-panel.css';
 
@@ -15,16 +16,29 @@ class Inbox extends Component {
     super(props);
 
     this.state = {
-      dropdownSelected: false
+      dropdownSelected: false,
     };
   }
 
-  async componentDidMount() {
-    this.props.getInbox({ page: 1 });
+  componentDidMount() {
+    const { page } = this.props.match.params;
+    const _page = Number(page);  
+    if (isNaN(_page)) {
+      this.props.toggleError();
+    } 
+    else {
+      this.props.getInbox({ page: _page });
+    }
+  }
+
+  componentDidUpdate = async (prevProps) => {
+    if (prevProps.match.params.page !== this.props.match.params.page) {
+      this.props.getInbox({ page: Number(this.props.match.params.page) });
+    }
   }
   
   componentWillUnmount() {
-    this.props.selectNone();
+    this.props.reset();
   }
   
   toggleDropdown = () => {
@@ -85,18 +99,24 @@ class Inbox extends Component {
   onNextPage = async () => {
     const { page }  = this.props.inbox;
     const nextPage = page + 1;
-    this.props.getInbox({ page: nextPage });
+    this.props.history.push(`/inbox/page/${nextPage}`);
   }
   
   onPreviousPage = async () => {
     const { page }  = this.props.inbox;
     const prevPage = page - 1;
-    this.props.getInbox({ page: prevPage }); 
+    this.props.history.push(`/inbox/page/${prevPage}`);
   }
   
   render() {
     const { dropdownSelected } = this.state;
-    const { inboxMessages, loading, page, totalResults } = this.props.inbox;
+    const { inboxMessages, loading, page, totalResults, error } = this.props.inbox;
+    
+    if (error) {
+      return (
+        <PanelError message="The inbox page does not exist" />
+      );
+    }    
     
     return (
       <div className="inbox messages-panel">
@@ -191,7 +211,9 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   selectAll,
   selectNone,
   selectAllUnread,
-  selectSingle
+  selectSingle,
+  reset,
+  toggleError
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Inbox);

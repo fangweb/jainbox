@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import './assets/css/index.css';
 import Inbox from './pages/Inbox';
 import Compose from './pages/Compose';
@@ -25,10 +25,12 @@ class Application extends Component {
       <React.Fragment>
         <Layout>
           <Switch>
-            <Route exact path="/" key={"inbox-home"} component={Inbox} />
-            <Route
-              exact
-              path="/inbox"
+            <Redirect exact from="/" to="/inbox/page/1" />
+            <Redirect exact from="/inbox" to="/inbox/page/1" />
+            <Redirect exact from="/sent" to="/sent/page/1" />
+            <Redirect exact from="/trash" to="/trash/page/1" />
+            <Route 
+              path="/inbox/page/:page"
               name="inbox"
               key="inbox"
               component={Inbox}
@@ -42,14 +44,14 @@ class Application extends Component {
             />
             <Route
               exact
-              path="/sent"
+              path="/sent/page/:page"
               name="sent"
               key="sent"
               component={Sent}
             />
             <Route
               exact
-              path="/trash"
+              path="/trash/page/:page"
               name="trash"
               key="trash"
               component={Trash}

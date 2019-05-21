@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import OutsideClickHandler from 'react-outside-click-handler';
 import Pagination from '../components/Pagination';
 import Loader from '../components/Loader';
-import { getTrash, selectAll, selectNone, selectSingle } from '../modules/trash-module';
+import { getTrash, selectAll, selectNone, selectSingle, reset, toggleError } from '../modules/trash-module';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Checkbox from '../components/Checkbox';
+import PanelError from '../components/PanelError';
 import NoMessages from '../components/NoMessages';
 
 import '../assets/css/messages-panel.css';
@@ -19,12 +21,25 @@ class Trash extends Component {
     };
   }
 
-  async componentDidMount() {
-    this.props.getTrash({ page: 1 });
+  componentDidMount() {
+    const { page } = this.props.match.params;
+    const _page = Number(page);  
+    if (isNaN(_page)) {
+      this.props.toggleError();
+    } 
+    else {
+      this.props.getTrash({ page: _page });
+    }
+  }
+
+  componentDidUpdate = async (prevProps) => {
+    if (prevProps.match.params.page !== this.props.match.params.page) {
+      this.props.getTrash({ page: Number(this.props.match.params.page) });
+    }
   }
 
   componentWillUnmount() {
-    this.props.selectNone();
+    this.props.reset();
   }
 
   toggleDropdown = () => {
@@ -74,20 +89,26 @@ class Trash extends Component {
   }
 
   onNextPage = async () => {
-    const { page }  = this.props.trash;
+    const { page }  = this.props.sent;
     const nextPage = page + 1;
-    this.props.getInbox({ page: nextPage });
+    this.props.history.push(`/trash/page/${nextPage}`);
   }
   
   onPreviousPage = async () => {
-    const { page }  = this.props.trash;
+    const { page }  = this.props.sent;
     const prevPage = page - 1;
-    this.props.getInbox({ page: prevPage }); 
+    this.props.history.push(`/trash/page/${prevPage}`);
   }
 
   render() {
     const { dropdownSelected } = this.state;
-    const { trashMessages, loading, page, totalResults } = this.props.trash;
+    const { trashMessages, loading, page, totalResults, error } = this.props.trash;
+
+    if (error) {
+      return (
+        <PanelError message="Page does not exist" />
+      );
+    } 
     
     return (
       <div className="trash messages-panel">
@@ -173,7 +194,9 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   getTrash,
   selectAll,
   selectNone,
-  selectSingle
+  selectSingle,
+  reset,
+  toggleError
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trash);

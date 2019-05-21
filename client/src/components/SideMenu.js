@@ -22,7 +22,7 @@ class SideMenu extends Component {
           <li>
             <Link
               to="/inbox"
-              className={`link ${pathname === '/' || pathname === '/inbox' ? 'active' : ''}`}
+              className={`link ${pathname === '/' || ( pathname.indexOf('/inbox/page') > -1 ) ? 'active' : ''}`}
             >
               <i className="fas fa-inbox" />
               <span>Inbox</span>
@@ -31,7 +31,7 @@ class SideMenu extends Component {
           <li>
             <Link
               to="/sent"
-              className={`link ${pathname === '/sent'  ? 'active' : ''}`}
+              className={`link ${pathname === '/sent' || ( pathname.indexOf('/sent/page') > -1 )  ? 'active' : ''}`}
             >
               <i className="fas fa-envelope-square" />
               <span>Sent Messages</span>
@@ -40,7 +40,7 @@ class SideMenu extends Component {
           <li>
             <Link
               to="/trash"
-              className={`link ${pathname === '/trash'  ? 'active' : ''}`}
+              className={`link ${pathname === '/trash' || ( pathname.indexOf('/trash/page') > -1 )   ? 'active' : ''}`}
             >
               <i className="fas fa-trash-alt" />
               <span>Trash</span>

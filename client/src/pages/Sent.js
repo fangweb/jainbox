@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import OutsideClickHandler from 'react-outside-click-handler';
 import Pagination from '../components/Pagination';
 import Loader from '../components/Loader';
-import { getSent, selectAll, selectNone, selectSingle } from '../modules/sent-module';
+import { getSent, selectAll, selectNone, selectSingle, reset, toggleError } from '../modules/sent-module';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Checkbox from '../components/Checkbox';
+import PanelError from '../components/PanelError';
 import NoMessages from '../components/NoMessages';
-
 import '../assets/css/messages-panel.css';
 
 class Sent extends Component {
@@ -20,12 +21,25 @@ class Sent extends Component {
     };
   }
 
-  async componentDidMount() {
-    this.props.getSent({ page: 1 });
+  componentDidMount() {
+    const { page } = this.props.match.params;
+    const _page = Number(page);  
+    if (isNaN(_page)) {
+      this.props.toggleError();
+    } 
+    else {
+      this.props.getSent({ page: _page });
+    }
+  }
+
+  componentDidUpdate = async (prevProps) => {
+    if (prevProps.match.params.page !== this.props.match.params.page) {
+      this.props.getSent({ page: Number(this.props.match.params.page) });
+    }
   }
 
   componentWillUnmount() {
-    this.props.selectNone();
+    this.props.reset();
   }
 
   toggleDropdown = () => {
@@ -77,18 +91,24 @@ class Sent extends Component {
   onNextPage = async () => {
     const { page }  = this.props.sent;
     const nextPage = page + 1;
-    this.props.getInbox({ page: nextPage });
+    this.props.history.push(`/sent/page/${nextPage}`);
   }
   
   onPreviousPage = async () => {
     const { page }  = this.props.sent;
     const prevPage = page - 1;
-    this.props.getInbox({ page: prevPage }); 
+    this.props.history.push(`/sent/page/${prevPage}`);
   }
   
   render() {
     const { dropdownSelected } = this.state;
-    const { sentMessages, loading, page, totalResults } = this.props.sent;
+    const { sentMessages, loading, page, totalResults, error } = this.props.sent;
+
+    if (error) {
+      return (
+        <PanelError message="Page does not exist" />
+      );
+    } 
     
     return (
       <div className="sent messages-panel">
@@ -177,7 +197,9 @@ const mapDispatchToProps = dispatch =>
       getSent,
       selectAll,
       selectNone,
-      selectSingle
+      selectSingle,
+      reset,
+      toggleError
     },
     dispatch
   );
