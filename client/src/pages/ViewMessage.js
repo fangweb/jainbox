@@ -1,53 +1,90 @@
 import React, { Component } from 'react';
+import { InboxPath } from '../const';
+import { Link } from 'react-router-dom';
+import { ServiceContainer } from '../services';
+import { wait } from '../helpers';
+import PanelError from '../components/PanelError';
+import PropTypes from 'prop-types';
+
+import Loader from '../components/Loader';
 
 import '../assets/css/view-message.css';
 
 class ViewMessage extends Component {
   
+  static propTypes = {
+    prevLink: PropTypes.string
+  }
+  
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
-      message: {
-        id: null,
-        title: null,
-        handler: null,
-        content: null
-      }
+      message: null,
+      error: false
     };
   }
   
-  componentDidMount() {
-  
+  async componentDidMount() {
+    const api = new ServiceContainer().api();
+    const { messageId } = this.props.match.params; 
+    await wait(300); 
+    let apiResult;
+    try {
+      apiResult = await api.getMessage({ messageId: messageId });
+      this.setState({ message: { ...apiResult }, loading: false });
+    } catch (e) {
+      this.setState({ error: true, loading: false });
+    }
   }
-  
-  // Redux not required, just pull directly from api
     
   render() {
+    const { loading, message, error } = this.state;
+    let { prevLink } = this.props;
+    if (!prevLink) {
+      prevLink = InboxPath;
+    }
+    
+    if (error) {
+      return (
+        <div className="view-message">
+          <PanelError message="There was an error" />
+        </div>
+      );
+    }
+    
+    if (loading) {
+      return (
+         <div className="view-message">
+           <Loader />
+         </div>
+      );
+    }
+    
     return (
       <div className="view-message">
         <div className="top-bar">
           <div className="handler message-segment">
-            TestUserA
+            {message.username}
           </div>
           <div className="right">
             <div className="view-message-time message-segment">
               4:36 PM
             </div>
             <div className="go-back message-segment">
-              <i className="fas fa-backward backwardsIcon"></i>
+              <Link to={prevLink}>
+                <i className="fas fa-backward backwardsIcon"></i>
+              </Link>
             </div>
           </div>
         </div>
         <div className="title message-segment">
-          TItle
+          {message.title}
         </div>
         <div className="content message-segment">
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-          standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type 
-          specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially 
-          unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-           recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+          <pre>
+            {message.message_text}
+          </pre>
         </div>
       </div>
     );

@@ -1,4 +1,4 @@
-import { inboxPage1, inboxPage2, inboxPage3, sentPage1, trashPage1 } from './response';
+import { inboxPage1, inboxPage2, inboxPage3, sentPage1, trashPage1, mockMessage } from './response';
 import { wait } from '../../helpers';
 
 export class MockApiService {
@@ -32,7 +32,11 @@ export class MockApiService {
   }
   
   getMessage({ messageId }) {
-  
+    if ( messageId === "36") {
+      return Promise.resolve(mockMessage);
+    } else {
+      return Promise.reject();
+    }
   }
   
   async compose(form) {

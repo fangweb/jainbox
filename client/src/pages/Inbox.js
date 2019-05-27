@@ -149,6 +149,8 @@ class Inbox extends Component {
   }
   
   displayInboxMessages(inboxMessages, loading, notice) {
+    const { page } = this.props.inbox;
+    
     if (loading) {
       return (
         <div className="messages">
@@ -171,8 +173,9 @@ class Inbox extends Component {
                     </div>
                     <div className="view">
                       <Link 
-                        to="/message/testId" 
-                        style={{ color: message.viewed ? 'rgb(163, 163, 163)' : 'rgb(25, 127, 37)' }}>
+                        to={`/view-message/${message.message_id}`} 
+                        style={{ color: message.viewed ? 'rgb(163, 163, 163)' : 'rgb(25, 127, 37)' }}
+                        prevLink={`/inbox/page/${page}`}>
                           <i className="fas fa-eye viewIcon"></i>
                       </Link>
                     </div>

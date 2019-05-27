@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import './assets/css/index.css';
+import { RootPath, ComposePath, InboxPath, SentPath, TrashPath, ViewMessagePath, TestAreaPath } from './const';
 import Inbox from './pages/Inbox';
 import Compose from './pages/Compose';
 import Sent from './pages/Sent';
@@ -14,6 +14,8 @@ import { Modal } from './pkg/modal';
 import { Toast } from './pkg/toast';
 import { initialize } from './modules/ws-module';
 
+import './assets/css/index.css';
+
 class Application extends Component {
   
   componentDidMount() {
@@ -25,45 +27,45 @@ class Application extends Component {
       <React.Fragment>
         <Layout>
           <Switch>
-            <Redirect exact from="/" to="/inbox/page/1" />
-            <Redirect exact from="/inbox" to="/inbox/page/1" />
-            <Redirect exact from="/sent" to="/sent/page/1" />
-            <Redirect exact from="/trash" to="/trash/page/1" />
+            <Redirect exact from={RootPath} to={`${InboxPath}/page/1`} />
+            <Redirect exact from={InboxPath} to={`${InboxPath}/page/1`} />
+            <Redirect exact from={SentPath} to={`${SentPath}/page/1`} />
+            <Redirect exact from={TrashPath} to={`${TrashPath}/page/1`} />
             <Route 
-              path="/inbox/page/:page"
+              path={`${InboxPath}/page/:page`}
               name="inbox"
               key="inbox"
               component={Inbox}
             />
             <Route
               exact
-              path="/compose"
+              path={`${ComposePath}`}
               name="compose"
               key="compose"
               component={Compose}
             />
             <Route
               exact
-              path="/sent/page/:page"
+              path={`${SentPath}/page/:page`}
               name="sent"
               key="sent"
               component={Sent}
             />
             <Route
               exact
-              path="/trash/page/:page"
+              path={`${TrashPath}/page/:page`}
               name="trash"
               key="trash"
               component={Trash}
             />
             <Route
-              path="/message/:messageId"
-              name="message"
-              key="message"
+              path={`${ViewMessagePath}/:messageId`}
+              name="view-message"
+              key="view-message"
               component={ViewMessage}
             />
             <Route
-              path="/testarea"
+              path={`${TestAreaPath}`}
               name="testArea"
               key="testArea"
               component={TestArea}
