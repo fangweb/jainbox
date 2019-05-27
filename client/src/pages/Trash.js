@@ -140,6 +140,8 @@ class Trash extends Component {
   }
   
   displayTrashMessages(trashMessages, loading, notice) {
+    const { page } = this.props.trash;
+    
     if (loading) {
       return (
         <div className="messages">
@@ -155,11 +157,23 @@ class Trash extends Component {
               trashMessages.map(message => {
                 const e = new Date(message.created_at);
                 const timeSent = e.toLocaleTimeString();
+                const messageLink = `/view-message/${message.message_id}`;
+                const prevLink = `/sent/page/${page}`;                      
                 return (
                   <div key={message.panel_id} className="message">
                     <div className="checkbox">
                       <Checkbox checked={message.selected} panelId={message.panel_id} selectSingle={this.selectSingle} />
                     </div>
+                    <div className="view">
+                      <Link 
+                        to={{
+                          pathname: messageLink,
+                          state: { prevLink }
+                        }} 
+                        style={{ color: message.viewed ? 'rgb(163, 163, 163)' : 'rgb(25, 127, 37)' }}>
+                          <i className="fas fa-eye viewIcon"></i>
+                      </Link>
+                    </div>                       
                     <div className={`username flex-auto`}>
                       {message.username}
                     </div>
