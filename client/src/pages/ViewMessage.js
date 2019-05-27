@@ -13,7 +13,7 @@ import '../assets/css/view-message.css';
 class ViewMessage extends Component {
   
   static propTypes = {
-    prevLink: PropTypes.string
+    prevlink: PropTypes.string
   }
   
   constructor(props) {
@@ -40,9 +40,11 @@ class ViewMessage extends Component {
     
   render() {
     const { loading, message, error } = this.state;
-    let { prevLink } = this.props;
-    if (!prevLink) {
-      prevLink = InboxPath;
+    let prevLink;
+    if (this.props.location.state) {
+      prevLink = this.props.location.state.prevLink;
+    } else {
+      prevLink = InboxPath
     }
     
     if (error) {
@@ -55,9 +57,9 @@ class ViewMessage extends Component {
     
     if (loading) {
       return (
-         <div className="view-message">
-           <Loader />
-         </div>
+        <div className="view-message">
+          <Loader />
+        </div>
       );
     }
     

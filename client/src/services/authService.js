@@ -1,6 +1,6 @@
-import Session from '../../lib/session';
+import Session from '../lib/session';
 
-export class MockAuthService {
+export class AuthService {
 
   isAuthenticated() {
     return Session.getJwt() ? true : false;

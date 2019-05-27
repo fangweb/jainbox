@@ -166,6 +166,8 @@ class Inbox extends Component {
               inboxMessages.map(message => {
                 const e = new Date(message.created_at);
                 const timeSent = e.toLocaleTimeString();
+                const messageLink = `/view-message/${message.message_id}`;
+                const prevLink = `/inbox/page/${page}`;
                 return (
                   <div key={message.panel_id} className="message">
                     <div className="checkbox">
@@ -173,9 +175,11 @@ class Inbox extends Component {
                     </div>
                     <div className="view">
                       <Link 
-                        to={`/view-message/${message.message_id}`} 
-                        style={{ color: message.viewed ? 'rgb(163, 163, 163)' : 'rgb(25, 127, 37)' }}
-                        prevLink={`/inbox/page/${page}`}>
+                        to={{
+                          pathname: messageLink,
+                          state: { prevLink }
+                        }} 
+                        style={{ color: message.viewed ? 'rgb(163, 163, 163)' : 'rgb(25, 127, 37)' }}>
                           <i className="fas fa-eye viewIcon"></i>
                       </Link>
                     </div>

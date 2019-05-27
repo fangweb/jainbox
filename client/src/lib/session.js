@@ -1,4 +1,4 @@
-export class SessionService {
+export default class Session {
   static storeJwt(token) {
     localStorage.setItem("jwt", token);
   }

@@ -55,13 +55,13 @@ class Compose extends Component {
   }
   
   render() {
-    const { ws, compose } = this.props;
+    const { application, compose } = this.props;
     
     return (
       <div className="compose">
         <form onSubmit={this.onSend}>
           <div className="compose-ctrl">
-            <Dropdown title={this.getDropdownTitle()} data={ws.onlineUsers} onSelectItem={this.selectedFromDropdown} />
+            <Dropdown title={this.getDropdownTitle()} data={application.onlineUsers} onSelectItem={this.selectedFromDropdown} />
             <button onClick={this.onClearForm} type="submit" className="clear">
               <i className="fas fa-eraser cfa"></i><span>Clear Form</span>
             </button>
@@ -79,7 +79,7 @@ class Compose extends Component {
 }
 
 const mapStateToProps = state => ({
-  ws: state.wsReducer,
+  application: state.applicationReducer,
   compose: state.composeReducer
 });
 
