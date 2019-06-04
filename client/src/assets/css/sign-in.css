@@ -1,0 +1,86 @@
+.sign-in {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(48, 49, 51);
+  height: 100vh;
+}
+
+.sign-in .sign-in-card {
+  display: flex;
+  background: rgb(201, 201, 201);
+  border-radius: 5px;
+  padding: 20px 10px;
+  color: rgb(58, 58, 58);
+  min-width: 800px;
+}
+
+.sign-in .sign-in-card .sign-in__header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.sign-in .sign-in-card .form-errors {
+  color: rgb(188, 5, 17);
+  margin-bottom: 5px;
+}
+
+.sign-in .sign-in-card i.signinIcon {
+  font-size: 40px;
+  color: rgb(74, 206, 89);
+}
+
+.sign-in .sign-in-card > .main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sign-in .sign-in-card > .main > form {
+  display: flex;
+  flex-direction: column;
+}
+
+.sign-in .sign-in-card > .main > form > input {
+  padding: 5px 10px;
+  margin-bottom: 3px;
+}
+
+.sign-in .sign-in-card > .main > form > input.error {
+  background: rgb(252, 228, 228);
+  border: 1px solid rgb(188, 5, 17);
+  outline: none;
+}
+
+.sign-in .sign-in-card > .main > form > input.error::placeholder {
+  color: rgb(188, 5, 17);
+}
+
+.sign-in .sign-in-card > .main > form > label.mock-ctrl {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  user-select: none;
+  cursor: pointer;
+}
+
+.sign-in .sign-in-card > .main > form > label.mock-ctrl > input {
+  margin-right: 5px;
+}
+
+.sign-in .sign-in-card button.sign-in__button {
+  color: #fff;
+  background: rgb(25, 127, 37);
+  padding: 8px 20px;
+} 
+
+.sign-in .sign-in-card > .secondary {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+}

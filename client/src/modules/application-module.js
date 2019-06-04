@@ -7,7 +7,8 @@ export const UPDATE_ONLINE_USERS = 'application/UPDATE_ONLINE_USERS';
 const initialState = {
   loading: false,
   initialSignIn: false,  
-  onlineUsers: [],
+  isAuthenticated: false,
+  onlineUsers: []
 };
 
 export default (state = initialState, action) => {
@@ -32,12 +33,13 @@ export const initialize = () => {
   return async (dispatch) => {
     const Services = new ServiceContainer();
     const auth = Services.auth();
-    // if (auth.isAuthenticated()) {
-      const ws = Services.ws();
-      const data = await ws.initialize();
-      const { onlineUsers } = data;
-      dispatch(updateOnlineUsers(onlineUsers));
-    // }
+    if (!auth.isAuthenticated()) {
+      return;
+    }
+    const ws = Services.ws();
+    const data = await ws.initialize();
+    const { onlineUsers } = data;
+    dispatch(updateOnlineUsers(onlineUsers));
   };    
 };
 

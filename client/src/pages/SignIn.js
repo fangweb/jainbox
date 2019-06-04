@@ -2,7 +2,27 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { InboxPath } from '../const';
+import { ServiceContainer } from '../services';
 import '../assets/css/sign-in.css';
+
+const getNewInitialState = () => {
+  return {
+    displaySignup: false,
+    formSubmitting: false,
+    formError: false,
+    redirect: false,
+    formSignin: {
+      username: '',
+      password: ''
+    },
+    formSignup: {
+      username: '',
+      password: '',
+      verify: '',
+      generateMock: true
+    }
+  };
+}
 
 class SignIn extends Component {
   
@@ -15,30 +35,20 @@ class SignIn extends Component {
     super(props);
     
     this.state = {
-      displaySignup: false,
-      signinForm: {
-        username: '',
-        password: ''
-      },
-      signupForm: {
-        username: '',
-        password: '',
-        verify: '',
-        generateMock: true
-      }
+      ...getNewInitialState()
     };
     
+    this.auth = new ServiceContainer().auth();
   }
   
   toggleCard = e => {
     e.preventDefault();
-    this.setState(prevState => ({ displaySignup: !prevState.displaySignup }));
+    this.setState(prevState => ({ ...getNewInitialState(), displaySignup: !prevState.displaySignup }));
   }
   
   setForm = (formType, e) => {
     const target = e.target;
     const { name, value } = target;
-    console.log(name, value);
     this.setState(prevState => ({ 
       [formType]:  {
         ...prevState[formType],
@@ -49,29 +59,45 @@ class SignIn extends Component {
   
   toggleCheckbox = () => {
     this.setState( prevState => ({ 
-      signupForm: {
-        ...prevState['signupForm'],
-        generateMock: !prevState['signupForm']['generateMock']
+      formSignup: {
+        ...prevState['formSignup'],
+        generateMock: !prevState['formSignup']['generateMock']
       }
     })); 
   }
   
-  handleSignin = e => {
+  handleSignin = async (e) => {
     e.preventDefault();
-    console.log(this.state.signinForm);
+    this.setState({ formSubmitting: true });
+    try {
+      await this.auth.signIn({ ...this.state.formSignin });
+      this.setState({ redirect: true });
+    }
+    catch (e) {
+      this.setState({ formError: true, formSubmitting: false });
+    }
   }
 
-  handleSignup = e => {
+  handleSignup = async (e) => {
     e.preventDefault();  
-    console.log(this.state.signupForm);
+    this.setState({ formSubmitting: true });
+    try {
+      await this.auth.signIn({ ...this.state.formSignup });
+      this.setState({ redirect: true });
+    }
+    catch (e) {
+      this.setState({ formError: true, formSubmitting: false });
+    }    
   }
   
   render() {
     const { isAuthenticated } = this.props;
-    const { displaySignup, signinForm, signupForm } = this.state;
+    const { displaySignup, formSignin, formSignup, formError, redirect } = this.state;
     
-    if (isAuthenticated) {
-      return <Redirect to={`${InboxPath}/page/1`} />;
+    if (isAuthenticated || redirect) {
+      return (
+        <Redirect to={InboxPath} />
+      );
     }
     
     if (!displaySignup) {
@@ -83,9 +109,14 @@ class SignIn extends Component {
                 <i className="fas fa-sign-in-alt signinIcon"></i>
                 <b>Sign In</b>
               </div>
+              {formError &&
+                <div className="form-errors">
+                  Please check that all your fields are correct. 
+                </div>
+              }
               <form onSubmit={this.handleSignin}>
-                <input onChange={e => this.setForm('signinForm', e)} value={signinForm.username} type="text" name="username" placeholder="Username" />
-                <input onChange={e => this.setForm('signinForm', e)} value={signinForm.password} type="password" name="password" placeholder="Password" />
+                <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignin', e)} value={formSignin.username} type="text" name="username" placeholder="Username" />
+                <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignin', e)} value={formSignin.password} type="password" name="password" placeholder="Password" />
                 <button type="submit" className="sign-in__button"><b>Sign in</b></button>
               </form>
             </div>
@@ -109,11 +140,11 @@ class SignIn extends Component {
                 <b>Sign up</b>
               </div>
               <form onSubmit={this.handleSignup}>
-                <input onChange={e => this.setForm('signupForm', e)} value={signupForm.username}  type="text" name="username" placeholder="Username" />
-                <input onChange={e => this.setForm('signupForm', e)} value={signupForm.password}  type="password" name="password" placeholder="Password" />
-                <input onChange={e => this.setForm('signupForm', e)} value={signupForm.verify}  type="password" name="verify" placeholder="Verify Password" />
+                <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignup', e)} value={formSignup.username}  type="text" name="username" placeholder="Username" />
+                <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignup', e)} value={formSignup.password}  type="password" name="password" placeholder="Password" />
+                <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignup', e)} value={formSignup.verify}  type="password" name="verify" placeholder="Verify Password" />
                 <label className="mock-ctrl">
-                  <input onChange={this.toggleCheckbox} checked={signupForm.generateMock} type="checkbox" /> 
+                  <input onChange={this.toggleCheckbox} checked={formSignup.generateMock} type="checkbox" /> 
                   <span>Generate Mock Data</span>
                 </label>
                 <button type="submit" className="sign-in__button"><b>Sign up</b></button>

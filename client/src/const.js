@@ -7,6 +7,7 @@ export const ApiConfig = {
 };
 
 export const RootPath = '/';
+export const SignInPath = '/signin';
 export const ComposePath = '/compose';
 export const InboxPath = '/inbox';
 export const SentPath = '/sent';

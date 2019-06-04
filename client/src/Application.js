@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { RootPath, ComposePath, InboxPath, SentPath, TrashPath, ViewMessagePath, TestAreaPath } from './const';
+import { SignInPath, RootPath, ComposePath, InboxPath, SentPath, TrashPath, ViewMessagePath, TestAreaPath } from './const';
 import DashboardLayout from './components/DashboardLayout';
 import Inbox from './pages/Inbox';
 import Compose from './pages/Compose';
 import Sent from './pages/Sent';
 import Trash from './pages/Trash';
 import ViewMessage from './pages/ViewMessage';
+import SignIn from './pages/SignIn';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { TestArea } from './pkg/testArea';
@@ -30,6 +31,14 @@ class Application extends Component {
           <Redirect exact from={InboxPath} to={`${InboxPath}/page/1`} />
           <Redirect exact from={SentPath} to={`${SentPath}/page/1`} />
           <Redirect exact from={TrashPath} to={`${TrashPath}/page/1`} />
+          <Route
+            path={SignInPath}
+            name="signin"
+            key="signin"
+            render={props => (
+              <SignIn isAuthenticated={false} {...props} />
+            )}
+          />
           <Route 
             path={`${InboxPath}/page/:page`}
             name="inbox"

@@ -1,10 +1,19 @@
 export default class Session {
-  static storeJwt(token) {
-    localStorage.setItem("jwt", token);
+
+  static set(k, v) {
+    localStorage.setItem(k, v);
   }
   
-  static getJwt() {
-    return localStorage.getItem("jwt");
+  static get(k) {
+    return localStorage.getItem(k);
+  }
+  
+  static remove(k) {
+    localStorage.removeItem(k);
+  }
+  
+  static clear() {
+    localStorage.clear();
   }
   
 }
