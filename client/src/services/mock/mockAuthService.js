@@ -13,7 +13,7 @@ export class MockAuthService {
   }
   
   async signIn({ username, password }) {
-    await wait(500);
+    await wait(1000);
     if (username === 'showError') {
       return Promise.reject();
     }
@@ -22,7 +22,7 @@ export class MockAuthService {
   }
   
   async signUp({ username, password, createWithMockData }) {
-    await wait(500);
+    await wait(1000);
     if (username === 'showError') {
       return Promise.reject();
     }

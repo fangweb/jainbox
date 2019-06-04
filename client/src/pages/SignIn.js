@@ -24,6 +24,20 @@ const getNewInitialState = () => {
   };
 }
 
+const SubmitButton = ({ onClick, message, formSubmitting, submittingMessage }) => {
+  if (formSubmitting) {
+    return (
+      <button type="submit" disabled className="sign-in__button disabled">
+        <i style={{ marginRight: '1em' }} className="fas fa-spinner fa-spin"></i>
+        <b>{submittingMessage}</b>
+      </button>
+    );
+  }
+  return (
+    <button type="submit" onClick={onClick} className="sign-in__button"><b>{message}</b></button>
+  );
+};
+
 class SignIn extends Component {
   
   // pass props from render on route
@@ -92,7 +106,7 @@ class SignIn extends Component {
   
   render() {
     const { isAuthenticated } = this.props;
-    const { displaySignup, formSignin, formSignup, formError, redirect } = this.state;
+    const { displaySignup, formSubmitting, formSignin, formSignup, formError, redirect } = this.state;
     
     if (isAuthenticated || redirect) {
       return (
@@ -111,13 +125,20 @@ class SignIn extends Component {
               </div>
               {formError &&
                 <div className="form-errors">
-                  Please check that all your fields are correct. 
+                  <ul>
+                    <li>Please check that all your fields are correct. </li>
+                  </ul>
                 </div>
               }
               <form onSubmit={this.handleSignin}>
                 <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignin', e)} value={formSignin.username} type="text" name="username" placeholder="Username" />
                 <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignin', e)} value={formSignin.password} type="password" name="password" placeholder="Password" />
-                <button type="submit" className="sign-in__button"><b>Sign in</b></button>
+                <SubmitButton 
+                  onClick={this.handleSignin} 
+                  message="Sign in" 
+                  formSubmitting={formSubmitting}
+                  submittingMessage="Signing in"
+                />
               </form>
             </div>
             <div className="secondary">
@@ -139,6 +160,13 @@ class SignIn extends Component {
                 <i className="fas fa-users signinIcon"></i>
                 <b>Sign up</b>
               </div>
+              {formError &&
+                <div className="form-errors">
+                  <ul>
+                    <li>Please check that all your fields are correct. </li>
+                  </ul>
+                </div>
+              }              
               <form onSubmit={this.handleSignup}>
                 <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignup', e)} value={formSignup.username}  type="text" name="username" placeholder="Username" />
                 <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignup', e)} value={formSignup.password}  type="password" name="password" placeholder="Password" />
@@ -147,7 +175,12 @@ class SignIn extends Component {
                   <input onChange={this.toggleCheckbox} checked={formSignup.generateMock} type="checkbox" /> 
                   <span>Generate Mock Data</span>
                 </label>
-                <button type="submit" className="sign-in__button"><b>Sign up</b></button>
+                <SubmitButton 
+                  onClick={this.handleSignup} 
+                  message="Sign up" 
+                  formSubmitting={formSubmitting}
+                  submittingMessage="Signing up"
+                />
               </form>
             </div>
             <div className="secondary">
