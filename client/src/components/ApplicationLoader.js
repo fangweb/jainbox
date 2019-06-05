@@ -16,10 +16,18 @@ class ApplicationLoader extends Component {
     children: PropTypes.node.isRequired
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      bootstrappingApplication: true
+    }
+  }
+
   async initialize() {
     const { application, updateOnlineUsers, updateLoaded, updateAuthenticated } = this.props;
     const auth = (new ServiceContainer()).auth();
     updateAuthenticated(auth.isAuthenticated());
+    this.setState({ bootstrappingApplication: false });
     if (application.loaded || !auth.isAuthenticated()) {
       return;
     }
@@ -35,6 +43,19 @@ class ApplicationLoader extends Component {
   
   render() {
     const { application } = this.props;
+    const { bootstrappingApplication } = this.state;
+    
+    if (bootstrappingApplication) {
+      return (
+        <div className="application-loader">
+          <div className="inner">
+            <i className="fas fa-wifi application-loader-icon"></i>
+            <span>Bootstrapping application</span>
+            <Loader />
+          </div>
+        </div>
+      );      
+    }
     
     if (!application.isAuthenticated) {
       return (
