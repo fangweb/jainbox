@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { InboxPath } from '../const';
 import { ServiceContainer } from '../services';
+import { updateAuthenticated } from '../modules/application-module';
 import '../assets/css/sign-in.css';
 
 const getNewInitialState = () => {
@@ -10,7 +12,6 @@ const getNewInitialState = () => {
     displaySignup: false,
     formSubmitting: false,
     formError: false,
-    redirect: false,
     formSignin: {
       username: '',
       password: ''
@@ -24,7 +25,7 @@ const getNewInitialState = () => {
   };
 }
 
-const SubmitButton = ({ onClick, message, formSubmitting, submittingMessage }) => {
+const SubmitButton = ({ message, formSubmitting, submittingMessage }) => {
   if (formSubmitting) {
     return (
       <button type="submit" disabled className="sign-in__button disabled">
@@ -34,16 +35,11 @@ const SubmitButton = ({ onClick, message, formSubmitting, submittingMessage }) =
     );
   }
   return (
-    <button type="submit" onClick={onClick} className="sign-in__button"><b>{message}</b></button>
+    <button type="submit" className="sign-in__button"><b>{message}</b></button>
   );
 };
 
 class SignIn extends Component {
-  
-  // pass props from render on route
-  static propTypes = {
-    isAuthenticated: PropTypes.bool.isRequired
-  }
   
   constructor(props) {
     super(props);
@@ -81,23 +77,26 @@ class SignIn extends Component {
   }
   
   handleSignin = async (e) => {
+    const { updateAuthenticated } = this.props;
     e.preventDefault();
     this.setState({ formSubmitting: true });
     try {
       await this.auth.signIn({ ...this.state.formSignin });
-      this.setState({ redirect: true });
+      updateAuthenticated(true);
     }
     catch (e) {
+      console.log(e);
       this.setState({ formError: true, formSubmitting: false });
     }
   }
 
   handleSignup = async (e) => {
+    const { updateAuthenticated } = this.props;
     e.preventDefault();  
     this.setState({ formSubmitting: true });
     try {
-      await this.auth.signIn({ ...this.state.formSignup });
-      this.setState({ redirect: true });
+      await this.auth.signUp({ ...this.state.formSignup });
+      updateAuthenticated(true);     
     }
     catch (e) {
       this.setState({ formError: true, formSubmitting: false });
@@ -105,10 +104,10 @@ class SignIn extends Component {
   }
   
   render() {
-    const { isAuthenticated } = this.props;
-    const { displaySignup, formSubmitting, formSignin, formSignup, formError, redirect } = this.state;
+    const { application } = this.props;
+    const { displaySignup, formSubmitting, formSignin, formSignup, formError } = this.state;
     
-    if (isAuthenticated || redirect) {
+    if (application.isAuthenticated) {
       return (
         <Redirect to={InboxPath} />
       );
@@ -134,7 +133,6 @@ class SignIn extends Component {
                 <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignin', e)} value={formSignin.username} type="text" name="username" placeholder="Username" />
                 <input className={`${formError ? 'error' : ''}`} onChange={e => this.setForm('formSignin', e)} value={formSignin.password} type="password" name="password" placeholder="Password" />
                 <SubmitButton 
-                  onClick={this.handleSignin} 
                   message="Sign in" 
                   formSubmitting={formSubmitting}
                   submittingMessage="Signing in"
@@ -176,7 +174,6 @@ class SignIn extends Component {
                   <span>Generate Mock Data</span>
                 </label>
                 <SubmitButton 
-                  onClick={this.handleSignup} 
                   message="Sign up" 
                   formSubmitting={formSubmitting}
                   submittingMessage="Signing up"
@@ -197,5 +194,12 @@ class SignIn extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  application: state.applicationReducer
+}); 
 
-export default SignIn;
+const mapDispatchToProps = dispatch => bindActionCreators({
+  updateAuthenticated
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

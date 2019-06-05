@@ -2,26 +2,20 @@ import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { SignInPath, RootPath, ComposePath, InboxPath, SentPath, TrashPath, ViewMessagePath, TestAreaPath } from './const';
 import DashboardLayout from './components/DashboardLayout';
+import ApplicationLoader from './components/ApplicationLoader';
 import Inbox from './pages/Inbox';
 import Compose from './pages/Compose';
 import Sent from './pages/Sent';
 import Trash from './pages/Trash';
 import ViewMessage from './pages/ViewMessage';
 import SignIn from './pages/SignIn';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { TestArea } from './pkg/testArea';
 import { Modal } from './pkg/modal';
 import { Toast } from './pkg/toast';
-import { initialize } from './modules/application-module';
 
 import './assets/css/index.css';
 
 class Application extends Component {
-  
-  componentDidMount() {
-    this.props.initialize();
-  }
   
   render() {
     return (
@@ -36,7 +30,7 @@ class Application extends Component {
             name="signin"
             key="signin"
             render={props => (
-              <SignIn isAuthenticated={false} {...props} />
+              <SignIn {...props} />
             )}
           />
           <Route 
@@ -44,9 +38,11 @@ class Application extends Component {
             name="inbox"
             key="inbox"
             render={props => (
-              <DashboardLayout>
-                <Inbox {...props} />
-              </DashboardLayout>
+              <ApplicationLoader>
+                <DashboardLayout>
+                  <Inbox {...props} />
+                </DashboardLayout>
+              </ApplicationLoader>
             )}
           />
           <Route
@@ -55,9 +51,11 @@ class Application extends Component {
             name="compose"
             key="compose"
             render={props => (
-              <DashboardLayout>
-                <Compose {...props} />
-              </DashboardLayout>
+             <ApplicationLoader>  
+               <DashboardLayout>
+                 <Compose {...props} />
+               </DashboardLayout>
+             </ApplicationLoader>
             )}
           />
           <Route
@@ -66,9 +64,11 @@ class Application extends Component {
             name="sent"
             key="sent"
             render={props => (
-              <DashboardLayout>
-                <Sent {...props} />
-              </DashboardLayout>
+              <ApplicationLoader>
+                <DashboardLayout>
+                  <Sent {...props} />
+                </DashboardLayout>
+              </ApplicationLoader>
             )}
           />
           <Route
@@ -77,9 +77,11 @@ class Application extends Component {
             name="trash"
             key="trash"
             render={props => (
-              <DashboardLayout>
-                <Trash {...props} />
-              </DashboardLayout>
+              <ApplicationLoader>
+                <DashboardLayout>
+                  <Trash {...props} />
+                </DashboardLayout>
+              </ApplicationLoader>
             )}
           />
           <Route
@@ -87,9 +89,11 @@ class Application extends Component {
             name="view-message"
             key="view-message"
             render={props => (
-              <DashboardLayout>
-                <ViewMessage {...props} />
-              </DashboardLayout>
+              <ApplicationLoader>
+                <DashboardLayout>
+                  <ViewMessage {...props} />
+                </DashboardLayout>
+              </ApplicationLoader>
             )}
           />
           <Route
@@ -97,9 +101,11 @@ class Application extends Component {
             name="testArea"
             key="testArea"
             render={props => (
-              <DashboardLayout>
-                <TestArea {...props} />
-              </DashboardLayout>
+              <ApplicationLoader>
+                <DashboardLayout>
+                  <TestArea {...props} />
+                </DashboardLayout>
+              </ApplicationLoader>
             )}
           />
           {/* TODO: not found */}
@@ -111,15 +117,4 @@ class Application extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      initialize,
-    },
-    dispatch
-  );
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(Application);
+export default Application;

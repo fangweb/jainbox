@@ -1,5 +1,6 @@
 import Session from '../../lib/session';
 import { userSignin, userSignup } from './response';
+import AuthenticationError from '../../lib/error/AuthenticationError';
 import { wait } from '../../helpers';
 
 export class MockAuthService {
@@ -12,22 +13,30 @@ export class MockAuthService {
     Session.set('jwt', token);
   }
   
+  clearJwt() {
+    Session.remove('jwt');
+  }
+  
   async signIn({ username, password }) {
     await wait(1000);
     if (username === 'showError') {
-      return Promise.reject();
+      throw new AuthenticationError('Mock error');
     }
     this.storeJwt(userSignin.token);
-    return Promise.resolve(userSignin);
+    return userSignin;
   }
   
   async signUp({ username, password, createWithMockData }) {
     await wait(1000);
     if (username === 'showError') {
-      return Promise.reject();
+      throw new AuthenticationError('Mock error'); 
     }
     this.storeJwt(userSignin.token);
-    return Promise.resolve(userSignup);  
+    return userSignup;  
+  }
+  
+  signOut() {
+    this.clearJwt(); 
   }
   
 }

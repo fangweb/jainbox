@@ -1,56 +1,48 @@
-import { ServiceContainer } from '../services';
-
-export const LOADING = 'application/LOADING';
-export const INITIAL_SIGN_IN = 'application/INITIAL_SIGN_IN';
+export const UPDATE_AUTHENTICATED = 'application/UPDATE_AUTHENTICATED';
 export const UPDATE_ONLINE_USERS = 'application/UPDATE_ONLINE_USERS';
+export const UPDATE_LOADED = 'application/UPDATE_LOADED';
 
 const initialState = {
-  loading: false,
-  initialSignIn: false,  
   isAuthenticated: false,
-  onlineUsers: []
+  onlineUsers: [],
+  loaded: false  
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case UPDATE_AUTHENTICATED:
+      return {
+        ...state,
+        isAuthenticated: action.payload
+      };
     case UPDATE_ONLINE_USERS:
       return {
+        ...state,
         onlineUsers: action.payload
+      };
+    case UPDATE_LOADED:
+      return {
+        ...state,
+        loaded: action.payload
       };
     default: 
       return state;
   }
 };
 
-export const updateOnlineUsers = (onlineUsers) => {
-  return {
-    type: UPDATE_ONLINE_USERS,
-    payload: onlineUsers
-  };
-};
-
-export const initialize = () => {
-  return async (dispatch) => {
-    const Services = new ServiceContainer();
-    const auth = Services.auth();
-    if (!auth.isAuthenticated()) {
-      return;
-    }
-    const ws = Services.ws();
-    const data = await ws.initialize();
-    const { onlineUsers } = data;
-    dispatch(updateOnlineUsers(onlineUsers));
-  };    
-};
-
-export const loading = () => ({
-  type: LOADING
+export const updateAuthenticated = (isAuthenticated) => ({
+  type: UPDATE_AUTHENTICATED,
+  payload: isAuthenticated
 });
 
-export const initialSignIn = (value) => ({
-  type: INITIAL_SIGN_IN,
-  payload: value
+export const updateOnlineUsers = (onlineUsers) => ({
+  type: UPDATE_ONLINE_USERS,
+  payload: onlineUsers
 });
 
+export const updateLoaded = (loaded) => ({
+  type: UPDATE_LOADED,
+  payload: loaded
+});
 
 
