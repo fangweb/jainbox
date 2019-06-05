@@ -1,7 +1,7 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 dotenv.config();
 
-type NodeEnv = 'test' | 'development' | 'production';
+type NodeEnv = "test" | "development" | "production";
 
 export interface IConfiguration {
   nodeEnv: NodeEnv;
@@ -22,6 +22,6 @@ export const Config: IConfiguration = {
   },
   jwt: {
     secret: process.env.JWTSECRET,
-    expiration: '24 hours'
+    expiration: "24 hours"
   }
 };

@@ -1,7 +1,7 @@
-import { RequestHandler } from 'express';
-import { BaseController } from './base.controller';
+import { RequestHandler } from "express";
+import { BaseController } from "./base.controller";
 
-import { UserService } from '../services';
+import { UserService } from "../services";
 import {
   IncorrectPasswordError,
   UserNotFoundError,
@@ -9,18 +9,28 @@ import {
   UserExistsError,
   HttpError,
   DeactivateError
-} from '../common/errors';
-import { EmptyFieldsErrorMessage, MaxUsernameLength, MaxPasswordLength, InvalidLengthMessage } from '../common/const';
-import { isLenLowerThan } from '../common/helpers';
+} from "../common/errors";
+import {
+  EmptyFieldsErrorMessage,
+  MaxUsernameLength,
+  MaxPasswordLength,
+  InvalidLengthMessage
+} from "../common/const";
+import { isLenLowerThan } from "../common/helpers";
 
 const validation = (request, response, next) => {
   const { username, password } = request.body;
 
   if (!username || !password) {
-    return next(new HttpError({ status: 401, message: EmptyFieldsErrorMessage }));
+    return next(
+      new HttpError({ status: 401, message: EmptyFieldsErrorMessage })
+    );
   }
 
-  if (!isLenLowerThan(username, MaxUsernameLength) || !isLenLowerThan(password, MaxPasswordLength)) {
+  if (
+    !isLenLowerThan(username, MaxUsernameLength) ||
+    !isLenLowerThan(password, MaxPasswordLength)
+  ) {
     return next(new HttpError({ status: 401, message: InvalidLengthMessage }));
   }
 
@@ -32,31 +42,38 @@ export class UserController extends BaseController {
     super();
 
     this.router.use(validation);
-    this.router.route('/sign-in').get(this.signIn);
+    this.router.route("/sign-in").get(this.signIn);
 
-    this.router.route('/create').post(this.create);
+    this.router.route("/create").post(this.create);
 
-    this.router.route('/deactivate').put(this.deactivate);
+    this.router.route("/deactivate").put(this.deactivate);
   }
 
   public static get router() {
     return new UserController().router;
   }
 
-  private signIn: RequestHandler = async (request, response, next): Promise<any> => {
+  private signIn: RequestHandler = async (
+    request,
+    response,
+    next
+  ): Promise<any> => {
     const { username, password } = request.body;
     let token;
 
     try {
       token = await UserService.signIn(username, password);
     } catch (error) {
-      if (error instanceof IncorrectPasswordError || error instanceof UserNotFoundError) {
+      if (
+        error instanceof IncorrectPasswordError ||
+        error instanceof UserNotFoundError
+      ) {
         return next(new UnauthorizedError(error.message));
       }
       return next(error);
     }
 
-    response.header('Authorization', `Bearer ${token}`);
+    response.header("Authorization", `Bearer ${token}`);
     response.status(200).end();
   };
 
@@ -73,7 +90,7 @@ export class UserController extends BaseController {
       return next(error);
     }
 
-    response.header('Authorization', `Bearer ${token}`);
+    response.header("Authorization", `Bearer ${token}`);
     response.status(200).end();
   };
 
@@ -83,7 +100,11 @@ export class UserController extends BaseController {
     try {
       await UserService.deactivate(username, password);
     } catch (error) {
-      if (error instanceof DeactivateError || error instanceof IncorrectPasswordError || error instanceof UserNotFoundError) {
+      if (
+        error instanceof DeactivateError ||
+        error instanceof IncorrectPasswordError ||
+        error instanceof UserNotFoundError
+      ) {
         return next(new HttpError({ status: 401, message: error.message }));
       }
       return next(error);

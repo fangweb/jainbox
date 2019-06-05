@@ -1,5 +1,5 @@
-import { InternalServerErrorMessage } from '../../const';
-import { HttpError } from './http.error';
+import { InternalServerErrorMessage } from "../../const";
+import { HttpError } from "./http.error";
 
 export class InternalServerError extends HttpError {
   constructor() {

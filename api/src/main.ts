@@ -1,4 +1,4 @@
-import { Server } from './server';
+import { Server } from "./server";
 
 class Main {
   public static async run(): Promise<void> {

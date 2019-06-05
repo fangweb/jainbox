@@ -1,4 +1,4 @@
-import { DeactivateErrorMessage } from '../const';
+import { DeactivateErrorMessage } from "../const";
 
 export class DeactivateError extends Error {
   constructor() {

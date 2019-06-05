@@ -1,4 +1,4 @@
-import { UpdateOnlineStatusMessage } from '../const';
+import { UpdateOnlineStatusMessage } from "../const";
 
 export class UpdateOnlineStatusError extends Error {
   constructor() {

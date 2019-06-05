@@ -1,19 +1,32 @@
-import * as pgPromise from 'pg-promise';
-import * as queries from './queries/user.queries';
-import { Db } from '../db';
-import { UpdateOnlineStatusError, UserExistsError, UserNotFoundError } from '../common/errors';
+import * as pgPromise from "pg-promise";
+import * as queries from "./queries/user.queries";
+import { Db } from "../db";
+import {
+  UpdateOnlineStatusError,
+  UserExistsError,
+  UserNotFoundError
+} from "../common/errors";
 
 export class UserRepository {
-  public static create({ username, hash }: { username: string; hash: string }): Promise<any> {
+  public static create({
+    username,
+    hash
+  }: {
+    username: string;
+    hash: string;
+  }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       Db.tx(async t => {
-        const createdAccount = await t.one(queries.createAccount, { username, hash });
+        const createdAccount = await t.one(queries.createAccount, {
+          username,
+          hash
+        });
         await t.none(queries.createStatus, { usernameId: createdAccount.id });
         return createdAccount;
       })
         .then(data => resolve(data))
         .catch(error => {
-          if (error.code === '23505') {
+          if (error.code === "23505") {
             return reject(new UserExistsError());
           }
           reject(error);
@@ -38,10 +51,20 @@ export class UserRepository {
     });
   }
 
-  public static deactivate({ username, hash }: { username: string; hash: string }): Promise<any> {
+  public static deactivate({
+    username,
+    hash
+  }: {
+    username: string;
+    hash: string;
+  }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const data = await Db.one(queries.deactivate, { username, hash, deactivate: true });
+        const data = await Db.one(queries.deactivate, {
+          username,
+          hash,
+          deactivate: true
+        });
         resolve(data);
       } catch (error) {
         reject(error);
@@ -58,7 +81,10 @@ export class UserRepository {
   }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const data = await Db.one(queries.updateStatus, { usernameId, onlineStatus });
+        const data = await Db.one(queries.updateStatus, {
+          usernameId,
+          onlineStatus
+        });
         resolve(data);
       } catch (error) {
         reject(new UpdateOnlineStatusError());

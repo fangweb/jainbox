@@ -1,7 +1,6 @@
-import * as pgPromise from 'pg-promise';
-import * as panelQueries from './queries/panel.queries';
-import { Db } from '../db';
-
+import * as pgPromise from "pg-promise";
+import * as panelQueries from "./queries/panel.queries";
+import { Db } from "../db";
 
 export class PanelRepository {
   public static getInboxMessages({
@@ -73,7 +72,13 @@ export class PanelRepository {
     });
   }
 
-  public static putMessageIntoTrash({ usernameId, messageId }: { usernameId: number; messageId: number }): Promise<any> {
+  public static putMessageIntoTrash({
+    usernameId,
+    messageId
+  }: {
+    usernameId: number;
+    messageId: number;
+  }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await Db.any(panelQueries.updatePanelMessage, {
@@ -91,7 +96,13 @@ export class PanelRepository {
   }
 
   /** such is an undo action from trash */
-  public static putMessageIntoInbox({ usernameId, messageId }: { usernameId: number; messageId: number }): Promise<any> {
+  public static putMessageIntoInbox({
+    usernameId,
+    messageId
+  }: {
+    usernameId: number;
+    messageId: number;
+  }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await Db.any(panelQueries.updatePanelMessage, {
@@ -108,7 +119,13 @@ export class PanelRepository {
     });
   }
 
-  public static softDeleteMessage({ usernameId, messageId }: { usernameId: number; messageId: number }): Promise<any> {
+  public static softDeleteMessage({
+    usernameId,
+    messageId
+  }: {
+    usernameId: number;
+    messageId: number;
+  }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await Db.any(panelQueries.updatePanelMessage, {
@@ -124,5 +141,4 @@ export class PanelRepository {
       }
     });
   }
-
 }

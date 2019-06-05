@@ -1,5 +1,5 @@
-import { Config } from '../config';
-import * as pgPromise from 'pg-promise';
+import { Config } from "../config";
+import * as pgPromise from "pg-promise";
 
 const options: any = {
   host: Config.pg.host,

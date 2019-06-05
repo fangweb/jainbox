@@ -1,22 +1,22 @@
-import * as BodyParser from 'body-parser';
-import * as Compression from 'compression';
-import * as Cors from 'cors';
-import * as Express from 'express';
-import * as Helmet from 'helmet';
-import * as Logger from 'morgan';
+import * as BodyParser from "body-parser";
+import * as Compression from "compression";
+import * as Cors from "cors";
+import * as Express from "express";
+import * as Helmet from "helmet";
+import * as Logger from "morgan";
 
-import { UserController, PanelController } from './controllers';
+import { UserController, PanelController } from "./controllers";
 
-import { NotFoundHandler, ErrorDevHandler, ErrorHandler } from './handlers';
-import { Config } from './config';
-import { Db } from './db';
+import { NotFoundHandler, ErrorDevHandler, ErrorHandler } from "./handlers";
+import { Config } from "./config";
+import { Db } from "./db";
 
 export class Server {
   public static async start(): Promise<void> {
     const server = new Server();
 
     await server.application.listen(Config.serverPort);
-    console.log('API is listening at port %s', Config.serverPort);
+    console.log("API is listening at port %s", Config.serverPort);
   }
 
   private readonly application: Express.Application;
@@ -32,8 +32,8 @@ export class Server {
   }
 
   private initialize(): void {
-    if (Config.nodeEnv !== 'production') {
-      this.application.use(Logger('dev'));
+    if (Config.nodeEnv !== "production") {
+      this.application.use(Logger("dev"));
     }
 
     this.application.use(Helmet());
@@ -44,10 +44,10 @@ export class Server {
   }
 
   private setupEndpoints(): void {
-    this.application.use('/user', UserController.router);
-    this.application.use('/panel', PanelController.router);
+    this.application.use("/user", UserController.router);
+    this.application.use("/panel", PanelController.router);
     this.application.use(NotFoundHandler);
-    if (Config.nodeEnv === 'development') {
+    if (Config.nodeEnv === "development") {
       this.application.use(ErrorDevHandler);
     }
     this.application.use(ErrorHandler);

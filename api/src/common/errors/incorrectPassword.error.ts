@@ -1,4 +1,4 @@
-import { IncorrectPasswordMessage } from '../const';
+import { IncorrectPasswordMessage } from "../const";
 
 export class IncorrectPasswordError extends Error {
   constructor() {

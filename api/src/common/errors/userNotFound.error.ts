@@ -1,4 +1,4 @@
-import { UserNotFoundMessage } from '../const';
+import { UserNotFoundMessage } from "../const";
 
 export class UserNotFoundError extends Error {
   constructor() {

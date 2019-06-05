@@ -1,11 +1,14 @@
-import * as Bcrypt from 'bcryptjs';
-import { IncorrectPasswordError, DeactivateError } from '../common/errors';
-import { TokenService } from './token.service';
-import { UserRepository } from '../repository';
-import { Config } from '../config';
+import * as Bcrypt from "bcryptjs";
+import { IncorrectPasswordError, DeactivateError } from "../common/errors";
+import { TokenService } from "./token.service";
+import { UserRepository } from "../repository";
+import { Config } from "../config";
 
 export class UserService {
-  public static async signIn(username: string, password: string): Promise<string> {
+  public static async signIn(
+    username: string,
+    password: string
+  ): Promise<string> {
     let accountData: any;
     try {
       accountData = await UserRepository.details({ username });
@@ -23,7 +26,10 @@ export class UserService {
     }
 
     try {
-      const token = await TokenService.sign(accountData.username, accountData.id);
+      const token = await TokenService.sign(
+        accountData.username,
+        accountData.id
+      );
       return token;
     } catch (error) {
       throw error;
@@ -41,14 +47,20 @@ export class UserService {
 
     try {
       const accountData = await UserRepository.create({ username, hash });
-      const token = await TokenService.sign(accountData.username, accountData.id);
+      const token = await TokenService.sign(
+        accountData.username,
+        accountData.id
+      );
       return token;
     } catch (error) {
       throw error;
     }
   }
 
-  public static async deactivate(username: string, password: string): Promise<void> {
+  public static async deactivate(
+    username: string,
+    password: string
+  ): Promise<void> {
     let accountData: any;
 
     try {

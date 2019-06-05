@@ -1,4 +1,4 @@
-import { UserExistsMessage } from '../const';
+import { UserExistsMessage } from "../const";
 
 export class UserExistsError extends Error {
   constructor() {

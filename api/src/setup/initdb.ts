@@ -1,6 +1,6 @@
-import * as dotenv from 'dotenv';
-import * as fs from 'fs-extra';
-import { Client } from 'pg';
+import * as dotenv from "dotenv";
+import * as fs from "fs-extra";
+import { Client } from "pg";
 
 dotenv.config();
 const init = async () => {
@@ -15,7 +15,7 @@ const init = async () => {
   const client = new Client(options);
   try {
     await client.connect();
-    const sql = await fs.readFile('src/setup/init.sql', { encoding: 'UTF-8' });
+    const sql = await fs.readFile("src/setup/init.sql", { encoding: "UTF-8" });
     const statements = sql.split(/;\s*$/m);
     for (const statement of statements) {
       if (statement.length > 3) {
@@ -31,6 +31,6 @@ const init = async () => {
 
 init()
   .then(() => {
-    console.log('success');
+    console.log("success");
   })
   .catch(error => console.log(error));

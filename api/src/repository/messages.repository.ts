@@ -1,7 +1,7 @@
-import * as pgPromise from 'pg-promise';
-import * as messageQueries from './queries/messages.queries';
-import * as panelQueries from './queries/panel.queries';
-import { Db } from '../db';
+import * as pgPromise from "pg-promise";
+import * as messageQueries from "./queries/messages.queries";
+import * as panelQueries from "./queries/panel.queries";
+import { Db } from "../db";
 
 export class MessagesRepository {
   public static compose({
@@ -32,5 +32,4 @@ export class MessagesRepository {
         .catch(error => reject(error));
     });
   }
-
 }

@@ -1,4 +1,4 @@
-import { ResultsPerPage } from './const';
+import { ResultsPerPage } from "./const";
 export const isEmail = (email: string) => {};
 
 export const isLenLowerThan = (isValid: string, length: number): boolean => {

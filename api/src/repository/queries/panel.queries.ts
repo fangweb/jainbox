@@ -33,7 +33,7 @@ export const getPanelSentMessages = `SELECT panel.id as panel_id, panel.message_
                                        AND panel.archive_level = 0
                                      ORDER BY created_at DESC
                                      OFFSET $[offset] LIMIT $[limit];`;
-                                     
+
 export const getPanelTrashMessages = `SELECT panel.id as panel_id, panel.message_id, panel.archive_level,
                                        messages.created_at, users.username as from
                                       FROM jainbox_schema.panel
@@ -45,6 +45,3 @@ export const getPanelTrashMessages = `SELECT panel.id as panel_id, panel.message
                                         AND panel.archive_level = 1
                                       ORDER BY created_at DESC
                                       OFFSET $[offset] LIMIT $[limit];`;
-
-                                     
-                                     

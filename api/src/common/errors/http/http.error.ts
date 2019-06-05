@@ -1,4 +1,4 @@
-import { InternalServerErrorMessage } from '../../const';
+import { InternalServerErrorMessage } from "../../const";
 
 export class HttpError extends Error {
   public status: number;
