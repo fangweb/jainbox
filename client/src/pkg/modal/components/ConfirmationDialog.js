@@ -6,15 +6,15 @@ class ConfirmationDialog extends React.Component {
   
   static propTypes = {
     title: PropTypes.string.isRequired,
-    onSelect: PropTypes.func.isRequired
+    onConfirm: PropTypes.func.isRequired
   }
   
   preventClose = (event) => {
     event.stopPropagation()
   }
   
-  onSelect = (value) => {
-    this.props.onSelect(value);
+  onConfirm = (value) => {
+    this.props.onConfirm(value);
   }
   
   render() {
@@ -24,8 +24,8 @@ class ConfirmationDialog extends React.Component {
           {this.props.title}
         </div>       
         <div className={styles.ctrl}>
-          <button className={[styles.btn, styles.proceed].join(' ')} onClick={() => this.onSelect(true)}>Proceed</button>
-          <button className={[styles.btn, styles.cancel].join(' ')} onClick={() => this.onSelect(false)}>Cancel</button>
+          <button className={[styles.btn, styles.proceed].join(' ')} onClick={() => this.onConfirm(true)}>Proceed</button>
+          <button className={[styles.btn, styles.cancel].join(' ')} onClick={() => this.onConfirm(false)}>Cancel</button>
         </div>
       </div>      
     );

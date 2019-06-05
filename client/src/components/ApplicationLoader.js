@@ -15,7 +15,6 @@ class ApplicationLoader extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired
   };
-  
 
   async initialize() {
     const { application, updateOnlineUsers, updateLoaded, updateAuthenticated } = this.props;

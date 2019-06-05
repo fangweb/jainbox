@@ -1,6 +1,7 @@
 export const UPDATE_AUTHENTICATED = 'application/UPDATE_AUTHENTICATED';
 export const UPDATE_ONLINE_USERS = 'application/UPDATE_ONLINE_USERS';
 export const UPDATE_LOADED = 'application/UPDATE_LOADED';
+export const RESET = 'application/RESET';
 
 const initialState = {
   isAuthenticated: false,
@@ -25,6 +26,10 @@ export default (state = initialState, action) => {
         ...state,
         loaded: action.payload
       };
+    case RESET:
+      return {
+        ...initialState
+      };  
     default: 
       return state;
   }
@@ -43,6 +48,10 @@ export const updateOnlineUsers = (onlineUsers) => ({
 export const updateLoaded = (loaded) => ({
   type: UPDATE_LOADED,
   payload: loaded
+});
+
+export const reset = () => ({
+  type: RESET
 });
 
 

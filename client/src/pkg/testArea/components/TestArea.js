@@ -50,13 +50,13 @@ class TestAreaC extends Component {
     }
   }
   
-  onSelectModal = (value) => {
+  onConfirm = (value) => {
     console.log(value);
     this.props.closeModal();
   }
   
   openModal = () => {
-    this.props.openModal('CONFIRMATION_MODAL', { title: 'Would you like to proceed?', onSelect: this.onSelectModal });
+    this.props.openModal('CONFIRMATION_MODAL', { title: 'Would you like to proceed?', onConfirm: this.onConfirm });
   }
   
   render() {

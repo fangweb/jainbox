@@ -8,5 +8,9 @@ export class MockWsService {
       onlineUsers: getOnlineUsers
     };
   }
+  
+  disconnect() {
+  
+  }
 
 }
