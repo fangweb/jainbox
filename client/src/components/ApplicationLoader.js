@@ -47,13 +47,7 @@ class ApplicationLoader extends Component {
     
     if (bootstrappingApplication) {
       return (
-        <div className="application-loader">
-          <div className="inner">
-            <i className="fas fa-wifi application-loader-icon"></i>
-            <span>Bootstrapping application</span>
-            <Loader />
-          </div>
-        </div>
+        <div className="application-loader" />
       );      
     }
     
