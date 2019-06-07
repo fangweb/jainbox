@@ -8,9 +8,9 @@ unchanged. It was popularised in the 1960s with the release of Letraset sheets c
 recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`;
 
 export const mockMessage = {
-  "id": "36",
-  "username": "TestUserA",
-  "created_at": '2019-04-07T00:12:10.826Z',
-  "title": "Welcome to the group",
-  "message_text": messageText
+  id: '36',
+  username: 'TestUserA',
+  created_at: '2019-04-07T00:12:10.826Z',
+  title: 'Welcome to the group',
+  message_text: messageText
 };

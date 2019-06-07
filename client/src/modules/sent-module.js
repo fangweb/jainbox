@@ -20,85 +20,99 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case LOADING:
+    case LOADING: {
       return {
         ...state,
         loading: true
       };
-    case RESET:
+    }
+    case RESET: {
       return {
         ...initialState
       };
-    case ERROR:
+    }
+    case ERROR: {
       return {
         ...state,
         error: !state.error
       };
-    case GET_SENT:
+    }
+    case GET_SENT: {
       return {
         ...action.payload,
         loading: false,
         error: false
       };
-    case SELECT_ALL: 
+    }
+    case SELECT_ALL: {
       if (state.sentMessages.length === 0) {
         return state;
       }
-      const selectAll = state.sentMessages.map(message => Object.assign(message, { selected: true }));
+      const selectAll = state.sentMessages.map(message =>
+        Object.assign(message, { selected: true })
+      );
       return {
         ...state,
         sentMessages: selectAll
       };
-    case SELECT_NONE:
+    }
+    case SELECT_NONE: {
       if (state.sentMessages.length === 0) {
         return state;
-      }    
-      const selectNone = state.sentMessages.map(message => Object.assign(message, { selected: false }));
+      }
+      const selectNone = state.sentMessages.map(message =>
+        Object.assign(message, { selected: false })
+      );
       return {
         ...state,
         sentMessages: selectNone
-      };      
-    case SELECT_SINGLE:
+      };
+    }
+    case SELECT_SINGLE: {
       if (state.sentMessages.length === 0) {
         return state;
-      };
+      }
       const selectSingle = state.sentMessages.map(message => {
-        if (message.panel_id === action.payload.panelId) {
-          message.selected = action.payload.isSelected;
+        const mappedMessage = Object.assign({}, message);
+        if (mappedMessage.panel_id === action.payload.panelId) {
+          mappedMessage.selected = action.payload.isSelected;
         }
-        return Object.assign({}, message);
+        return mappedMessage;
       });
       return {
         ...state,
-        sentMessages: selectSingle    
+        sentMessages: selectSingle
       };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 };
 
 export const getSent = ({ page }) => {
-  return async (dispatch) => {
+  return async dispatch => {
     const api = new ServiceContainer().api();
     dispatch({ type: LOADING });
     let apiResult;
-    try { 
+    try {
       apiResult = await api.getSent({ page });
-    }
-    catch (e) {
+    } catch (e) {
       return dispatch(toggleError());
     }
-    const sentMessages = apiResult.messages.map( message => Object.assign(message, { selected: false }));
+    const sentMessages = apiResult.messages.map(message =>
+      Object.assign(message, { selected: false })
+    );
     await wait(300);
-    dispatch({ 
-      type: GET_SENT, 
-      payload: { 
-        sentMessages, 
-        page: apiResult.page, 
-        totalResults: apiResult.totalResults 
+    return dispatch({
+      type: GET_SENT,
+      payload: {
+        sentMessages,
+        page: apiResult.page,
+        totalResults: apiResult.totalResults
       }
     });
-  }
+  };
 };
 
 export const selectAll = () => {
@@ -111,7 +125,7 @@ export const selectNone = () => {
   return {
     type: SELECT_NONE
   };
-}; 
+};
 
 export const selectSingle = (panelId, isSelected) => {
   return {
@@ -136,5 +150,3 @@ export const reset = () => ({
 export const toggleError = () => ({
   type: ERROR
 });
-
-

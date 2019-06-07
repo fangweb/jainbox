@@ -4,39 +4,37 @@ import AuthenticationError from '../../lib/error/AuthenticationError';
 import { wait } from '../../helpers';
 
 export class MockAuthService {
-
-  isAuthenticated() {
-    return Session.get('jwt') ? true : false;
+  static isAuthenticated() {
+    return Session.get('jwt') !== null;
   }
-  
-  storeJwt({ token }) {
+
+  static storeJwt({ token }) {
     Session.set('jwt', token);
   }
-  
-  clearJwt() {
+
+  static clearJwt() {
     Session.remove('jwt');
   }
-  
-  async signIn({ username, password }) {
+
+  static async signIn({ username, password }) {
     await wait(1000);
     if (username === 'showError') {
-      throw new AuthenticationError('Mock error');
+      throw new AuthenticationError('Mock error for User Sign in');
     }
-    this.storeJwt(userSignin.token);
+    MockAuthService.storeJwt(userSignin.token);
     return userSignin;
   }
-  
-  async signUp({ username, password, createWithMockData }) {
+
+  static async signUp({ username, password, createWithMockData }) {
     await wait(1000);
     if (username === 'showError') {
-      throw new AuthenticationError('Mock error'); 
+      throw new AuthenticationError('Mock error for User Sign up');
     }
-    this.storeJwt(userSignin.token);
-    return userSignup;  
+    MockAuthService.storeJwt(userSignin.token);
+    return userSignup;
   }
-  
-  signOut() {
-    this.clearJwt(); 
+
+  static signOut() {
+    MockAuthService.clearJwt();
   }
-  
 }

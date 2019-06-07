@@ -7,15 +7,15 @@ export const SENDING_FORM = 'compose/SEND_FORM';
 const initialState = {
   form: {
     to: null,
-    title: "",
-    message: ""
+    title: '',
+    message: ''
   },
   sending: false
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_FORM: 
+    case SET_FORM:
       return {
         form: {
           ...state.form,
@@ -25,10 +25,10 @@ export default (state = initialState, action) => {
       };
     case CLEAR_FORM:
       return Object.assign({}, initialState);
-    case SENDING_FORM: 
+    case SENDING_FORM:
       return {
         form: {
-          ...state.form,
+          ...state.form
         },
         sending: true
       };
@@ -37,11 +37,11 @@ export default (state = initialState, action) => {
   }
 };
 
-export const setForm = (data) => {
+export const setForm = data => {
   return {
     type: SET_FORM,
     payload: data
-  }
+  };
 };
 
 export const clearForm = () => {
@@ -56,7 +56,7 @@ export const sendForm = () => {
     dispatch({ type: SENDING_FORM });
     const sent = await api.compose(getState().form);
     if (!sent) {
-      //TODO: error sending form
+      // TODO: error sending form
     } else {
       dispatch({ type: CLEAR_FORM });
     }

@@ -20,65 +20,78 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case LOADING:
+    case LOADING: {
       return {
         ...state,
         loading: true
       };
-    case RESET:
+    }
+    case RESET: {
       return {
         ...initialState
       };
-    case ERROR:
+    }
+    case ERROR: {
       return {
         ...state,
         error: !state.error
-      };      
-    case GET_TRASH:
+      };
+    }
+    case GET_TRASH: {
       return {
         ...action.payload,
         loading: false,
         error: false
       };
-    case SELECT_ALL: 
+    }
+    case SELECT_ALL: {
       if (state.trashMessages.length === 0) {
         return state;
       }
-      const selectAll = state.trashMessages.map(message => Object.assign(message, { selected: true }));
+      const selectAll = state.trashMessages.map(message =>
+        Object.assign(message, { selected: true })
+      );
       return {
         ...state,
-        trashMessages: selectAll    
+        trashMessages: selectAll
       };
-    case SELECT_NONE:
+    }
+    case SELECT_NONE: {
       if (state.trashMessages.length === 0) {
         return state;
-      }    
-      const selectNone = state.trashMessages.map(message => Object.assign(message, { selected: false }));
+      }
+      const selectNone = state.trashMessages.map(message =>
+        Object.assign(message, { selected: false })
+      );
       return {
         ...state,
-        trashMessages: selectNone    
-      };      
-    case SELECT_SINGLE:
+        trashMessages: selectNone
+      };
+    }
+    case SELECT_SINGLE: {
       if (state.trashMessages.length === 0) {
         return state;
-      };
+      }
       const selectSingle = state.trashMessages.map(message => {
+        const mappedMessage = Object.assign({}, message);
         if (message.panel_id === action.payload.panelId) {
-          message.selected = action.payload.isSelected;
+          mappedMessage.selected = action.payload.isSelected;
         }
-        return Object.assign({}, message);
+        return mappedMessage;
       });
       return {
         ...state,
-        trashMessages: selectSingle        
+        trashMessages: selectSingle
       };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 };
 
 export const getTrash = ({ page }) => {
-  return async (dispatch) => {
+  return async dispatch => {
     const api = new ServiceContainer().api();
     dispatch({ type: LOADING });
     let apiResult;
@@ -87,17 +100,19 @@ export const getTrash = ({ page }) => {
     } catch (e) {
       return dispatch(toggleError());
     }
-    const trashMessages = apiResult.messages.map( message => Object.assign(message, { selected: false }));
+    const trashMessages = apiResult.messages.map(message =>
+      Object.assign(message, { selected: false })
+    );
     await wait(300);
-    dispatch({ 
-      type: GET_TRASH, 
-      payload: { 
-        trashMessages, 
-        page: apiResult.page, 
-        totalResults: apiResult.totalResults 
+    return dispatch({
+      type: GET_TRASH,
+      payload: {
+        trashMessages,
+        page: apiResult.page,
+        totalResults: apiResult.totalResults
       }
     });
-  }
+  };
 };
 
 export const selectAll = () => {
@@ -110,7 +125,7 @@ export const selectNone = () => {
   return {
     type: SELECT_NONE
   };
-}; 
+};
 
 export const selectSingle = (panelId, isSelected) => {
   return {
@@ -135,5 +150,3 @@ export const reset = () => ({
 export const toggleError = () => ({
   type: ERROR
 });
-
-

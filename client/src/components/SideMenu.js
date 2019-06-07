@@ -3,7 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 import '../assets/css/side-menu.css';
 
 class SideMenu extends Component {
-
   navigateCompose = () => {
     const { history } = this.props;
     history.push('/compose');
@@ -22,7 +21,11 @@ class SideMenu extends Component {
           <li>
             <Link
               to="/inbox"
-              className={`link ${pathname === '/' || ( pathname.indexOf('/inbox/page') > -1 ) ? 'active' : ''}`}
+              className={`link ${
+                pathname === '/' || pathname.indexOf('/inbox/page') > -1
+                  ? 'active'
+                  : ''
+              }`}
             >
               <i className="fas fa-inbox" />
               <span>Inbox</span>
@@ -31,7 +34,11 @@ class SideMenu extends Component {
           <li>
             <Link
               to="/sent"
-              className={`link ${pathname === '/sent' || ( pathname.indexOf('/sent/page') > -1 )  ? 'active' : ''}`}
+              className={`link ${
+                pathname === '/sent' || pathname.indexOf('/sent/page') > -1
+                  ? 'active'
+                  : ''
+              }`}
             >
               <i className="fas fa-envelope-square" />
               <span>Sent Messages</span>
@@ -40,7 +47,11 @@ class SideMenu extends Component {
           <li>
             <Link
               to="/trash"
-              className={`link ${pathname === '/trash' || ( pathname.indexOf('/trash/page') > -1 )   ? 'active' : ''}`}
+              className={`link ${
+                pathname === '/trash' || pathname.indexOf('/trash/page') > -1
+                  ? 'active'
+                  : ''
+              }`}
             >
               <i className="fas fa-trash-alt" />
               <span>Trash</span>

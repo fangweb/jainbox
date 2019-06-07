@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { SignInPath, RootPath, ComposePath, InboxPath, SentPath, TrashPath, ViewMessagePath, TestAreaPath } from './const';
-import DashboardLayout from './components/DashboardLayout';
+import {
+  SignInPath,
+  RootPath,
+  ComposePath,
+  InboxPath,
+  SentPath,
+  TrashPath,
+  ViewMessagePath,
+  TestAreaPath
+} from './const';
 import ApplicationLoader from './components/ApplicationLoader';
+import DashboardLayout from './components/DashboardLayout';
 import Inbox from './pages/Inbox';
 import Compose from './pages/Compose';
 import Sent from './pages/Sent';
@@ -16,7 +25,6 @@ import { Toast } from './pkg/toast';
 import './assets/css/index.css';
 
 class Application extends Component {
-  
   render() {
     return (
       <React.Fragment>
@@ -29,11 +37,9 @@ class Application extends Component {
             path={SignInPath}
             name="signin"
             key="signin"
-            render={props => (
-              <SignIn {...props} />
-            )}
+            render={props => <SignIn {...props} />}
           />
-          <Route 
+          <Route
             path={`${InboxPath}/page/:page`}
             name="inbox"
             key="inbox"
@@ -51,11 +57,11 @@ class Application extends Component {
             name="compose"
             key="compose"
             render={props => (
-             <ApplicationLoader>  
-               <DashboardLayout>
-                 <Compose {...props} />
-               </DashboardLayout>
-             </ApplicationLoader>
+              <ApplicationLoader>
+                <DashboardLayout>
+                  <Compose {...props} />
+                </DashboardLayout>
+              </ApplicationLoader>
             )}
           />
           <Route

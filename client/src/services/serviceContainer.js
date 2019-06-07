@@ -10,17 +10,16 @@ export class ServiceContainer {
   constructor() {
     this.devEnv = process.env.NODE_ENV === 'development';
   }
-  
+
   auth() {
-    return this.devEnv ? new MockAuthService() : new AuthService();
+    return this.devEnv ? MockAuthService : new AuthService();
   }
-  
+
   api() {
-    return this.devEnv ? new MockApiService() : new ApiService();
+    return this.devEnv ? MockApiService : new ApiService();
   }
 
   ws() {
-    return this.devEnv ? new MockWsService() : new WsService();
+    return this.devEnv ? MockWsService : new WsService();
   }
-  
 }

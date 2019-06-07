@@ -2,15 +2,12 @@ import { getOnlineUsers } from './response';
 import { wait } from '../../helpers';
 
 export class MockWsService {
-  async initialize() {
+  static async initialize() {
     await wait(1000);
     return {
       onlineUsers: getOnlineUsers
     };
   }
-  
-  disconnect() {
-  
-  }
 
+  static disconnect() {}
 }

@@ -1,4 +1,5 @@
 import ConfirmationDialog from './components/ConfirmationDialog';
+
 const initialState = null;
 
 const MODAL_OPEN = 'modal/MODAL_OPEN';
@@ -31,8 +32,5 @@ export const closeModal = () => ({
 });
 
 export const modalComponents = {
-  'CONFIRMATION_MODAL': ConfirmationDialog,
+  CONFIRMATION_MODAL: ConfirmationDialog
 };
-
-
-

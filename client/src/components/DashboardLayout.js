@@ -13,7 +13,7 @@ class DashboardLayout extends Component {
         <SideMenu />
         <Panel>{this.props.children}</Panel>
         <Footer />
-      </div> 
+      </div>
     );
   }
 }

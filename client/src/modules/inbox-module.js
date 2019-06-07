@@ -6,7 +6,7 @@ export const RESET = 'inbox/RESET';
 export const ERROR = 'inbox/ERROR';
 export const GET_INBOX = 'inbox/GET_INBOX';
 export const SELECT_ALL = 'inbox/SELECT_ALL';
-export const SELECT_ALL_UNREAD ='inbox/SELECT_ALL_UNREAD';
+export const SELECT_ALL_UNREAD = 'inbox/SELECT_ALL_UNREAD';
 export const SELECT_NONE = 'inbox/SELECT_NONE';
 export const SELECT_SINGLE = 'inbox/SELECT_SINGLE';
 export const TRASH_SELECTED = 'inbox/TRASH_SELECTED';
@@ -21,81 +21,96 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case LOADING:
+    case LOADING: {
       return {
         ...state,
         loading: true
       };
-    case RESET:
+    }
+    case RESET: {
       return {
         ...initialState
       };
-    case ERROR:
+    }
+    case ERROR: {
       return {
         ...initialState,
         error: !state.error
       };
-    case GET_INBOX:
+    }
+    case GET_INBOX: {
       return {
         ...action.payload,
         loading: false,
         error: false
       };
-    case SELECT_ALL: 
+    }
+    case SELECT_ALL: {
       if (state.inboxMessages.length === 0) {
         return state;
       }
-      const selectAll = state.inboxMessages.map(message => Object.assign(message, { selected: true }));
+      const selectAll = state.inboxMessages.map(message =>
+        Object.assign(message, { selected: true })
+      );
       return {
         ...state,
         inboxMessages: selectAll
       };
-    case SELECT_NONE:
+    }
+    case SELECT_NONE: {
       if (state.inboxMessages.length === 0) {
         return state;
-      }    
-      const selectNone = state.inboxMessages.map(message => Object.assign(message, { selected: false }));
+      }
+      const selectNone = state.inboxMessages.map(message =>
+        Object.assign(message, { selected: false })
+      );
       return {
         ...state,
         inboxMessages: selectNone
-      };      
-    case SELECT_ALL_UNREAD:
+      };
+    }
+    case SELECT_ALL_UNREAD: {
       if (state.inboxMessages.length === 0) {
         return state;
       }
       const selectUnread = state.inboxMessages.map(message => {
-        if (message.viewed === false) {
-          message.selected = true;
+        const mappedMessage = Object.assign({}, message);
+        if (mappedMessage.viewed === false) {
+          mappedMessage.selected = true;
         } else {
-          message.selected = false;
+          mappedMessage.selected = false;
         }
-        return Object.assign({}, message);
+        return mappedMessage;
       });
       return {
         ...state,
         inboxMessages: selectUnread
       };
-    case SELECT_SINGLE:
+    }
+    case SELECT_SINGLE: {
       if (state.inboxMessages.length === 0) {
         return state;
-      };
+      }
       const selectSingle = state.inboxMessages.map(message => {
-        if (message.panel_id === action.payload.panelId) {
-          message.selected = action.payload.isSelected;
+        const mappedMessage = Object.assign({}, message);
+        if (mappedMessage.panel_id === action.payload.panelId) {
+          mappedMessage.selected = action.payload.isSelected;
         }
-        return Object.assign({}, message);
+        return mappedMessage;
       });
       return {
         ...state,
         inboxMessages: selectSingle
       };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 };
 
 export const getInbox = ({ page }) => {
-  return async (dispatch) => {
+  return async dispatch => {
     const api = new ServiceContainer().api();
     dispatch({ type: LOADING });
     let apiResult;
@@ -104,17 +119,19 @@ export const getInbox = ({ page }) => {
     } catch (e) {
       return dispatch(toggleError());
     }
-    const inboxMessages = apiResult.messages.map( message => Object.assign(message, { selected: false }));
+    const inboxMessages = apiResult.messages.map(message =>
+      Object.assign(message, { selected: false })
+    );
     await wait(300);
-    dispatch({ 
-      type: GET_INBOX, 
-      payload: { 
-        inboxMessages, 
-        page: apiResult.page, 
+    return dispatch({
+      type: GET_INBOX,
+      payload: {
+        inboxMessages,
+        page: apiResult.page,
         totalResults: apiResult.totalResults
       }
     });
-  }
+  };
 };
 
 export const selectAll = () => {
@@ -133,7 +150,7 @@ export const selectNone = () => {
   return {
     type: SELECT_NONE
   };
-}; 
+};
 
 export const selectSingle = (panelId, isSelected) => {
   return {
@@ -158,5 +175,3 @@ export const reset = () => ({
 export const toggleError = () => ({
   type: ERROR
 });
-
-

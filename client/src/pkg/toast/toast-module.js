@@ -10,21 +10,21 @@ export const TOAST_DURATION = 5000;
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ACTIVATE_TOAST: 
+    case ACTIVATE_TOAST:
       return {
         toastKind: action.payload.kind,
         toastProps: {
           ...action.payload.props,
           duration: TOAST_DURATION,
-          transitionDelay: TOAST_TRANSITION_DELAY,
+          transitionDelay: TOAST_TRANSITION_DELAY
         }
       };
     case END_TOAST:
       return null;
-    default: 
+    default:
       return null;
   }
-}
+};
 
 export const activateToast = (kind, props) => {
   return (dispatch, getState) => {
@@ -43,5 +43,5 @@ export const endToast = () => ({
 });
 
 export const toastComponents = {
-  'SUCCESS_TOAST': Success,
+  SUCCESS_TOAST: Success
 };

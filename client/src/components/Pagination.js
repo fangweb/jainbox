@@ -3,16 +3,24 @@ import PropTypes from 'prop-types';
 import { ResultsPerPage } from '../const';
 import '../assets/css/pagination.css';
 
-function Pagination({ page, totalResults, onNextPage, onPreviousPage, loading }) {
-  const startDisplayOfResults = ( page - 1 ) * ResultsPerPage + 1;
-  const disableNextPage = ( ( page * ResultsPerPage + 1 ) > totalResults ) || loading || totalResults <= 0;
-  const disablePrevPage = ( ( startDisplayOfResults - ResultsPerPage ) < 1 ) || loading || totalResults <= 0 ;
+function Pagination({
+  page,
+  totalResults,
+  onNextPage,
+  onPreviousPage,
+  loading
+}) {
+  const startDisplayOfResults = (page - 1) * ResultsPerPage + 1;
+  const disableNextPage =
+    page * ResultsPerPage + 1 > totalResults || loading || totalResults <= 0;
+  const disablePrevPage =
+    startDisplayOfResults - ResultsPerPage < 1 || loading || totalResults <= 0;
   const bothButtonsDisabled = disableNextPage && disablePrevPage;
-  if ( startDisplayOfResults > totalResults && totalResults > 0 ) {
-    throw new Error("The page can not exist");
+  if (startDisplayOfResults > totalResults && totalResults > 0) {
+    throw new Error('The page can not exist');
   }
   let endDisplayOfResults = startDisplayOfResults + ResultsPerPage - 1;
-  if ( endDisplayOfResults > totalResults ) {
+  if (endDisplayOfResults > totalResults) {
     endDisplayOfResults = totalResults;
   }
   const displayString = `Displaying ${startDisplayOfResults}-${endDisplayOfResults} of ${totalResults}`;
@@ -27,15 +35,23 @@ function Pagination({ page, totalResults, onNextPage, onPreviousPage, loading })
       return;
     }
     onPreviousPage();
-  };  
-  
+  };
+
   return (
     <div className="pagination">
-      <span>{!loading && !bothButtonsDisabled && displayString}</span>                  
-      <button disabled={disablePrevPage} onClick={prevPage} className="pagination-btn prev-page">
+      <span>{!loading && !bothButtonsDisabled && displayString}</span>
+      <button
+        disabled={disablePrevPage}
+        onClick={prevPage}
+        className="pagination-btn prev-page"
+      >
         <i className="fas fa-angle-left" />
       </button>
-      <button disabled={disableNextPage} onClick={nextPage} className="pagination-btn next-page">
+      <button
+        disabled={disableNextPage}
+        onClick={nextPage}
+        className="pagination-btn next-page"
+      >
         <i className="fas fa-angle-right" />
       </button>
     </div>
@@ -47,7 +63,7 @@ Pagination.propTypes = {
   totalResults: PropTypes.number.isRequired,
   onNextPage: PropTypes.func.isRequired,
   onPreviousPage: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 Pagination.defaultProps = {

@@ -11,14 +11,8 @@ const middleware = [routerMiddleware(history), thunk];
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const enhancer = composeEnhancers(
-  applyMiddleware(...middleware),
-);
+const enhancer = composeEnhancers(applyMiddleware(...middleware));
 
-const store = createStore(
-  createRootReducer(history),
-  initialState,
-  enhancer
-);
+const store = createStore(createRootReducer(history), initialState, enhancer);
 
 export default store;

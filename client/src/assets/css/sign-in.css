@@ -59,7 +59,7 @@
   color: rgb(188, 5, 17);
 }
 
-.sign-in .sign-in-card > .main > form > label.mock-ctrl {
+.sign-in .sign-in-card > .main > form > .mock-ctrl {
   display: flex;
   align-items: center;
   margin: 10px 0;
@@ -67,7 +67,7 @@
   cursor: pointer;
 }
 
-.sign-in .sign-in-card > .main > form > label.mock-ctrl > input {
+.sign-in .sign-in-card > .main > form > .mock-ctrl > input {
   margin-right: 5px;
 }
 

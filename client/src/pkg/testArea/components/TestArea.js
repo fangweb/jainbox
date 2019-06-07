@@ -4,21 +4,24 @@ import { connect } from 'react-redux';
 import styles from './test-area.module.css';
 import { activateToast } from '../../toast';
 import { Dropdown } from '../../dropdown';
-import { openModal, closeModal } from '../../modal/';
+import { openModal, closeModal } from '../../modal';
 
-const dropdownData = [{
-  id: 1,
-  username: 'testUserA'
-}, {
-  id: 2,
-  username: 'testingForB'
-}, {
-  id: 3,
-  username: 'tester3forOne'
-}];
+const dropdownData = [
+  {
+    id: 1,
+    username: 'testUserA'
+  },
+  {
+    id: 2,
+    username: 'testingForB'
+  },
+  {
+    id: 3,
+    username: 'tester3forOne'
+  }
+];
 
 class TestAreaC extends Component {
-  
   constructor(props) {
     super(props);
     this.state = {
@@ -27,49 +30,59 @@ class TestAreaC extends Component {
     };
   }
 
-  handleMessage = (event) => {
+  handleMessage = event => {
     this.setState({ message: event.target.value });
-  }
-  
+  };
+
   activateToast = () => {
-    this.props.activateToast("SUCCESS_TOAST", { message: this.state.message });
-  }
-  
-  setDropdownTitle = (dropdownTitle) => {
+    this.props.activateToast('SUCCESS_TOAST', { message: this.state.message });
+  };
+
+  setDropdownTitle = dropdownTitle => {
     if (this.state.dropdownTitle !== dropdownTitle) {
       this.setState({ dropdownTitle });
-    }      
-  }
-  
+    }
+  };
+
   getDropdownTitle = () => {
     const { dropdownTitle } = this.state;
     if (dropdownTitle === null) {
-      return "Select a user";
-    } else {
-      return dropdownTitle;
+      return 'Select a user';
     }
-  }
-  
-  onConfirm = (value) => {
+    return dropdownTitle;
+  };
+
+  onConfirm = value => {
     console.log(value);
     this.props.closeModal();
-  }
-  
+  };
+
   openModal = () => {
-    this.props.openModal('CONFIRMATION_MODAL', { title: 'Would you like to proceed?', onConfirm: this.onConfirm });
-  }
-  
+    this.props.openModal('CONFIRMATION_MODAL', {
+      title: 'Would you like to proceed?',
+      onConfirm: this.onConfirm
+    });
+  };
+
   render() {
     return (
       <div className={styles.testArea}>
         <section className={styles.section}>
-          <input type="text" value={this.state.message} onChange={this.handleMessage} />
+          <input
+            type="text"
+            value={this.state.message}
+            onChange={this.handleMessage}
+          />
           <button className={styles.btn} onClick={this.activateToast}>
             Activate Toast
           </button>
         </section>
         <section className={styles.section}>
-          <Dropdown title={this.getDropdownTitle()} data={dropdownData} onSelectItem={(value) => this.setDropdownTitle(value.username)} />
+          <Dropdown
+            title={this.getDropdownTitle()}
+            data={dropdownData}
+            onSelectItem={value => this.setDropdownTitle(value.username)}
+          />
         </section>
         <section className={styles.section}>
           <button className={styles.btn} onClick={this.openModal}>
@@ -81,9 +94,9 @@ class TestAreaC extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   toast: state.toastReducer
-}); 
+});
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

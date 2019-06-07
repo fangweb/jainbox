@@ -1,5 +1,5 @@
 import { ApiConfig } from '../const';
-import { ServiceContainer } from '../services';
+import { ServiceContainer } from '.';
 
 export class ApiService {
   constructor() {
@@ -11,7 +11,7 @@ export class ApiService {
     };
   }
 
-  async getInbox() {
-  
-  }
+  /* TODO:
+  async getInbox() {}
+  */
 }

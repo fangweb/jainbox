@@ -6,7 +6,7 @@ export const RESET = 'application/RESET';
 const initialState = {
   isAuthenticated: false,
   onlineUsers: [],
-  loaded: false  
+  loaded: false
 };
 
 export default (state = initialState, action) => {
@@ -29,23 +29,23 @@ export default (state = initialState, action) => {
     case RESET:
       return {
         ...initialState
-      };  
-    default: 
+      };
+    default:
       return state;
   }
 };
 
-export const updateAuthenticated = (isAuthenticated) => ({
+export const updateAuthenticated = isAuthenticated => ({
   type: UPDATE_AUTHENTICATED,
   payload: isAuthenticated
 });
 
-export const updateOnlineUsers = (onlineUsers) => ({
+export const updateOnlineUsers = onlineUsers => ({
   type: UPDATE_ONLINE_USERS,
   payload: onlineUsers
 });
 
-export const updateLoaded = (loaded) => ({
+export const updateLoaded = loaded => ({
   type: UPDATE_LOADED,
   payload: loaded
 });
@@ -53,5 +53,3 @@ export const updateLoaded = (loaded) => ({
 export const reset = () => ({
   type: RESET
 });
-
-

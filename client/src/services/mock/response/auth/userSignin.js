@@ -1,3 +1,3 @@
 export const userSignin = {
-  'token': 'mocktoken'
+  token: 'mocktoken'
 };

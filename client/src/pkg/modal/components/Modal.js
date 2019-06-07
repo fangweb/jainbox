@@ -1,15 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Overlay } from './Overlay';
 import { modalComponents } from '../modal-module';
-import { connect } from 'react-redux';
 
 class ModalC extends React.Component {
-
   render() {
     if (!this.props.modal) {
       return null;
     }
-    
+
     const { modalKind, modalProps } = this.props.modal;
     const ComponentKind = modalComponents[modalKind];
     if (!ComponentKind) {
@@ -25,9 +24,8 @@ class ModalC extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   modal: state.modalReducer
-}); 
+});
 
 export const Modal = connect(mapStateToProps)(ModalC);
-
