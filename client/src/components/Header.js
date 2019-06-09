@@ -33,7 +33,6 @@ export default connect(
     onConfirmModal = confirm => {
       this.props.closeModal();
       if (confirm) {
-        console.log(confirm);
         this.auth.signOut();
         this.ws.disconnect();
         this.props.reset();

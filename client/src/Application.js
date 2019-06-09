@@ -18,6 +18,7 @@ import Sent from './pages/Sent';
 import Trash from './pages/Trash';
 import ViewMessage from './pages/ViewMessage';
 import SignIn from './pages/SignIn';
+import NotFound from './pages/NotFound';
 import { TestArea } from './pkg/testArea';
 import { Modal } from './pkg/modal';
 import { Toast } from './pkg/toast';
@@ -114,6 +115,7 @@ class Application extends Component {
               </ApplicationLoader>
             )}
           />
+          <Route component={NotFound} />
           {/* TODO: not found */}
         </Switch>
         <Modal />
