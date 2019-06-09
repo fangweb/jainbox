@@ -9,6 +9,7 @@ import '../assets/css/sign-in.css';
 
 const getNewInitialState = () => {
   return {
+    loadingPage: true,
     displaySignup: false,
     formSubmitting: false,
     formError: false,
@@ -50,6 +51,12 @@ class SignIn extends Component {
     };
 
     this.auth = new ServiceContainer().auth();
+  }
+
+  componentDidMount() {
+    const { application } = this.props;
+    this.props.updateAuthenticated(this.auth.isAuthenticated());
+    this.setState({ loadingPage: false });
   }
 
   toggleCard = e => {
@@ -109,8 +116,13 @@ class SignIn extends Component {
       formSubmitting,
       formSignin,
       formSignup,
-      formError
+      formError,
+      loadingPage
     } = this.state;
+
+    if (loadingPage) {
+      return <div className="sign-in" />;
+    }
 
     if (application.isAuthenticated) {
       return <Redirect to={InboxPath} />;
