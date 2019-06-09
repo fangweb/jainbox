@@ -63,6 +63,7 @@ class SignIn extends Component {
     e.preventDefault();
     this.setState(prevState => ({
       ...getNewInitialState(),
+      loadingPage: false,
       displaySignup: !prevState.displaySignup
     }));
   };
