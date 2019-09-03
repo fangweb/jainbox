@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package jainbox;
+
+service Messenger {
+  rpc Notify (NotifyRequest) returns (NotifyResponse) {}
+}
+
+message NotifyRequest {
+  string Username = 1;
+  
+  message Payload {
+    string Type = 2;
+    string Notification = 3;
+  }
+}
+
+message NotifyResponse {
+  bool Notified = 1;
+}
