@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  postgres:
+    restart: always
+    image: postgres:11.3-alpine
+    env_file: 
+      - ./env/postgres.env
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+  api:
+    build:
+      context: ./
+      dockerfile: api/Dockerfile 
+    depends_on:
+      - postgres
+    env_file:
+      - ./env/postgres.env
+      - ./env/api.env
+    volumes:
+      - /usr/api/node_modules
+      - ./api/src:/usr/api/src     
+  subscriber:
+    build:
+      context: ./
+      dockerfile: subscriber/Dockerfile
+    env_file:
+      - ./env/subscriber.env
