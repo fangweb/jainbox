@@ -20,7 +20,7 @@ import * as request from "supertest";
 const application = new Server().getApp();
 
 beforeAll(async done => {
-  const qf = new QueryFile(Path.resolve(__dirname, "../setup/init.sql"), {
+  const qf = new QueryFile(Path.resolve(__dirname, "../../init.sql"), {
     minify: true
   });
   try {
@@ -133,6 +133,7 @@ test("create a user and sign in using user service", async () => {
       "serviceUser",
       "password2hash"
     );
+    console.log(signInToken);
     const signInPayload = await TokenService.verify(signInToken);
     expect({ username: signInPayload.username }).toEqual({
       username: "serviceUser"
