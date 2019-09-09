@@ -16,6 +16,5 @@ node_modules/
 .env
 
 # Yarn
-yarn.lock
 .yarn-meta
 
