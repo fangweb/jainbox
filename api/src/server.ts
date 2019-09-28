@@ -5,7 +5,7 @@ import * as Express from "express";
 import * as Helmet from "helmet";
 import * as Logger from "morgan";
 
-import { UserController, PanelController } from "./controllers";
+import { UserController, PanelController, MessagesController } from "./controllers";
 
 import { NotFoundHandler, ErrorDevHandler, ErrorHandler } from "./handlers";
 import { Config } from "./config";
@@ -46,6 +46,7 @@ export class Server {
   private setupEndpoints(): void {
     this.application.use("/user", UserController.router);
     this.application.use("/panel", PanelController.router);
+    this.application.use("/messages", MessagesController.router);
     this.application.use(NotFoundHandler);
     if (Config.nodeEnv === "development") {
       this.application.use(ErrorDevHandler);

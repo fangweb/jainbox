@@ -336,6 +336,48 @@ test("panel controllers", async done => {
   }
 });
 
+test("send and retrieve a message", async done => {
+  try {
+    const message_text = "Hello from composeUserA";
+    const createdUserA = await request(application)
+      .post("/user/create")
+      .send({ username: "composeUserA", password: "password" })
+      .expect("Authorization", /Bearer/)
+      .expect(200);
+
+    const createdUserB = await request(application)
+      .post("/user/create")
+      .send({ username: "composeUserB", password: "password" })
+      .expect("Authorization", /Bearer/)
+      .expect(200);
+    
+    const composeResponse = await request(application)
+      .post("/messages/compose")
+      .set("Authorization", createdUserA.get("Authorization"))
+      .send({ receiver_name: "composeUserB", message_text })
+      .expect(200);
+
+    const inboxComposeUserB = await request(application)
+      .get("/panel/inbox")
+      .set("Authorization", createdUserB.get("Authorization"))
+      .send({ page: 1 })
+      .expect(200);
+
+    const viewMessage = await request(application)
+      .get(`/messages/view?id=${inboxComposeUserB.body[0].message_id}`)
+      .set("Authorization", createdUserB.get("Authorization"))
+      .expect(200);
+
+    expect(viewMessage.body.message_id).toEqual(inboxComposeUserB.body[0].message_id);
+    expect(viewMessage.body.message_text).toEqual(message_text);
+    expect(viewMessage.body.username).toEqual("composeUserA");
+ 
+    done();
+  } catch (error) {
+    done(error);
+  }
+});
+
 afterAll(() => {
   Db.$pool.end();
 });
