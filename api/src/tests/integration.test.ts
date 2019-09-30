@@ -280,13 +280,13 @@ test("user controllers", async done => {
       .expect(200);
 
     await request(application)
-      .get("/user/sign-in")
+      .post("/user/sign-in")
       .send({ username, password })
       .expect("Authorization", /Bearer/)
       .expect(200);
 
     const signinResponse = await request(application)
-      .get("/user/sign-in")
+      .post("/user/sign-in")
       .send({ username, password: "wrongPassword" })
       .expect(401);
 

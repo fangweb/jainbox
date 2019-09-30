@@ -42,7 +42,7 @@ export class UserController extends BaseController {
     super();
 
     this.router.use(validation);
-    this.router.route("/sign-in").get(this.signIn);
+    this.router.route("/sign-in").post(this.signIn);
 
     this.router.route("/create").post(this.create);
 
