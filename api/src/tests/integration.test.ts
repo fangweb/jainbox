@@ -325,9 +325,8 @@ test("panel controllers", async done => {
       .expect(401);
 
     inboxResponse = await request(application)
-      .get("/panel/inbox")
+      .get("/panel/inbox?page=1")
       .set("Authorization", createResponse.get("Authorization"))
-      .send({ page: 1 })
       .expect(200);
 
     done();
@@ -358,9 +357,8 @@ test("send and retrieve a message", async done => {
       .expect(200);
 
     const inboxComposeUserB = await request(application)
-      .get("/panel/inbox")
+      .get("/panel/inbox?page=1")
       .set("Authorization", createdUserB.get("Authorization"))
-      .send({ page: 1 })
       .expect(200);
 
     const viewMessage = await request(application)

@@ -8,7 +8,7 @@ import { TokenPayload } from "../services";
 import { HttpError } from "../common/errors";
 
 const validatePage = (request, response, next) => {
-  let { page } = request.body;
+  let { page } = request.query;
 
   page = parseInt(page, 10);
   if (isNaN(page)) {
