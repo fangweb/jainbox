@@ -349,7 +349,7 @@ test("send and retrieve a message", async done => {
       .send({ username: "composeUserB", password: "password" })
       .expect("Authorization", /Bearer/)
       .expect(200);
-    
+
     const composeResponse = await request(application)
       .post("/messages/compose")
       .set("Authorization", createdUserA.get("Authorization"))
@@ -366,10 +366,12 @@ test("send and retrieve a message", async done => {
       .set("Authorization", createdUserB.get("Authorization"))
       .expect(200);
 
-    expect(viewMessage.body.message_id).toEqual(inboxComposeUserB.body[0].message_id);
+    expect(viewMessage.body.message_id).toEqual(
+      inboxComposeUserB.body[0].message_id
+    );
     expect(viewMessage.body.message_text).toEqual(message_text);
     expect(viewMessage.body.username).toEqual("composeUserA");
- 
+
     done();
   } catch (error) {
     done(error);

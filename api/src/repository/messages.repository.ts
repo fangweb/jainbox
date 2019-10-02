@@ -32,8 +32,14 @@ export class MessagesRepository {
         .catch(error => reject(error));
     });
   }
-  
-  public static viewMessage({ messageId, usernameId }: { messageId: number, usernameId: number }): Promise<any> {
+
+  public static viewMessage({
+    messageId,
+    usernameId
+  }: {
+    messageId: number;
+    usernameId: number;
+  }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const viewMessage = await Db.one(messageQueries.viewMessage, {
@@ -43,8 +49,7 @@ export class MessagesRepository {
         resolve(viewMessage);
       } catch (error) {
         reject(error);
-      } 
-    }); 
+      }
+    });
   }
-  
 }

@@ -31,7 +31,7 @@ export class MessagesController extends BaseController {
       next(new HttpError({ status: 409, message: error.message }));
     }
   };
-  
+
   private viewMessage: RequestHandler = async (request, response, next) => {
     const { tokenPayload } = response.locals;
     const { id } = request.query;
@@ -43,8 +43,7 @@ export class MessagesController extends BaseController {
       response.json(result);
     } catch (error) {
       console.log(error.message);
-      next(new HttpError({ status: 409, message: error.message }));  
+      next(new HttpError({ status: 409, message: error.message }));
     }
-  }
-  
+  };
 }

@@ -129,7 +129,6 @@ export class PanelController extends BaseController {
       response.json(result);
     } catch (error) {
       next(new HttpError({ status: 409, message: error.message }));
-      
     }
   };
 }
