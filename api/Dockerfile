@@ -4,7 +4,7 @@ FROM base AS dependencies
 
 WORKDIR /usr/api
 
-COPY ./api/package.json ./api/yarn.lock ./
+COPY ./proto ./api/package.json ./api/yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 

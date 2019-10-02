@@ -17,6 +17,7 @@ services:
     env_file:
       - ./env/postgres.env
       - ./env/api.env
+      - ./env/subscriber.env
     volumes:
       - /usr/api/node_modules
       - ./api/src:/usr/api/src     

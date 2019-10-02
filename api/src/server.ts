@@ -4,6 +4,9 @@ import * as Cors from "cors";
 import * as Express from "express";
 import * as Helmet from "helmet";
 import * as Logger from "morgan";
+import * as Path from "path";
+import * as Grpc from 'grpc';
+import * as Protoloader from '@grpc/proto-loader';
 
 import { UserController, PanelController, MessagesController } from "./controllers";
 
@@ -41,6 +44,28 @@ export class Server {
     this.application.use(BodyParser.urlencoded({ extended: true }));
     this.application.use(BodyParser.json());
     this.application.use(Cors());
+    
+    this.initializeGrpc();
+  }
+  
+  private initializeGrpc(): void {
+
+    const packageDefinition = Protoloader.loadSync(
+        Path.resolve(__dirname, '../messenger.proto'),
+        {keepCase: true,
+         longs: String,
+         enums: String,
+         defaults: true,
+         oneofs: true
+        });
+    const messengerProto = Grpc.loadPackageDefinition(packageDefinition).jainbox;
+    
+    try {
+      const grpcClient = new messengerProto.Messenger(`subscriber:${Config.grpcPort}`, Grpc.credentials.createInsecure());
+      this.application.set('grpcClient', grpcClient);  
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   private setupEndpoints(): void {
@@ -51,6 +76,7 @@ export class Server {
     if (Config.nodeEnv === "development") {
       this.application.use(ErrorDevHandler);
     }
+    
     this.application.use(ErrorHandler);
   }
 }
