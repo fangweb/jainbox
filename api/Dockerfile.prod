@@ -1,5 +1,0 @@
-FROM node:10.16-alpine AS base
-
-FROM node:10.16-alpine AS release
-
-COPY
