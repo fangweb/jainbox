@@ -14,7 +14,7 @@ type Server struct {
 
 func (s *Server) run() {
 	s.configureRoutes()
-	log.Println("Websocket server listening")
+	log.Printf("Websocket server listening on address %v", s.addr)
 	err := http.ListenAndServe(s.addr, nil)
 	if err != nil {
 		log.Fatal("Error: ", err)
