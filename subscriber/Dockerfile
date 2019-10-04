@@ -69,5 +69,5 @@ RUN protoc -I $GOPATH/src/subscriber proto/messenger.proto --go_out=plugins=grpc
 
 WORKDIR $GOPATH/src/subscriber
 ENV GO111MODULE=on
-RUN go get -v ./...
-
+RUN go build ./cmd/...
+CMD ./subscriber
