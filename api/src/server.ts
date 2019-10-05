@@ -64,7 +64,7 @@ export class Server {
       }
     );
     const messengerProto = Grpc.loadPackageDefinition(packageDefinition)
-      .jainbox;
+      .pb;
 
     try {
       const grpcClient = new messengerProto.Messenger(

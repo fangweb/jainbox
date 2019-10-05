@@ -19,13 +19,26 @@ export class MessagesController extends BaseController {
   private compose: RequestHandler = async (request, response, next) => {
     const { tokenPayload } = response.locals;
     const { receiver_name, message_text } = request.body;
-
+    const grpcClient = request.app.get('grpcClient');
     try {
       const result = await MessagesRepository.compose({
         createdById: tokenPayload.username_id,
         receiverName: receiver_name,
         messageText: message_text
       });
+      
+      
+      try {
+        grpcClient.Notify({ Username: receiver_name, Type: "newMessage", Notification: message_text }, function(grpcError, grpcResponse) {
+          if (grpcError) {
+            console.error(grpcError);
+          } 
+          console.log(grpcResponse);
+        });
+      } catch (notifyError) {
+        console.error(notifyError);
+      }
+
       response.json(result);
     } catch (error) {
       next(new HttpError({ status: 409, message: error.message }));
