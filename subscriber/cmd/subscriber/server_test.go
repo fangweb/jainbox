@@ -37,8 +37,8 @@ func TestWs(t *testing.T) {
 
 	u := url.URL{Scheme: "ws", Host: "localhost:3003", Path: "/ws"}
 
-	cookieValue := fmt.Sprintf("Authorization=%s", tokenStr)
-	header.Add("Cookie", cookieValue)
+	authVal := fmt.Sprintf("Bearer %s", tokenStr)
+	header.Add("Authorization", authVal)
 
 	log.Printf("Dialing in 2s...")
 	time.Sleep(2 * time.Second)

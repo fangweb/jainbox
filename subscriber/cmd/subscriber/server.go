@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 )
 
 // Server mantains websocket connections
@@ -26,20 +27,22 @@ func (s *Server) configureRoutes() {
 }
 
 func (s *Server) wsHandler(w http.ResponseWriter, r *http.Request) {
-	c, err := r.Cookie("Authorization")
+	h := r.Header.Get("Authorization")
 
-	if err != nil {
-		log.Println(err)
-		if err == http.ErrNoCookie {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
+	if h == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	
+	split := strings.Split(h, " ")
+	
+	if split[0] != "Bearer" {
+		log.Println("Invalid authentication token type.")
+		w.WriteHeader(http.StatusBadRequest)
+		return	  
+	}
 
-	tokenStr := c.Value
-
+	tokenStr := split[1]
 	claims, ok := s.authentication.parse(tokenStr)
 
 	if ok != true {
