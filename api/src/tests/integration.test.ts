@@ -133,7 +133,6 @@ test("create a user and sign in using user service", async () => {
       "serviceUser",
       "password2hash"
     );
-    console.log(signInToken);
     const signInPayload = await TokenService.verify(signInToken);
     expect({ username: signInPayload.username }).toEqual({
       username: "serviceUser"

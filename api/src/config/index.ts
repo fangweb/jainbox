@@ -9,9 +9,9 @@ export interface IConfiguration {
 }
 
 export const Config: IConfiguration = {
-  nodeEnv: process.env.NODE_ENV as NodeEnv,
-  serverPort: parseInt(process.env.SERVER_PORT as string, 10),
-  grpcPort: parseInt(process.env.GRPC_PORT as string, 10),
+  nodeEnv: process.env.API_NODE_ENV as NodeEnv,
+  serverPort: parseInt(process.env.API_SERVER_PORT as string, 10),
+  grpcPort: parseInt(process.env.SUBSCRIBER_GRPC_PORT as string, 10),
   pg: {
     host: process.env.POSTGRES_HOST,
     database: process.env.POSTGRES_DB,
@@ -20,7 +20,7 @@ export const Config: IConfiguration = {
     port: process.env.POSTGRES_PORT
   },
   jwt: {
-    secret: process.env.JWT_SECRET,
+    secret: process.env.API_JWT_SECRET,
     expiration: "24 hours"
   }
 };

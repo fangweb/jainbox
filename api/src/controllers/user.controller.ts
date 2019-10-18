@@ -43,9 +43,7 @@ export class UserController extends BaseController {
 
     this.router.use(validation);
     this.router.route("/sign-in").post(this.signIn);
-
     this.router.route("/create").post(this.create);
-
     this.router.route("/deactivate").put(this.deactivate);
   }
 
