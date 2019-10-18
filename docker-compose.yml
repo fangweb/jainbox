@@ -4,26 +4,38 @@ services:
   postgres:
     restart: always
     image: postgres:11.3-alpine
-    env_file: 
-      - ./env/postgres.env
     volumes:
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD    
   api:
     build:
       context: ./
       dockerfile: api/Dockerfile 
     depends_on:
       - postgres
-    env_file:
-      - ./env/postgres.env
-      - ./env/api.env
-      - ./env/subscriber.env
     volumes:
       - /usr/api/node_modules
       - ./api/src:/usr/api/src     
+    ports:
+      - "3001:3001"
+    environment:
+      - POSTGRES_HOST
+      - POSTGRES_PORT
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - API_SERVER_PORT
+      - API_NODE_ENV
+      - API_JWT_SECRET
+      - SUBSCRIBER_GRPC_PORT
   subscriber:
     build:
       context: ./
       dockerfile: subscriber/Dockerfile
-    env_file:
-      - ./env/subscriber.env
+    environment:
+      - API_JWT_SECRET
+      - SUBSCRIBER_GRPC_PORT
+      - SUBSCRIBER_SERVER_PORT
