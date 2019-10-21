@@ -6,9 +6,9 @@ import (
 )
 
 func main() {
-	rpcAddr := fmt.Sprintf(":%v", os.Getenv("GRPC_PORT"))
-	subscriberAddr := fmt.Sprintf(":%v", os.Getenv("SUBSCRIBER_PORT"))
-	key := []byte(os.Getenv("KEY"))
+	subscriberAddr := fmt.Sprintf(":%v", os.Getenv("SUBSCRIBER_SERVER_PORT"))
+	rpcAddr := fmt.Sprintf(":%v", os.Getenv("SUBSCRIBER_GRPC_PORT"))
+	key := []byte(os.Getenv("API_JWT_SECRET"))
 	
 	authentication := &Authentication{key: key}
 
