@@ -32,7 +32,7 @@ beforeAll(async done => {
   }
 });
 
-test("create a user, reject an existing user", async () => {
+test("Create a new user and correctly handle duplicate users", async () => {
   try {
     const data = await UserRepository.create({
       username: "testname",
@@ -54,7 +54,7 @@ test("create a user, reject an existing user", async () => {
   }
 });
 
-test("get user details", async () => {
+test("Get user details directly through the user repository", async () => {
   try {
     const data = await UserRepository.details({ username: "testname" });
     expect({ username: data.username, hash: data.hash }).toEqual({
@@ -73,7 +73,7 @@ test("get user details", async () => {
   }
 });
 
-test("deactivate a user", async () => {
+test("Deactivate a user directly through the user repository", async () => {
   try {
     const data = await UserRepository.deactivate({
       username: "testname",
@@ -88,7 +88,7 @@ test("deactivate a user", async () => {
   }
 });
 
-test("update user online status", async () => {
+test("Update user online status through the user repository", async () => {
   try {
     const dataCreate = await UserRepository.create({
       username: "testStatusName",
@@ -117,7 +117,7 @@ test("update user online status", async () => {
   }
 });
 
-test("create a user and sign in using user service", async () => {
+test("Create a user and sign in using only the user service", async () => {
   try {
     const createToken = await UserService.create(
       "serviceUser",
@@ -143,7 +143,7 @@ test("create a user and sign in using user service", async () => {
   }
 });
 
-test("test errors for user service", async () => {
+test("Test error handling for user service", async () => {
   try {
     await UserService.signIn("nonExistantUser", "fakepassword2hash");
     throw new Error("Resolved");
@@ -159,7 +159,7 @@ test("test errors for user service", async () => {
   }
 });
 
-test("messages and panel repository", async () => {
+test("Directly test messages and panel repository calls", async () => {
   let payloadC, payloadD;
 
   try {
@@ -255,7 +255,7 @@ test("messages and panel repository", async () => {
   }
 });
 
-test("not found", done => {
+test("Test 404 handling", done => {
   request(application)
     .get("/notdefined")
     .set("Accept", "application/json")
@@ -268,7 +268,7 @@ test("not found", done => {
     });
 });
 
-test("user controllers", async done => {
+test("Test user endpoint controllers", async done => {
   try {
     const username = "testuserA",
       password = "testPasswordA12";
@@ -308,7 +308,7 @@ test("user controllers", async done => {
   }
 });
 
-test("panel controllers", async done => {
+test("Test panel endpoint controllers", async done => {
   try {
     const username = "testuserB",
       password = "passwordB";
@@ -334,7 +334,7 @@ test("panel controllers", async done => {
   }
 });
 
-test("send and retrieve a message", async done => {
+test("Send and retrieve a message through the user endpoint", async done => {
   try {
     const message_text = "Hello from composeUserA";
     const createdUserA = await request(application)
