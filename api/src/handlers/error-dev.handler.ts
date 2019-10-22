@@ -5,5 +5,6 @@ export const ErrorDevHandler: ErrorRequestHandler = (
   response,
   next
 ) => {
+  console.error(error.message);
   next(error);
 };
