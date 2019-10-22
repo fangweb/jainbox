@@ -299,7 +299,7 @@ test("user controllers", async done => {
     const deactivateResponse = await request(application)
       .put("/user/deactivate")
       .send({ username, password })
-      .expect(401);
+      .expect(409);
 
     expect(deactivateResponse.body.message).toEqual(UserNotFoundMessage);
     done();
@@ -377,6 +377,25 @@ test("send and retrieve a message", async done => {
   }
 });
 
-afterAll(() => {
+afterAll(async () => {
+  // Create external integration testing users
+  const createdUserA = await request(application)
+    .post("/user/create")
+    .send({ username: "integServiceUserA", password: "password1" });
+    
+  const createdUserB = await request(application)
+    .post("/user/create")
+    .send({ username: "integServiceUserB", password: "password2" });
+
+  // Close db
   Db.$pool.end();
 });
+
+
+
+
+
+
+
+
+
