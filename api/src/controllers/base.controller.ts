@@ -7,12 +7,4 @@ export abstract class BaseController {
     this.router = Router();
   }
 
-  /*
-  private setupPublishing()
-
-  private publishUpdate: fn<void> = (fn) => {
-    await fn
-    // publish repository
-  }
-  */
 }
