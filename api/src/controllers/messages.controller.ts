@@ -41,7 +41,7 @@ export class MessagesController extends BaseController {
 
       response.json(result);
     } catch (error) {
-      next(new HttpError({ status: 409, message: error.message }));
+      next(new HttpError({ status: 400, message: error.message }));
     }
   };
 
@@ -55,8 +55,7 @@ export class MessagesController extends BaseController {
       });
       response.json(result);
     } catch (error) {
-      console.log(error.message);
-      next(new HttpError({ status: 409, message: error.message }));
+      next(new HttpError({ status: 400, message: error.message }));
     }
   };
 }

@@ -83,7 +83,7 @@ export class UserController extends BaseController {
       token = await UserService.create(username, password);
     } catch (error) {
       if (error instanceof UserExistsError) {
-        return next(new HttpError({ status: 401, message: error.message }));
+        return next(new HttpError({ status: 409, message: error.message }));
       }
       return next(error);
     }
@@ -103,7 +103,7 @@ export class UserController extends BaseController {
         error instanceof IncorrectPasswordError ||
         error instanceof UserNotFoundError
       ) {
-        return next(new HttpError({ status: 401, message: error.message }));
+        return next(new HttpError({ status: 409, message: error.message }));
       }
       return next(error);
     }

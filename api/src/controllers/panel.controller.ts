@@ -54,7 +54,7 @@ export class PanelController extends BaseController {
       response.json(result);
     } catch (error) {
       console.log(error);
-      next(new HttpError({ status: 409, message: error.message }));
+      next(new HttpError({ status: 400, message: error.message }));
     }
   };
 
@@ -70,7 +70,7 @@ export class PanelController extends BaseController {
       });
       response.json(result);
     } catch (error) {
-      next(new HttpError({ status: 409, message: error.message }));
+      next(new HttpError({ status: 400, message: error.message }));
     }
   };
 
@@ -89,7 +89,7 @@ export class PanelController extends BaseController {
       });
       response.json(result);
     } catch (error) {
-      next(new HttpError({ status: 409, message: error.message }));
+      next(new HttpError({ status: 400, message: error.message }));
     }
   };
 
@@ -109,7 +109,7 @@ export class PanelController extends BaseController {
       });
       response.json(result);
     } catch (error) {
-      next(new HttpError({ status: 409, message: error.message }));
+      next(new HttpError({ status: 400, message: error.message }));
     }
   };
 
@@ -128,7 +128,7 @@ export class PanelController extends BaseController {
       });
       response.json(result);
     } catch (error) {
-      next(new HttpError({ status: 409, message: error.message }));
+      next(new HttpError({ status: 400, message: error.message }));
     }
   };
 }
