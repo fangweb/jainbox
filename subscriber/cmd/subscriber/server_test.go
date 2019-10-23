@@ -11,6 +11,7 @@ import (
 	"sync"
 	"testing"
 	"time"
+	"os"
 	
 	"subscriber/proto"
 	"github.com/gorilla/websocket"
@@ -22,8 +23,8 @@ func TestWs(t *testing.T) {
 	var header http.Header
 	header = make(http.Header)
 	tokenStr := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlcnZpY2VVc2VyIiwidXNlcm5hbWVfaWQiOjQsImlhdCI6MTU2NTY1MzU5Nn0.pKigso89LxEVDGm1jZshv7d_UHqxYFlzhL-nd53m1kg"
-	addr := ":3003"
-	rpcAddr := ":3004"
+	subscriberAddr := fmt.Sprintf(":%v", os.Getenv("SUBSCRIBER_SERVER_PORT"))
+	rpcAddr := fmt.Sprintf(":%v", os.Getenv("SUBSCRIBER_GRPC_PORT"))
 
 	authentication := &Authentication{key: []byte("jwtsecret12345a")}
 
@@ -32,11 +33,11 @@ func TestWs(t *testing.T) {
 
 	go listenRpc(clientPool, rpcAddr)
 
-	server := Server{authentication: authentication, clientPool: clientPool, addr: addr}
+	server := Server{authentication: authentication, clientPool: clientPool, addr: subscriberAddr}
 	go server.run()
 
-	u := url.URL{Scheme: "ws", Host: "localhost:3003", Path: "/ws"}
-
+	u := url.URL{Scheme: "ws", Host: fmt.Sprintf("localhost:%v", os.Getenv("SUBSCRIBER_SERVER_PORT")), Path: "/ws"}
+	
 	authVal := fmt.Sprintf("Bearer %s", tokenStr)
 	header.Add("Authorization", authVal)
 
