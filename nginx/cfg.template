@@ -1,0 +1,26 @@
+upstream docker-api {
+  server api:${API_SERVER_PORT};
+}
+
+upstream docker-subscriber {
+  server subscriber:${SUBSCRIBER_SERVER_PORT};
+}
+
+server {
+
+  location /subscriber/ {
+    rewrite /subscriber/(.*) /$1  break; 
+    proxy_pass http://docker-subscriber;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";    
+  }
+
+  location /api/ {
+    rewrite /api/(.*) /$1  break;
+    proxy_pass http://docker-api;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+  }
+}
+
