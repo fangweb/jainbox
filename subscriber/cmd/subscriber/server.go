@@ -33,13 +33,13 @@ func (s *Server) wsHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	
+
 	split := strings.Split(h, " ")
-	
+
 	if split[0] != "Bearer" {
 		log.Println("Invalid authentication token type.")
 		w.WriteHeader(http.StatusBadRequest)
-		return	  
+		return
 	}
 
 	tokenStr := split[1]

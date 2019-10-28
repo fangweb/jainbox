@@ -7,15 +7,15 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"reflect"
 	"sync"
 	"testing"
 	"time"
-	"os"
-	
-	"subscriber/proto"
+
 	"github.com/gorilla/websocket"
 	"google.golang.org/grpc"
+	"subscriber/proto"
 )
 
 func TestWs(t *testing.T) {
@@ -37,7 +37,7 @@ func TestWs(t *testing.T) {
 	go server.run()
 
 	u := url.URL{Scheme: "ws", Host: fmt.Sprintf("localhost:%v", os.Getenv("SUBSCRIBER_SERVER_PORT")), Path: "/ws"}
-	
+
 	authVal := fmt.Sprintf("Bearer %s", tokenStr)
 	header.Add("Authorization", authVal)
 

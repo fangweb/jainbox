@@ -13,9 +13,9 @@ type rpcServer struct {
 	clientPool *ClientPool
 }
 
-func (s *rpcServer) Notify(ctx context.Context, in *pb.NotifyMessage) (*pb.NotifyResponse, error) {	
+func (s *rpcServer) Notify(ctx context.Context, in *pb.NotifyMessage) (*pb.NotifyResponse, error) {
 	// TODO: notify error channel
-	s.clientPool.notify <- &Message{Username: in.Username, Payload: &Payload{ Type: in.Type, Notification: in.Notification }} 
+	s.clientPool.notify <- &Message{Username: in.Username, Payload: &Payload{Type: in.Type, Notification: in.Notification}}
 	return &pb.NotifyResponse{Notified: true}, nil
 }
 
