@@ -19,8 +19,6 @@ services:
     volumes:
       - /usr/api/node_modules
       - ./api/src:/usr/api/src     
-    ports:
-      - "3001:3001"
     environment:
       - POSTGRES_HOST
       - POSTGRES_PORT
@@ -35,7 +33,26 @@ services:
     build:
       context: ./
       dockerfile: subscriber/Dockerfile
+    depends_on:
+      - api
     environment:
       - API_JWT_SECRET
       - SUBSCRIBER_GRPC_PORT
       - SUBSCRIBER_SERVER_PORT
+  nginx:
+    build: 
+      context: ./
+      dockerfile: nginx/Dockerfile
+    depends_on:
+      - postgres
+      - api
+      - subscriber
+    volumes:
+      - ./nginx/cfg.template:/etc/nginx/conf.d/cfg.template
+    ports:
+      # host:container format
+      - "3000:80"
+    environment:
+      - API_SERVER_PORT
+      - SUBSCRIBER_SERVER_PORT       
+      
