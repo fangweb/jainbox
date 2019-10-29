@@ -1,5 +1,5 @@
 export class HttpClient {
-  static async request(request) {
+  static async send(request) {
     const response = await fetch(request);
 
     if (!response.ok && response.type) {
@@ -19,7 +19,7 @@ export class HttpClient {
       mode: 'cors'
     });
 
-    return HttpClient.request(request);
+    return HttpClient.send(request);
   }
 
   static post(headers, endpoint, body) {
@@ -30,7 +30,7 @@ export class HttpClient {
       mode: 'cors'
     });
 
-    return HttpClient.request(request);
+    return HttpClient.send(request);
   }
 
   static put(headers, endpoint, body) {
@@ -41,7 +41,7 @@ export class HttpClient {
       mode: 'cors'
     });
 
-    return HttpClient.request(request);
+    return HttpClient.send(request);
   }
 
   static delete(headers, endpoint, body) {
@@ -52,6 +52,6 @@ export class HttpClient {
       mode: 'cors'
     });
 
-    return HttpClient.request(request);
+    return HttpClient.send(request);
   }
 }
