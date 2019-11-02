@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ResultsPerPage } from '../const';
+import { ResultsPerPage } from '../config';
 import '../assets/css/pagination.css';
 
 function Pagination({

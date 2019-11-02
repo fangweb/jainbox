@@ -1,9 +1,7 @@
 import { MockApiService } from './mock/mockApiService';
-import { MockWsService } from './mock/mockWsService';
 import { MockAuthService } from './mock/mockAuthService';
 
 import { ApiService } from './apiService';
-import { WsService } from './wsService';
 import { AuthService } from './authService';
 
 export class ServiceContainer {
@@ -12,14 +10,10 @@ export class ServiceContainer {
   }
 
   auth() {
-    return this.devEnv ? MockAuthService : new AuthService();
+    return this.devEnv ? MockAuthService : AuthService;
   }
 
   api() {
-    return this.devEnv ? MockApiService : new ApiService();
-  }
-
-  ws() {
-    return this.devEnv ? MockWsService : new WsService();
+    return this.devEnv ? MockApiService : ApiService;
   }
 }

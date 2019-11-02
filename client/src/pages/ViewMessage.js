@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { InboxPath } from '../const';
+import { PathConfig } from '../config';
 import { ServiceContainer } from '../services';
 import { wait } from '../helpers';
 import PanelError from '../components/PanelError';
@@ -58,7 +58,9 @@ class ViewMessage extends Component {
           <div className="right">
             <div className="view-message-time message-segment">4:36 PM</div>
             <div className="go-back message-segment">
-              <Link to={this.props.location.state.prevLink || InboxPath}>
+              <Link
+                to={this.props.location.state.prevLink || PathConfig.inboxPath}
+              >
                 <i className="fas fa-backward backwardsIcon" />
               </Link>
             </div>

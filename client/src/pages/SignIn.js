@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { InboxPath } from '../const';
+import { PathConfig } from '../config';
 import { ServiceContainer } from '../services';
 import { updateAuthenticated } from '../modules/application-module';
 import '../assets/css/sign-in.css';
@@ -126,7 +126,7 @@ class SignIn extends Component {
     }
 
     if (application.isAuthenticated) {
-      return <Redirect to={InboxPath} />;
+      return <Redirect to={PathConfig.inboxPath} />;
     }
 
     if (!displaySignup) {

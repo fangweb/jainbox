@@ -3,11 +3,12 @@ import { routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import { createBrowserHistory } from 'history';
 import createRootReducer from './modules';
+import wsMiddleware from './middleware/wsMiddleware';
 
 export const history = createBrowserHistory();
 
 const initialState = {};
-const middleware = [routerMiddleware(history), thunk];
+const middleware = [routerMiddleware(history), thunk, wsMiddleware()];
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

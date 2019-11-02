@@ -1,4 +1,4 @@
-export const getOnlineUsers = [
+const getOnlineUsers = [
   {
     id: 1,
     username: 'testExampleA'
@@ -12,3 +12,5 @@ export const getOnlineUsers = [
     username: 'testExampleCCCC'
   }
 ];
+
+export default getOnlineUsers;

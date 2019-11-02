@@ -14,7 +14,8 @@ export const PathConfig = {
   sentPath: '/sent',
   trashPath: '/trash',
   viewMessagePath: '/view-message',
-  testAreaPath: '/testarea'
+  testAreaPath: '/testarea',
+  subscriberRoot: '/ws'
 };
 
 export const WsConfig = {

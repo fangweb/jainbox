@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { openModal, closeModal } from '../pkg/modal';
 import { ServiceContainer } from '../services';
 import { reset } from '../modules/application-module';
+import { wsDisconnect } from '../modules/ws-module';
 import '../assets/css/header.css';
 
 const mapDispatchToProps = dispatch =>
@@ -12,7 +13,8 @@ const mapDispatchToProps = dispatch =>
     {
       openModal,
       closeModal,
-      reset
+      reset,
+      wsDisconnect
     },
     dispatch
   );
@@ -27,14 +29,13 @@ export default connect(
 
       const serviceContainer = new ServiceContainer();
       this.auth = serviceContainer.auth();
-      this.ws = serviceContainer.ws();
     }
 
     onConfirmModal = confirm => {
       this.props.closeModal();
       if (confirm) {
         this.auth.signOut();
-        this.ws.disconnect();
+        this.props.wsDisconnect();
         this.props.reset();
       }
     };

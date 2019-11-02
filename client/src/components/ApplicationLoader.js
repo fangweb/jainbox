@@ -4,13 +4,14 @@ import { bindActionCreators } from 'redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { ServiceContainer } from '../services';
-import { SignInPath } from '../const';
+import { PathConfig } from '../config';
 import Loader from './Loader';
 import {
   updateOnlineUsers,
   updateLoaded,
   updateAuthenticated
 } from '../modules/application-module';
+import { wsConnect } from '../modules/ws-module';
 
 import '../assets/css/application-loader.css';
 
@@ -38,10 +39,7 @@ class ApplicationLoader extends Component {
     if (application.loaded || !auth.isAuthenticated()) {
       return;
     }
-    const ws = new ServiceContainer().ws();
-    const { onlineUsers } = await ws.initialize();
-    this.props.updateOnlineUsers(onlineUsers);
-    this.props.updateLoaded(true);
+    this.props.wsConnect();
   }
 
   render() {
@@ -53,7 +51,7 @@ class ApplicationLoader extends Component {
     }
 
     if (!application.isAuthenticated) {
-      return <Redirect to={SignInPath} />;
+      return <Redirect to={PathConfig.signInPath} />;
     }
 
     if (!application.loaded) {
@@ -79,9 +77,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      updateOnlineUsers,
-      updateLoaded,
-      updateAuthenticated
+      updateAuthenticated,
+      wsConnect
     },
     dispatch
   );

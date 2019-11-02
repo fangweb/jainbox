@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import {
-  SignInPath,
-  RootPath,
-  ComposePath,
-  InboxPath,
-  SentPath,
-  TrashPath,
-  ViewMessagePath,
-  TestAreaPath
-} from './const';
+import { PathConfig } from './config';
 import ApplicationLoader from './components/ApplicationLoader';
 import DashboardLayout from './components/DashboardLayout';
 import Inbox from './pages/Inbox';
@@ -30,18 +21,34 @@ class Application extends Component {
     return (
       <React.Fragment>
         <Switch>
-          <Redirect exact from={RootPath} to={`${InboxPath}/page/1`} />
-          <Redirect exact from={InboxPath} to={`${InboxPath}/page/1`} />
-          <Redirect exact from={SentPath} to={`${SentPath}/page/1`} />
-          <Redirect exact from={TrashPath} to={`${TrashPath}/page/1`} />
+          <Redirect
+            exact
+            from={PathConfig.rootPath}
+            to={`${PathConfig.inboxPath}/page/1`}
+          />
+          <Redirect
+            exact
+            from={PathConfig.inboxPath}
+            to={`${PathConfig.inboxPath}/page/1`}
+          />
+          <Redirect
+            exact
+            from={PathConfig.sentPath}
+            to={`${PathConfig.sentPath}/page/1`}
+          />
+          <Redirect
+            exact
+            from={PathConfig.trashPath}
+            to={`${PathConfig.trashPath}/page/1`}
+          />
           <Route
-            path={SignInPath}
+            path={PathConfig.signInPath}
             name="signin"
             key="signin"
             render={props => <SignIn {...props} />}
           />
           <Route
-            path={`${InboxPath}/page/:page`}
+            path={`${PathConfig.inboxPath}/page/:page`}
             name="inbox"
             key="inbox"
             render={props => (
@@ -54,7 +61,7 @@ class Application extends Component {
           />
           <Route
             exact
-            path={`${ComposePath}`}
+            path={`${PathConfig.composePath}`}
             name="compose"
             key="compose"
             render={props => (
@@ -67,7 +74,7 @@ class Application extends Component {
           />
           <Route
             exact
-            path={`${SentPath}/page/:page`}
+            path={`${PathConfig.sentPath}/page/:page`}
             name="sent"
             key="sent"
             render={props => (
@@ -80,7 +87,7 @@ class Application extends Component {
           />
           <Route
             exact
-            path={`${TrashPath}/page/:page`}
+            path={`${PathConfig.trashPath}/page/:page`}
             name="trash"
             key="trash"
             render={props => (
@@ -92,7 +99,7 @@ class Application extends Component {
             )}
           />
           <Route
-            path={`${ViewMessagePath}/:messageId`}
+            path={`${PathConfig.viewMessagePath}/:messageId`}
             name="view-message"
             key="view-message"
             render={props => (
@@ -104,7 +111,7 @@ class Application extends Component {
             )}
           />
           <Route
-            path={`${TestAreaPath}`}
+            path={`${PathConfig.testAreaPath}`}
             name="testArea"
             key="testArea"
             render={props => (
