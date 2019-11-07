@@ -27,14 +27,14 @@ func (s *Server) configureRoutes() {
 }
 
 func (s *Server) wsHandler(w http.ResponseWriter, r *http.Request) {
-	h := r.Header.Get("Authorization")
+	cookie, err := r.Cookie("X-Authorization")
 
-	if h == "" {
+	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	split := strings.Split(h, " ")
+	split := strings.Split(cookie.Value, " ")
 
 	if split[0] != "Bearer" {
 		log.Println("Invalid authentication token type.")
