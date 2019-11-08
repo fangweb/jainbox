@@ -51,7 +51,7 @@ services:
       - ./nginx/cfg.template:/etc/nginx/conf.d/cfg.template
     ports:
       # host:container format
-      - "3000:80"
+      - "${NGINX_EXPOSED_PORT}:80"
     environment:
       - API_SERVER_PORT
       - SUBSCRIBER_SERVER_PORT       
