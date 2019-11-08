@@ -4,7 +4,15 @@ import { HttpClient } from '../lib/httpClient';
 
 export class AuthService {
   static isAuthenticated() {
-    return !Session.getJwt();
+    return Session.get('jwt') !== null;
+  }
+
+  static storeJwt({ token }) {
+    Session.set('jwt', token);
+  }
+
+  static clearJwt() {
+    Session.remove('jwt');
   }
 
   static getBaseHeaders() {
@@ -23,12 +31,16 @@ export class AuthService {
     return response;
   }
 
-  static async create(username, password) {
+  static async signUp(username, password) {
     const response = await HttpClient.post(
       this.getBaseHeaders(),
       `/api/user/create`,
       { username, password }
     );
     return response;
+  }
+
+  static signOut() {
+    AuthService.clearJwt();
   }
 }
