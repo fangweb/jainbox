@@ -5,15 +5,11 @@ import { ApiService } from './apiService';
 import { AuthService } from './authService';
 
 export class ServiceContainer {
-  constructor() {
-    this.devEnv = process.env.NODE_ENV === 'development';
+  static auth() {
+    return process.env.REACT_APP_USE_MOCK ? MockAuthService : AuthService;
   }
 
-  auth() {
-    return this.devEnv ? MockAuthService : AuthService;
-  }
-
-  api() {
-    return this.devEnv ? MockApiService : ApiService;
+  static api() {
+    return process.env.REACT_APP_USE_MOCK ? MockApiService : ApiService;
   }
 }

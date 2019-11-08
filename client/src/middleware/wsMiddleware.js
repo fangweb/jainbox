@@ -78,9 +78,7 @@ const mockMiddleware = () => {
 };
 
 const wsMiddleware = () => {
-  return process.env.NODE_ENV === 'development'
-    ? mockMiddleware()
-    : prodMiddleware();
+  return process.env.REACT_APP_USE_MOCK ? mockMiddleware() : prodMiddleware();
 };
 
 export default wsMiddleware;

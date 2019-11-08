@@ -20,7 +20,7 @@ class ViewMessage extends Component {
   }
 
   async componentDidMount() {
-    const api = new ServiceContainer().api();
+    const api = ServiceContainer.api();
     const { messageId } = this.props.match.params;
     await wait(300);
     let apiResult;

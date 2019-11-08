@@ -33,7 +33,7 @@ class ApplicationLoader extends Component {
 
   async initialize() {
     const { application } = this.props;
-    const auth = new ServiceContainer().auth();
+    const auth = ServiceContainer.auth();
     this.props.updateAuthenticated(auth.isAuthenticated());
     this.setState({ bootstrappingApplication: false });
     if (application.loaded || !auth.isAuthenticated()) {

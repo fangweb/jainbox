@@ -52,7 +52,7 @@ export const clearForm = () => {
 
 export const sendForm = () => {
   return async (dispatch, getState) => {
-    const api = new ServiceContainer().api();
+    const api = ServiceContainer.api();
     dispatch({ type: SENDING_FORM });
     const sent = await api.compose(getState().form);
     if (!sent) {

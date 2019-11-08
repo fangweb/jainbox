@@ -27,8 +27,7 @@ export default connect(
     constructor(props) {
       super(props);
 
-      const serviceContainer = new ServiceContainer();
-      this.auth = serviceContainer.auth();
+      this.auth = ServiceContainer.auth();
     }
 
     onConfirmModal = confirm => {

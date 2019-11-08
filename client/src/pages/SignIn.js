@@ -50,7 +50,7 @@ class SignIn extends Component {
       ...getNewInitialState()
     };
 
-    this.auth = new ServiceContainer().auth();
+    this.auth = ServiceContainer.auth();
   }
 
   componentDidMount() {
