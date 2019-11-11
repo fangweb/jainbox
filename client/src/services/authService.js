@@ -25,7 +25,7 @@ export class AuthService {
   static async signIn(username, password) {
     const response = await HttpClient.post(
       this.getBaseHeaders(),
-      `/api/user/sign-in`,
+      `${ApiConfig.basePath}/user/sign-in`,
       { username, password }
     );
     return response;
@@ -34,7 +34,7 @@ export class AuthService {
   static async signUp(username, password) {
     const response = await HttpClient.post(
       this.getBaseHeaders(),
-      `/api/user/create`,
+      `${ApiConfig.basePath}/user/create`,
       { username, password }
     );
     return response;

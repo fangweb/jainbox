@@ -1,5 +1,5 @@
 import * as actions from '../modules/ws-module';
-import { PathConfig } from '../config';
+import { WsConfig } from '../config';
 import { wait } from '../helpers';
 import { updateOnlineUsers, updateLoaded } from '../modules/application-module';
 import onlineUsers from './mock/onlineUsers';
@@ -37,7 +37,7 @@ const prodMiddleware = () => {
             socket.close();
           }
 
-          socket = new WebSocket(PathConfig.subscriberRoot);
+          socket = new WebSocket(WsConfig.basePath);
           socket.onopen = onOpen(store);
           socket.onclose = onClose(store);
           socket.onmessage = onClose(store);
@@ -78,7 +78,9 @@ const mockMiddleware = () => {
 };
 
 const wsMiddleware = () => {
-  return process.env.REACT_APP_USE_MOCK ? mockMiddleware() : prodMiddleware();
+  return process.env.REACT_APP_USE_MOCK === true
+    ? mockMiddleware()
+    : prodMiddleware();
 };
 
 export default wsMiddleware;
