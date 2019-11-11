@@ -78,7 +78,7 @@ const mockMiddleware = () => {
 };
 
 const wsMiddleware = () => {
-  return process.env.REACT_APP_USE_MOCK === true
+  return process.env.REACT_APP_USE_MOCK === 'true'
     ? mockMiddleware()
     : prodMiddleware();
 };

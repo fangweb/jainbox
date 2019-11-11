@@ -21,7 +21,7 @@ export class MockAuthService {
     if (username === 'showError') {
       throw new AuthenticationError('Mock error for User Sign in');
     }
-    MockAuthService.storeJwt(userSignin.token);
+    MockAuthService.storeJwt({ token: userSignin.token });
     return userSignin;
   }
 
@@ -30,7 +30,7 @@ export class MockAuthService {
     if (username === 'showError') {
       throw new AuthenticationError('Mock error for User Sign up');
     }
-    MockAuthService.storeJwt(userSignin.token);
+    MockAuthService.storeJwt({ token: userSignin.token });
     return userSignup;
   }
 

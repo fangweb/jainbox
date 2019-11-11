@@ -17,21 +17,22 @@ export class AuthService {
 
   static getBaseHeaders() {
     return {
-      Accept: ApiConfig.HeaderAcceptValue,
-      'Content-Type': ApiConfig.HeaderContentTypeValue
+      Accept: ApiConfig.headers.HeaderAcceptValue,
+      'Content-Type': ApiConfig.headers.HeaderContentTypeValue
     };
   }
 
-  static async signIn(username, password) {
+  static async signIn({ username, password }) {
     const response = await HttpClient.post(
       this.getBaseHeaders(),
       `${ApiConfig.basePath}/user/sign-in`,
       { username, password }
     );
+
     return response;
   }
 
-  static async signUp(username, password) {
+  static async signUp({ username, password }) {
     const response = await HttpClient.post(
       this.getBaseHeaders(),
       `${ApiConfig.basePath}/user/create`,
