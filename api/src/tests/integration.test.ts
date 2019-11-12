@@ -275,13 +275,11 @@ test("Test user endpoint controllers", async done => {
     await request(application)
       .post("/user/create")
       .send({ username, password })
-      .expect("Authorization", /Bearer/)
       .expect(200);
 
     await request(application)
       .post("/user/sign-in")
       .send({ username, password })
-      .expect("Authorization", /Bearer/)
       .expect(200);
 
     const signinResponse = await request(application)
@@ -316,16 +314,15 @@ test("Test panel endpoint controllers", async done => {
     const createResponse = await request(application)
       .post("/user/create")
       .send({ username, password })
-      .expect("Authorization", /Bearer/)
       .expect(200);
 
     let inboxResponse = await request(application)
       .get("/panel/inbox")
       .expect(401);
-
+    
     inboxResponse = await request(application)
       .get("/panel/inbox?page=1")
-      .set("Authorization", createResponse.get("Authorization"))
+      .set("Authorization", createResponse.body.Authorization)
       .expect(200);
 
     done();
@@ -340,29 +337,27 @@ test("Send and retrieve a message through the user endpoint", async done => {
     const createdUserA = await request(application)
       .post("/user/create")
       .send({ username: "composeUserA", password: "password" })
-      .expect("Authorization", /Bearer/)
       .expect(200);
 
     const createdUserB = await request(application)
       .post("/user/create")
       .send({ username: "composeUserB", password: "password" })
-      .expect("Authorization", /Bearer/)
       .expect(200);
 
     const composeResponse = await request(application)
       .post("/messages/compose")
-      .set("Authorization", createdUserA.get("Authorization"))
+      .set("Authorization", createdUserA.body.Authorization)
       .send({ receiver_name: "composeUserB", message_text })
       .expect(200);
 
     const inboxComposeUserB = await request(application)
       .get("/panel/inbox?page=1")
-      .set("Authorization", createdUserB.get("Authorization"))
+      .set("Authorization", createdUserB.body.Authorization)
       .expect(200);
 
     const viewMessage = await request(application)
       .get(`/messages/view?id=${inboxComposeUserB.body[0].message_id}`)
-      .set("Authorization", createdUserB.get("Authorization"))
+      .set("Authorization", createdUserB.body.Authorization)
       .expect(200);
 
     expect(viewMessage.body.message_id).toEqual(
@@ -379,6 +374,7 @@ test("Send and retrieve a message through the user endpoint", async done => {
 
 afterAll(async () => {
   // Create external integration testing users
+  /*
   const createdUserA = await request(application)
     .post("/user/create")
     .send({ username: "integServiceUserA", password: "password1" });
@@ -386,7 +382,7 @@ afterAll(async () => {
   const createdUserB = await request(application)
     .post("/user/create")
     .send({ username: "integServiceUserB", password: "password2" });
-
+  */
   // Close db
   Db.$pool.end();
 });
