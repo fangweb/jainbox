@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -21,11 +22,6 @@ var (
 	space   = []byte{' '}
 )
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
-
 // Client for websocket connections
 type Client struct {
 	username string
@@ -38,6 +34,7 @@ type Client struct {
 func (c *Client) writer() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
+		log.Printf("User %v has disconnected.\n", c.username)
 		ticker.Stop()
 		c.conn.Close()
 	}()
@@ -54,6 +51,7 @@ func (c *Client) writer() {
 			// May write multiple messages with NextWriter
 			w, err := c.conn.NextWriter(websocket.TextMessage)
 			if err != nil {
+				log.Println(err)
 				return
 			}
 			w.Write(notification)
@@ -65,6 +63,7 @@ func (c *Client) writer() {
 			}
 
 			if err := w.Close(); err != nil {
+				log.Println(err)
 				return
 			}
 		case <-ticker.C:
