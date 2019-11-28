@@ -63,8 +63,7 @@ export class Server {
         oneofs: true
       }
     );
-    const messengerProto = Grpc.loadPackageDefinition(packageDefinition)
-      .pb;
+    const messengerProto = Grpc.loadPackageDefinition(packageDefinition).pb;
 
     try {
       const grpcClient = new messengerProto.Messenger(

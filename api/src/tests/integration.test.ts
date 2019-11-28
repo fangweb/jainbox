@@ -319,9 +319,14 @@ test("Test panel endpoint controllers", async done => {
     let inboxResponse = await request(application)
       .get("/panel/inbox")
       .expect(401);
-    
+
     inboxResponse = await request(application)
       .get("/panel/inbox?page=1")
+      .set("Authorization", createResponse.body.Authorization)
+      .expect(200);
+
+    const registeredUsers = await request(application)
+      .get("/panel/registered-users")
       .set("Authorization", createResponse.body.Authorization)
       .expect(200);
 
@@ -378,7 +383,7 @@ afterAll(async () => {
   const createdUserA = await request(application)
     .post("/user/create")
     .send({ username: "integServiceUserA", password: "password1" });
-    
+
   const createdUserB = await request(application)
     .post("/user/create")
     .send({ username: "integServiceUserB", password: "password2" });
@@ -386,12 +391,3 @@ afterAll(async () => {
   // Close db
   Db.$pool.end();
 });
-
-
-
-
-
-
-
-
-

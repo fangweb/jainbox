@@ -141,4 +141,15 @@ export class PanelRepository {
       }
     });
   }
+
+  public static getRegisteredUsers(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await Db.any(panelQueries.getRegisteredUsers);
+        resolve(result);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }

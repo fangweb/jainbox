@@ -6,5 +6,4 @@ export abstract class BaseController {
   public constructor() {
     this.router = Router();
   }
-
 }

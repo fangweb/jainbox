@@ -29,6 +29,7 @@ export class PanelController extends BaseController {
     this.router.route("/inbox").get([validatePage, this.getInboxMessages]);
     this.router.route("/sent").get([validatePage, this.getSentMessages]);
     this.router.route("/trash").get([validatePage, this.getTrashedMessages]);
+    this.router.route("/registered-users").get(this.getRegisteredUsers);
     this.router.route("/message").delete(this.softDeleteMessage);
     this.router.route("/message").put(this.putMessageIntoInbox);
   }
@@ -83,7 +84,7 @@ export class PanelController extends BaseController {
     const { message_id } = request.body;
 
     try {
-      const result = PanelRepository.putMessageIntoInbox({
+      const result = await PanelRepository.putMessageIntoInbox({
         usernameId: tokenPayload.username_id,
         messageId: message_id
       });
@@ -122,12 +123,26 @@ export class PanelController extends BaseController {
     const { message_id } = request.body;
 
     try {
-      const result = PanelRepository.softDeleteMessage({
+      const result = await PanelRepository.softDeleteMessage({
         usernameId: tokenPayload.username_id,
         messageId: message_id
       });
       response.json(result);
     } catch (error) {
+      next(new HttpError({ status: 400, message: error.message }));
+    }
+  };
+
+  private getRegisteredUsers: RequestHandler = async (
+    request,
+    response,
+    next
+  ) => {
+    try {
+      const result = await PanelRepository.getRegisteredUsers();
+      response.json(result);
+    } catch (error) {
+      console.log(error);
       next(new HttpError({ status: 400, message: error.message }));
     }
   };

@@ -71,7 +71,7 @@ export class UserController extends BaseController {
       return next(error);
     }
 
-    response.json({ "Authorization": `Bearer ${token}` });
+    response.json({ Authorization: `Bearer ${token}` });
   };
 
   private create: RequestHandler = async (request, response, next) => {
@@ -87,7 +87,7 @@ export class UserController extends BaseController {
       return next(error);
     }
 
-    response.json({ "Authorization": `Bearer ${token}` });
+    response.json({ Authorization: `Bearer ${token}` });
   };
 
   private deactivate: RequestHandler = async (request, response, next) => {
@@ -106,6 +106,6 @@ export class UserController extends BaseController {
       return next(error);
     }
 
-    response.json({ 'Success': 'true' });
+    response.json({ Success: "true" });
   };
 }
