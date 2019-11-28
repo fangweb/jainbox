@@ -38,7 +38,8 @@ func TestWs(t *testing.T) {
 
 	u := url.URL{Scheme: "ws", Host: fmt.Sprintf("localhost:%v", os.Getenv("SUBSCRIBER_SERVER_PORT")), Path: "/ws"}
 
-	cookieVal := fmt.Sprintf("X-Authorization=Bearer %s; path=/", tokenStr)
+	credentials := url.QueryEscape(fmt.Sprintf("Bearer %s", tokenStr))
+	cookieVal := fmt.Sprintf("X-Authorization=%s;", credentials)
 	header.Add("Cookie", cookieVal)
 
 	log.Printf("Dialing in 2s...")
