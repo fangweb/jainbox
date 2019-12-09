@@ -5,20 +5,20 @@ import Session from '../lib/session';
 export class ApiService {
   static getBaseHeaders() {
     return {
-      Accept: ApiConfig.HeaderAcceptValue,
-      'Content-Type': ApiConfig.HeaderContentTypeValue
+      Accept: ApiConfig.headers.acceptValue,
+      'Content-Type': ApiConfig.headers.contentTypeValue
     };
   }
 
   static getAuthHeaders() {
-    const tokenString = Session.get('token');
+    const tokenString = Session.get('jwt');
     if (!tokenString) {
       throw new Error('Token is not set inside session');
     }
 
     return {
       ...this.getBaseHeaders(),
-      Authorization: `${ApiConfig.AuthScheme} ${tokenString}`
+      Authorization: `${ApiConfig.authScheme} ${tokenString}`
     };
   }
 

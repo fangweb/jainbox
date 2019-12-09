@@ -1,17 +1,14 @@
 export class HttpClient {
   static async send(request) {
     const response = await fetch(request);
-
     if (!response.ok && response.type) {
       throw new Error(response.statusText);
     }
 
-    const text = await response.text();
-
-    return text ? JSON.parse(text) : {};
+    return response;
   }
 
-  static get(headers, endpoint) {
+  static async get(headers, endpoint) {
     const request = new Request(endpoint, {
       body: null,
       headers,
@@ -19,10 +16,11 @@ export class HttpClient {
       mode: 'cors'
     });
 
-    return HttpClient.send(request);
+    const response = await HttpClient.send(request);
+    return response;
   }
 
-  static post(headers, endpoint, body) {
+  static async post(headers, endpoint, body) {
     const request = new Request(endpoint, {
       body: JSON.stringify(body),
       headers,
@@ -30,10 +28,11 @@ export class HttpClient {
       mode: 'cors'
     });
 
-    return HttpClient.send(request);
+    const response = await HttpClient.send(request);
+    return response;
   }
 
-  static put(headers, endpoint, body) {
+  static async put(headers, endpoint, body) {
     const request = new Request(endpoint, {
       body: JSON.stringify(body),
       headers,
@@ -41,10 +40,11 @@ export class HttpClient {
       mode: 'cors'
     });
 
-    return HttpClient.send(request);
+    const response = await HttpClient.send(request);
+    return response;
   }
 
-  static delete(headers, endpoint, body) {
+  static async delete(headers, endpoint, body) {
     const request = new Request(endpoint, {
       body: JSON.stringify(body),
       headers,
@@ -52,6 +52,7 @@ export class HttpClient {
       mode: 'cors'
     });
 
-    return HttpClient.send(request);
+    const response = HttpClient.send(request);
+    return response;
   }
 }

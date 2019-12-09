@@ -1,10 +1,10 @@
 export const ApiConfig = {
+  authScheme: 'Bearer',
   headers: {
-    AuthScheme: 'Bearer',
-    HeaderAcceptValue: 'application/json',
-    HeaderContentTypeValue: 'application/json; charset=utf-8'
+    acceptValue: 'application/json',
+    contentTypeValue: 'application/json; charset=utf-8'
   },
-  basePath: 'http://localhost:3001/api'
+  basePath: 'http://localhost:3000/api'
 };
 
 export const PathConfig = {
@@ -19,7 +19,7 @@ export const PathConfig = {
 };
 
 export const WsConfig = {
-  basePath: 'ws://localhost:3001/ws'
+  basePath: 'ws://localhost:3000/subscriber'
 };
 
 export const ResultsPerPage = 10;

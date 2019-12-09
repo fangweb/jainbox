@@ -115,20 +115,27 @@ export const getInbox = ({ page }) => {
     dispatch({ type: LOADING });
     let apiResult;
     try {
-      apiResult = await api.getInbox({ page });
+      const apiCall = await api.getInbox({ page });
+      apiResult = await apiCall.json();
     } catch (e) {
       return dispatch(toggleError());
     }
-    const inboxMessages = apiResult.messages.map(message =>
-      Object.assign(message, { selected: false })
-    );
+
+    let inboxMessages;
+    if (apiResult.length > 0) {
+      inboxMessages = apiResult.messages.map(message =>
+        Object.assign(message, { selected: false })
+      );
+    } else {
+      inboxMessages = [];
+    }
     await wait(300);
     return dispatch({
       type: GET_INBOX,
       payload: {
         inboxMessages,
-        page: apiResult.page,
-        totalResults: apiResult.totalResults
+        page,
+        totalResults: apiResult.length
       }
     });
   };

@@ -1,18 +1,28 @@
 import * as actions from '../modules/ws-module';
 import { WsConfig } from '../config';
 import { wait } from '../helpers';
-import { updateOnlineUsers, updateLoaded } from '../modules/application-module';
-import onlineUsers from './mock/onlineUsers';
+import {
+  updateRegisteredUsers,
+  updateLoaded
+} from '../modules/application-module';
+import registeredUsers from './mock/registeredUsers';
 
 const prodMiddleware = () => {
   let socket = null;
 
-  const onOpen = store => event => {
+  const onOpen = store => async event => {
+    await wait(500);
     console.log('Websocket has connected');
+    store.dispatch(updateRegisteredUsers(registeredUsers));
+    store.dispatch(updateLoaded(true));
   };
 
   const onClose = store => event => {
     console.log('Websocket has disconnected');
+  };
+
+  const onError = store => event => {
+    console.error('WebSocket error: ', event);
   };
 
   const onMessage = store => event => {
@@ -21,8 +31,6 @@ const prodMiddleware = () => {
     switch (payload.Type) {
       case 'notification':
         store.dispatch();
-        break;
-      case 'onlineUsers':
         break;
       default:
         break;
@@ -37,10 +45,11 @@ const prodMiddleware = () => {
             socket.close();
           }
 
-          socket = new WebSocket(WsConfig.basePath);
+          socket = new WebSocket(`${WsConfig.basePath}/ws`);
           socket.onopen = onOpen(store);
           socket.onclose = onClose(store);
-          socket.onmessage = onClose(store);
+          socket.onerror = onError(store);
+          socket.onmessage = onMessage(store);
         } else {
           throw new Error('Your browser does support WebSockets');
         }
@@ -63,7 +72,7 @@ const mockMiddleware = () => {
     switch (action.type) {
       case 'WS_CONNECT':
         await wait(1000);
-        store.dispatch(updateOnlineUsers(onlineUsers));
+        store.dispatch(updateRegisteredUsers(registeredUsers));
         store.dispatch(updateLoaded(true));
         console.log('Websocket has connected');
         break;

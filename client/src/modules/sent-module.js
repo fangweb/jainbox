@@ -96,20 +96,27 @@ export const getSent = ({ page }) => {
     dispatch({ type: LOADING });
     let apiResult;
     try {
-      apiResult = await api.getSent({ page });
+      const apiCall = await api.getSent({ page });
+      apiResult = await apiCall.json();
     } catch (e) {
       return dispatch(toggleError());
     }
-    const sentMessages = apiResult.messages.map(message =>
-      Object.assign(message, { selected: false })
-    );
+
+    let sentMessages;
+    if (apiResult.length > 0) {
+      sentMessages = apiResult.messages.map(message =>
+        Object.assign(message, { selected: false })
+      );
+    } else {
+      sentMessages = [];
+    }
     await wait(300);
     return dispatch({
       type: GET_SENT,
       payload: {
         sentMessages,
-        page: apiResult.page,
-        totalResults: apiResult.totalResults
+        page,
+        totalResults: apiResult.length
       }
     });
   };

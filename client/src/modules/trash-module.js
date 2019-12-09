@@ -96,20 +96,27 @@ export const getTrash = ({ page }) => {
     dispatch({ type: LOADING });
     let apiResult;
     try {
-      apiResult = await api.getTrash({ page });
+      const apiCall = await api.getTrash({ page });
+      apiResult = await apiCall.json();
     } catch (e) {
       return dispatch(toggleError());
     }
-    const trashMessages = apiResult.messages.map(message =>
-      Object.assign(message, { selected: false })
-    );
+
+    let trashMessages;
+    if (apiResult.length > 0) {
+      trashMessages = apiResult.messages.map(message =>
+        Object.assign(message, { selected: false })
+      );
+    } else {
+      trashMessages = [];
+    }
     await wait(300);
     return dispatch({
       type: GET_TRASH,
       payload: {
         trashMessages,
-        page: apiResult.page,
-        totalResults: apiResult.totalResults
+        page,
+        totalResults: apiResult.length
       }
     });
   };

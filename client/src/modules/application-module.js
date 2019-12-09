@@ -1,11 +1,11 @@
 export const UPDATE_AUTHENTICATED = 'application/UPDATE_AUTHENTICATED';
-export const UPDATE_ONLINE_USERS = 'application/UPDATE_ONLINE_USERS';
+export const UPDATE_REGISTERED_USERS = 'application/UPDATE_REGISTERED_USERS';
 export const UPDATE_LOADED = 'application/UPDATE_LOADED';
 export const RESET = 'application/RESET';
 
 const initialState = {
   isAuthenticated: false,
-  onlineUsers: [],
+  registeredUsers: [],
   loaded: false
 };
 
@@ -16,10 +16,10 @@ export default (state = initialState, action) => {
         ...state,
         isAuthenticated: action.payload
       };
-    case UPDATE_ONLINE_USERS:
+    case UPDATE_REGISTERED_USERS:
       return {
         ...state,
-        onlineUsers: action.payload
+        registeredUsers: action.payload
       };
     case UPDATE_LOADED:
       return {
@@ -40,9 +40,9 @@ export const updateAuthenticated = isAuthenticated => ({
   payload: isAuthenticated
 });
 
-export const updateOnlineUsers = onlineUsers => ({
-  type: UPDATE_ONLINE_USERS,
-  payload: onlineUsers
+export const updateRegisteredUsers = registeredUsers => ({
+  type: UPDATE_REGISTERED_USERS,
+  payload: registeredUsers
 });
 
 export const updateLoaded = loaded => ({

@@ -70,7 +70,7 @@ class Compose extends Component {
           <div className="compose-ctrl">
             <Dropdown
               title={this.getDropdownTitle()}
-              data={application.onlineUsers}
+              data={application.registeredUsers}
               onSelectItem={this.selectedFromDropdown}
             />
             <button onClick={this.onClearForm} type="submit" className="clear">
