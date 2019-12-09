@@ -7,7 +7,6 @@ import { ServiceContainer } from '../services';
 import { PathConfig } from '../config';
 import Loader from './Loader';
 import {
-  updateOnlineUsers,
   updateLoaded,
   updateAuthenticated
 } from '../modules/application-module';
