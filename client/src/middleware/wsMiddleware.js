@@ -1,11 +1,12 @@
 import * as actions from '../modules/ws-module';
 import { WsConfig } from '../config';
 import { wait } from '../helpers';
+import { ApiService } from '../services/apiService';
 import {
   updateRegisteredUsers,
   updateLoaded
 } from '../modules/application-module';
-import registeredUsers from './mock/registeredUsers';
+import mockRegisteredUsers from './mock/registeredUsers';
 
 const prodMiddleware = () => {
   let socket = null;
@@ -13,6 +14,8 @@ const prodMiddleware = () => {
   const onOpen = store => async event => {
     await wait(500);
     console.log('Websocket has connected');
+    const response = await ApiService.getRegisteredUsers();
+    const registeredUsers = await response.json();
     store.dispatch(updateRegisteredUsers(registeredUsers));
     store.dispatch(updateLoaded(true));
   };
@@ -72,7 +75,7 @@ const mockMiddleware = () => {
     switch (action.type) {
       case 'WS_CONNECT':
         await wait(1000);
-        store.dispatch(updateRegisteredUsers(registeredUsers));
+        store.dispatch(updateRegisteredUsers(mockRegisteredUsers));
         store.dispatch(updateLoaded(true));
         console.log('Websocket has connected');
         break;

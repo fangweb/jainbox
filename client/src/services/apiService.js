@@ -46,6 +46,14 @@ export class ApiService {
     return response;
   }
 
+  static async getRegisteredUsers() {
+    const response = await HttpClient.get(
+      this.getAuthHeaders(),
+      `${ApiConfig.basePath}/panel/registered-users`
+    );
+    return response;
+  }
+
   static async softDeleteMessage({ messageId }) {
     const response = await HttpClient.delete(
       this.getAuthHeaders(),

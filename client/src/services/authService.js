@@ -18,8 +18,8 @@ export class AuthService {
 
   static getBaseHeaders() {
     return {
-      Accept: ApiConfig.headers.HeaderAcceptValue,
-      'Content-Type': ApiConfig.headers.HeaderContentTypeValue
+      Accept: ApiConfig.headers.acceptValue,
+      'Content-Type': ApiConfig.headers.contentTypeValue
     };
   }
 
