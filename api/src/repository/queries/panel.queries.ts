@@ -11,7 +11,7 @@ export const updatePanelMessage = `UPDATE jainbox_schema.panel
                                    RETURNING *`;
 
 export const getPanelInboxMessages = `SELECT panel.id as panel_id, panel.message_id, panel.archive_level,
-                                       messages.created_at, users.username as from
+                                       messages.created_at, messages.title, users.username as from
                                       FROM jainbox_schema.panel
                                         LEFT JOIN jainbox_schema.messages ON panel.message_id = messages.id
                                         LEFT JOIN jainbox_schema.users ON messages.created_by_id = users.id
@@ -23,7 +23,7 @@ export const getPanelInboxMessages = `SELECT panel.id as panel_id, panel.message
                                       OFFSET $[offset] LIMIT $[limit];`;
 
 export const getPanelSentMessages = `SELECT panel.id as panel_id, panel.message_id, panel.archive_level,
-                                       messages.created_at, users.username as to
+                                       messages.created_at, messages.title, users.username as to
                                      FROM jainbox_schema.panel
                                        LEFT JOIN jainbox_schema.messages ON panel.message_id = messages.id
                                        LEFT JOIN jainbox_schema.users ON messages.receiver_id = users.id
@@ -35,7 +35,7 @@ export const getPanelSentMessages = `SELECT panel.id as panel_id, panel.message_
                                      OFFSET $[offset] LIMIT $[limit];`;
 
 export const getPanelTrashMessages = `SELECT panel.id as panel_id, panel.message_id, panel.archive_level,
-                                       messages.created_at, users.username as from
+                                       messages.created_at, messages.title, users.username as from
                                       FROM jainbox_schema.panel
                                         LEFT JOIN jainbox_schema.messages ON panel.message_id = messages.id
                                         LEFT JOIN jainbox_schema.users ON messages.created_by_id = users.id

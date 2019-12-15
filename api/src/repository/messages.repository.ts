@@ -7,10 +7,12 @@ export class MessagesRepository {
   public static compose({
     createdById,
     receiverName,
+    title,
     messageText
   }: {
     createdById: number;
     receiverName: string;
+    title: string;
     messageText: string;
   }): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -19,6 +21,7 @@ export class MessagesRepository {
           createdById,
           receiverName,
           createdAt: new Date(),
+          title,
           messageText
         });
         await t.many(panelQueries.createPanelMessages, {

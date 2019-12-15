@@ -18,12 +18,13 @@ export class MessagesController extends BaseController {
 
   private compose: RequestHandler = async (request, response, next) => {
     const { tokenPayload } = response.locals;
-    const { receiver_name, message_text } = request.body;
+    const { receiver_name, title, message_text } = request.body;
     const grpcClient = request.app.get("grpcClient");
     try {
       const result = await MessagesRepository.compose({
         createdById: tokenPayload.username_id,
         receiverName: receiver_name,
+        title,
         messageText: message_text
       });
 

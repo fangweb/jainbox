@@ -175,27 +175,32 @@ test("Directly test messages and panel repository calls", async () => {
     const msg1 = await MessagesRepository.compose({
       createdById: payloadC.username_id,
       receiverName: "testUserD",
+      title: "test title 1",
       messageText: "test message 1"
     });
     expect(msg1).not.toBeNaN();
     const msg2 = await MessagesRepository.compose({
       createdById: payloadC.username_id,
       receiverName: "testUserD",
+      title: "test title 2",
       messageText: "test message 2"
     });
     const msg3 = await MessagesRepository.compose({
       createdById: payloadC.username_id,
       receiverName: "testUserD",
+      title: "test title 3",
       messageText: "test message 3"
     });
     const msg4 = await MessagesRepository.compose({
       createdById: payloadD.username_id,
       receiverName: "testUserC",
+      title: "test title 4",
       messageText: "test message 4"
     });
     const msg5 = await MessagesRepository.compose({
       createdById: payloadD.username_id,
       receiverName: "testUserC",
+      title: "test title 5",
       messageText: "test message 5"
     });
 
@@ -339,6 +344,7 @@ test("Test panel endpoint controllers", async done => {
 test("Send and retrieve a message through the user endpoint", async done => {
   try {
     const message_text = "Hello from composeUserA";
+    const title = "Example title";
     const createdUserA = await request(application)
       .post("/user/create")
       .send({ username: "composeUserA", password: "password" })
@@ -352,7 +358,7 @@ test("Send and retrieve a message through the user endpoint", async done => {
     const composeResponse = await request(application)
       .post("/messages/compose")
       .set("Authorization", createdUserA.body.Authorization)
-      .send({ receiver_name: "composeUserB", message_text })
+      .send({ receiver_name: "composeUserB", title, message_text })
       .expect(200);
 
     const inboxComposeUserB = await request(application)

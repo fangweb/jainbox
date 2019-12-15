@@ -26,6 +26,7 @@ id serial PRIMARY KEY,
 created_by_id integer NOT NULL REFERENCES jainbox_schema.users (id) ON DELETE CASCADE,
 receiver_id integer NOT NULL REFERENCES jainbox_schema.users (id) ON DELETE CASCADE,
 created_at timestamptz NOT NULL,
+title text NOT NULL,
 message_text text NOT NULL,
 CHECK ( created_by_id != receiver_id )
 );
