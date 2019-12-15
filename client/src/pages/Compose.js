@@ -2,19 +2,11 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Dropdown } from '../pkg/dropdown';
-import { setForm, clearForm, sendForm } from '../modules/compose-module';
+import { setForm, clearForm, sendMessage } from '../modules/compose-module';
+import { ServiceContainer } from '../services/serviceContainer';
 import '../assets/css/compose.css';
 
 class Compose extends Component {
-  /* TODO:
-  constructor(props) {
-    super(props);
-    this.state = {
-      messageSubmitting: false
-    };
-  }
-  */
-
   componentWillUnmount() {
     /* TODO:
     if (this.props.messageSubmitting) {
@@ -25,7 +17,8 @@ class Compose extends Component {
     this.props.clearForm();
   }
 
-  send = e => {
+  onSendForm = e => {
+    this.props.sendMessage();
     e.preventDefault();
   };
 
@@ -66,7 +59,7 @@ class Compose extends Component {
 
     return (
       <div className="compose">
-        <form onSubmit={this.onSend}>
+        <form onSubmit={this.onSendForm}>
           <div className="compose-ctrl">
             <Dropdown
               title={this.getDropdownTitle()}
@@ -86,9 +79,9 @@ class Compose extends Component {
             type="text"
           />
           <textarea
-            name="message"
+            name="messageText"
             onChange={this.setForm}
-            value={compose.form.message}
+            value={compose.form.messageText}
             placeholder="Message"
             className="message"
           />
@@ -112,7 +105,7 @@ const mapDispatchToProps = dispatch =>
     {
       setForm,
       clearForm,
-      sendForm
+      sendMessage
     },
     dispatch
   );

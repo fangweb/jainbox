@@ -169,7 +169,7 @@ class Inbox extends Component {
                       !message.viewed ? 'bold-view' : ''
                     }`}
                   >
-                    {message.username}
+                    {message.from}
                   </div>
                   <div
                     className={`title flex-auto ${

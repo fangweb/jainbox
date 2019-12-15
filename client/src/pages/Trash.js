@@ -155,7 +155,7 @@ class Trash extends Component {
                       <i className="fas fa-eye viewIcon" />
                     </Link>
                   </div>
-                  <div className="username flex-auto">{message.username}</div>
+                  <div className="username flex-auto">{message.from}</div>
                   <div className="title flex-auto">{message.title}</div>
                   <div className="time-sent flex-auto">{timeSent}</div>
                 </div>

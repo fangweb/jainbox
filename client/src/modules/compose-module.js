@@ -8,7 +8,7 @@ const initialState = {
   form: {
     to: null,
     title: '',
-    message: ''
+    messageText: ''
   },
   sending: false
 };
@@ -50,15 +50,16 @@ export const clearForm = () => {
   };
 };
 
-export const sendForm = () => {
+export const sendMessage = () => {
   return async (dispatch, getState) => {
     const api = ServiceContainer.api();
+    const { composeReducer } = getState();
     dispatch({ type: SENDING_FORM });
-    const sent = await api.compose(getState().form);
-    if (!sent) {
-      // TODO: error sending form
-    } else {
-      dispatch({ type: CLEAR_FORM });
+    try {
+      const sent = await api.sendMessage({ ...composeReducer.form });
+    } catch (e) {
+      console.log(e);
     }
+    dispatch({ type: CLEAR_FORM });
   };
 };

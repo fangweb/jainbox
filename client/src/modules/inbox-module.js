@@ -123,7 +123,8 @@ export const getInbox = ({ page }) => {
 
     let inboxMessages;
     if (apiResult.length > 0) {
-      inboxMessages = apiResult.messages.map(message =>
+      console.log(apiResult);
+      inboxMessages = apiResult.map(message =>
         Object.assign(message, { selected: false })
       );
     } else {

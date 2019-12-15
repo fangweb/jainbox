@@ -43,8 +43,8 @@ export class MockApiService {
     return Promise.reject();
   }
 
-  static async compose(form) {
-    await wait(3000);
+  static async sendMessage({ to, title, messageText }) {
+    await wait(1000);
     return true;
   }
 }

@@ -74,11 +74,12 @@ export class ApiService {
     return response;
   }
 
-  static async compose({ receiverName, messageText }) {
+  static async sendMessage({ to, title, messageText }) {
+    console.log(to, title, messageText);
     const response = await HttpClient.post(
       this.getAuthHeaders(),
       `${ApiConfig.basePath}/messages/compose`,
-      { receiver_name: receiverName, message_text: messageText }
+      { receiver_name: to, title, message_text: messageText }
     );
     return response;
   }
