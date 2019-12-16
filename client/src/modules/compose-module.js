@@ -51,6 +51,8 @@ export const clearForm = () => {
   };
 };
 
+const validateMessage = form => {};
+
 export const sendMessage = history => {
   return async (dispatch, getState) => {
     const api = ServiceContainer.api();
@@ -58,11 +60,12 @@ export const sendMessage = history => {
     dispatch({ type: SENDING_FORM });
     try {
       const sent = await api.sendMessage({ ...composeReducer.form });
-      dispatch(activateToast('SUCCESS_TOAST', { message: 'Message sent' }));
+      dispatch(activateToast('success', { message: 'Message sent' }));
       history.push('/sent');
+      dispatch({ type: CLEAR_FORM });
     } catch (e) {
+      dispatch(activateToast('error', { message: 'Could not send message' }));
       console.log(e);
     }
-    dispatch({ type: CLEAR_FORM });
   };
 };
