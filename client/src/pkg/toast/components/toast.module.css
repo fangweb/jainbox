@@ -1,4 +1,4 @@
-.success {
+.toast {
   display: flex;
   align-items: center;
   justify-content: space-between;  
@@ -8,16 +8,24 @@
   position: fixed;
   transform: translateX(-50%) translateY(150%);
   transition: transform .5s ease;
-  background-color: rgb(3, 102, 16);
-  color: #fff;
   padding: 0 20px;
 }
 
-.success.visible {
+.toast.success {
+  background-color: rgb(3, 102, 16);
+  color: #fff;
+}
+
+.toast.error {
+  background-color: rgb(166, 23, 42);
+  color: #fff;
+}
+
+.toast.visible {
   transform: translateX(-50%) translateY(-150%);
 }
 
-.successIcon {
+.toastIcon {
   font-size: 20px;
   margin-right: 10px;
 }

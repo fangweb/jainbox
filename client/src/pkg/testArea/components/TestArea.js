@@ -35,7 +35,7 @@ class TestAreaC extends Component {
   };
 
   activateToast = () => {
-    this.props.activateToast('SUCCESS_TOAST', { message: this.state.message });
+    this.props.activateToast('success', { message: this.state.message });
   };
 
   setDropdownTitle = dropdownTitle => {

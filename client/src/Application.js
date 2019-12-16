@@ -12,7 +12,7 @@ import SignIn from './pages/SignIn';
 import NotFound from './pages/NotFound';
 import { TestArea } from './pkg/testArea';
 import { Modal } from './pkg/modal';
-import { Toast } from './pkg/toast';
+import { ToastContainer } from './pkg/toast';
 
 import './assets/css/index.css';
 
@@ -126,7 +126,7 @@ class Application extends Component {
           {/* TODO: not found */}
         </Switch>
         <Modal />
-        <Toast />
+        <ToastContainer />
       </React.Fragment>
     );
   }

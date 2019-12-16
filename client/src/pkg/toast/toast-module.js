@@ -1,5 +1,3 @@
-import Success from './components/Success';
-
 const initialState = null;
 
 const ACTIVATE_TOAST = 'toast/ACTIVATE_TOAST';
@@ -12,7 +10,7 @@ export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ACTIVATE_TOAST:
       return {
-        toastKind: action.payload.kind,
+        toastType: action.payload.toastType,
         toastProps: {
           ...action.payload.props,
           duration: TOAST_DURATION,
@@ -26,12 +24,12 @@ export const reducer = (state = initialState, action) => {
   }
 };
 
-export const activateToast = (kind, props) => {
+export const activateToast = (toastType, props) => {
   return (dispatch, getState) => {
     dispatch({
       type: ACTIVATE_TOAST,
       payload: {
-        kind,
+        toastType,
         props
       }
     });
@@ -41,7 +39,3 @@ export const activateToast = (kind, props) => {
 export const endToast = () => ({
   type: END_TOAST
 });
-
-export const toastComponents = {
-  SUCCESS_TOAST: Success
-};
