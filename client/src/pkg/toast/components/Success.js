@@ -20,7 +20,7 @@ class Success extends React.Component {
   }
 
   componentWillUnmount() {
-    this.cancelDelays();
+    // this.cancelDelays();
   }
 
   cancelSequence = async () => {

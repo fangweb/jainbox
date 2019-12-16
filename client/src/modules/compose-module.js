@@ -1,4 +1,5 @@
 import { ServiceContainer } from '../services';
+import { activateToast } from '../pkg/toast/toast-module';
 
 export const SET_FORM = 'compose/SET_FORM';
 export const CLEAR_FORM = 'compose/CLEAR_FORM';
@@ -50,13 +51,15 @@ export const clearForm = () => {
   };
 };
 
-export const sendMessage = () => {
+export const sendMessage = history => {
   return async (dispatch, getState) => {
     const api = ServiceContainer.api();
     const { composeReducer } = getState();
     dispatch({ type: SENDING_FORM });
     try {
       const sent = await api.sendMessage({ ...composeReducer.form });
+      dispatch(activateToast('SUCCESS_TOAST', { message: 'Message sent' }));
+      history.push('/sent');
     } catch (e) {
       console.log(e);
     }

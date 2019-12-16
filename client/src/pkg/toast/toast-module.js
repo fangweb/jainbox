@@ -22,7 +22,7 @@ export const reducer = (state = initialState, action) => {
     case END_TOAST:
       return null;
     default:
-      return null;
+      return state;
   }
 };
 

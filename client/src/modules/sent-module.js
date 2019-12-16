@@ -104,7 +104,6 @@ export const getSent = ({ page }) => {
 
     let sentMessages;
     if (apiResult.length > 0) {
-      console.log(apiResult);
       sentMessages = apiResult.map(message =>
         Object.assign(message, { selected: false })
       );

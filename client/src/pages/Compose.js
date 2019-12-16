@@ -18,7 +18,7 @@ class Compose extends Component {
   }
 
   onSendForm = e => {
-    this.props.sendMessage();
+    this.props.sendMessage(this.props.history);
     e.preventDefault();
   };
 
