@@ -104,7 +104,8 @@ export const getTrash = ({ page }) => {
 
     let trashMessages;
     if (apiResult.length > 0) {
-      trashMessages = apiResult.messages.map(message =>
+      console.log(apiResult);
+      trashMessages = apiResult.map(message =>
         Object.assign(message, { selected: false })
       );
     } else {
