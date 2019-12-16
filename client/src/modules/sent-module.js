@@ -104,7 +104,8 @@ export const getSent = ({ page }) => {
 
     let sentMessages;
     if (apiResult.length > 0) {
-      sentMessages = apiResult.messages.map(message =>
+      console.log(apiResult);
+      sentMessages = apiResult.map(message =>
         Object.assign(message, { selected: false })
       );
     } else {
