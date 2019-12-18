@@ -6,7 +6,7 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
-	"subscriber/proto"
+	pb "subscriber/proto"
 )
 
 type rpcServer struct {

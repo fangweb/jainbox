@@ -58,16 +58,22 @@ RUN set -eux; \
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+ENV GO111MODULE=on
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
 RUN apk add --no-cache git protobuf
-RUN go get -v google.golang.org/grpc
-RUN go get -v github.com/golang/protobuf/protoc-gen-go
-COPY ./subscriber/ $GOPATH/src/subscriber/
-COPY ./proto $GOPATH/src/subscriber/proto
-RUN protoc -I $GOPATH/src/subscriber proto/messenger.proto --go_out=plugins=grpc:$GOPATH/src/subscriber
 
 WORKDIR $GOPATH/src/subscriber
-ENV GO111MODULE=on
+
+COPY ./subscriber/go.mod .
+COPY ./subscriber/go.sum .
+RUN go mod download
+
+RUN go get -v google.golang.org/grpc
+RUN go get -v github.com/golang/protobuf/protoc-gen-go
+COPY ./proto ./proto
+RUN protoc --proto_path=./proto --go_out=plugins=grpc:./proto messenger.proto
+
+COPY ./subscriber/cmd ./cmd
 RUN go build ./cmd/...
 CMD ./subscriber

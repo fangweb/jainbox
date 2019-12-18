@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// New
 const (
 	writeWait = 10 * time.Second
 
@@ -71,6 +72,7 @@ func (c *Client) writer() {
 
 			// Write message and immediately close
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+				log.Println(err)
 				return
 			}
 		}

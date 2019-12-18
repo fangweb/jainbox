@@ -15,7 +15,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"google.golang.org/grpc"
-	"subscriber/proto"
+	pb "subscriber/proto"
 )
 
 func TestWs(t *testing.T) {
