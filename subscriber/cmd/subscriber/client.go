@@ -30,14 +30,40 @@ type Client struct {
 	conn *websocket.Conn
 
 	write chan []byte
+
+	clientPool *ClientPool
+}
+
+func (c *Client) reader() {
+	defer func() {
+		c.clientPool.unregister <- c
+
+		// Close writer goroutine
+		close(c.write)
+
+		c.conn.Close()
+		log.Printf("User %v has disconnected.", c.username)
+	}()
+	c.conn.SetReadLimit(maxMessageSize)
+	c.conn.SetReadDeadline(time.Now().Add(pongWait))
+	c.conn.SetPongHandler(func(string) error { c.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+	for {
+		_, _, err := c.conn.ReadMessage()
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				log.Printf("error: %v\n", err)
+			}
+			break
+		}
+	}
 }
 
 func (c *Client) writer() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
-		log.Printf("User %v has disconnected.\n", c.username)
 		ticker.Stop()
 		c.conn.Close()
+		log.Printf("Client writer for %v has closed.", c.username)
 	}()
 
 	for {

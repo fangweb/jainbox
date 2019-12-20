@@ -20,15 +20,14 @@ func (c *ClientPool) run() {
 	for {
 		select {
 		case client := <-c.register:
+			log.Printf("User %v has registered to client pool.\n", string(client.username))
 			c.cache.set(string(client.username), client)
 		case client := <-c.unregister:
 			if _, ok := c.cache.get(client.username); ok {
+				log.Printf("User %v has unregistered to client pool.\n", string(client.username))
 				c.cache.delete(client.username)
-
-				// Close Client.writer goroutine
-				close(client.write)
 			} else {
-				log.Printf("Could not unregister cache for user: %v\n", string(client.username))
+				log.Printf("Could not unregister cache for user %v in client pool.\n", string(client.username))
 			}
 		case message := <-c.notify:
 			if client, ok := c.cache.get(message.Username); ok {
@@ -39,7 +38,7 @@ func (c *ClientPool) run() {
 				}
 				client.write <- bytes
 			} else {
-				log.Printf("Could not find user from cache: %v\n", string(message.Username))
+				log.Printf("Could not find user from cache %v in client pool.\n", string(message.Username))
 			}
 		}
 	}

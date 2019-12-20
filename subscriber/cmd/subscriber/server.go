@@ -79,9 +79,10 @@ func (s *Server) wsHandler(w http.ResponseWriter, r *http.Request) {
 
 	if username, ok := claims["username"].(string); ok {
 		log.Printf("User %v has successfully upgraded.\n", username)
-		client := &Client{username: username, conn: conn, write: make(chan []byte, 256)}
+		client := &Client{username: username, conn: conn, write: make(chan []byte, 256), clientPool: s.clientPool}
 		s.clientPool.register <- client
 		go client.writer()
+		go client.reader()
 	} else {
 		log.Println("Could not assert claims[\"username\"]")
 	}
