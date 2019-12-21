@@ -1,5 +1,7 @@
+import { PathConfig, WsConfig } from '../config';
 import * as actions from '../modules/ws-module';
-import { WsConfig } from '../config';
+import { getInbox } from '../modules/inbox-module';
+
 import { wait } from '../helpers';
 import { ApiService } from '../services/apiService';
 import {
@@ -30,10 +32,12 @@ const prodMiddleware = () => {
 
   const onMessage = store => event => {
     const payload = JSON.parse(event.data);
-
+    const { router } = store.getState();
     switch (payload.Type) {
-      case 'notification':
-        store.dispatch();
+      case 'newMessage':
+        if (router.location.pathname === `${PathConfig.inboxPath}/page/1`) {
+          store.dispatch(getInbox({ page: 1, showLoader: false }));
+        }
         break;
       default:
         break;

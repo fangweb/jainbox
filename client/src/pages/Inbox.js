@@ -32,7 +32,7 @@ class Inbox extends Component {
   componentDidMount() {
     try {
       const page = getPage(this.props.match.params.page);
-      this.props.getInbox({ page });
+      this.props.getInbox({ page, showLoader: true });
     } catch (e) {
       this.props.toggleError();
     }

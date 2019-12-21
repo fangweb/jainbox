@@ -109,10 +109,13 @@ export default (state = initialState, action) => {
   }
 };
 
-export const getInbox = ({ page }) => {
+export const getInbox = ({ page, showLoader }) => {
   return async dispatch => {
     const api = ServiceContainer.api();
-    dispatch({ type: LOADING });
+
+    if (showLoader) {
+      dispatch({ type: LOADING });
+    }
     let apiResult;
     try {
       const apiCall = await api.getInbox({ page });

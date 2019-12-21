@@ -80,7 +80,6 @@ class Toast extends React.Component {
     const { visible, message } = this.state;
 
     let toastType = '';
-    console.log(this.props);
     if (this.props.toastType === 'success') {
       toastType = styles.success;
     } else if (this.props.toastType === 'error') {
