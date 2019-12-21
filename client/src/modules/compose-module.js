@@ -1,5 +1,6 @@
 import { ServiceContainer } from '../services';
 import { activateToast } from '../pkg/toast/toast-module';
+import ComposeValidationError from '../lib/error/ComposeValidationError';
 
 export const SET_FORM = 'compose/SET_FORM';
 export const CLEAR_FORM = 'compose/CLEAR_FORM';
@@ -7,7 +8,7 @@ export const SENDING_FORM = 'compose/SEND_FORM';
 
 const initialState = {
   form: {
-    to: null,
+    to: '',
     title: '',
     messageText: ''
   },
@@ -51,20 +52,37 @@ export const clearForm = () => {
   };
 };
 
-const validateMessage = form => {};
+const validateMessage = form => {
+  if (!form.to || !form.title || !form.messageText) {
+    throw new ComposeValidationError(
+      'Please make sure all fields are completed'
+    );
+  }
+  if (form.to === '' || form.title === '' || form.MessageText === '') {
+    throw new ComposeValidationError(
+      'Please make sure all fields are completed'
+    );
+  }
+};
 
 export const sendMessage = history => {
   return async (dispatch, getState) => {
     const api = ServiceContainer.api();
     const { composeReducer } = getState();
+    const { form } = composeReducer;
     dispatch({ type: SENDING_FORM });
     try {
-      const sent = await api.sendMessage({ ...composeReducer.form });
+      validateMessage(form);
+      const sent = await api.sendMessage({ ...form });
       dispatch(activateToast('success', { message: 'Message sent' }));
       history.push('/sent');
       dispatch({ type: CLEAR_FORM });
     } catch (e) {
-      dispatch(activateToast('error', { message: 'Could not send message' }));
+      if (e.validationErrorMessage) {
+        dispatch(activateToast('error', { message: e.validationErrorMessage }));
+      } else {
+        dispatch(activateToast('error', { message: 'Could not send message' }));
+      }
       console.log(e);
     }
   };
