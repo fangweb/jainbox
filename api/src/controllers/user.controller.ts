@@ -76,6 +76,7 @@ export class UserController extends BaseController {
 
   private create: RequestHandler = async (request, response, next) => {
     const { username, password } = request.body;
+    const grpcClient = request.app.get("grpcClient");
     let token;
 
     try {
@@ -85,6 +86,23 @@ export class UserController extends BaseController {
         return next(new HttpError({ status: 409, message: error.message }));
       }
       return next(error);
+    }
+
+    try {
+      grpcClient.Broadcast(
+        {
+          Type: "newUser",
+          Notification: username
+        },
+        function(grpcError, grpcResponse) {
+          console.log(grpcResponse);
+          if (grpcError) {
+            console.error(grpcError);
+          }
+        }
+      );
+    } catch (notifyError) {
+      console.error(notifyError);
     }
 
     response.json({ Authorization: `Bearer ${token}` });

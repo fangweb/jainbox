@@ -13,12 +13,16 @@ import mockRegisteredUsers from './mock/registeredUsers';
 const prodMiddleware = () => {
   let socket = null;
 
-  const onOpen = store => async event => {
-    await wait(500);
-    console.log('Websocket has connected');
+  const getThenUpdateRegisteredUsers = async store => {
     const response = await ApiService.getRegisteredUsers();
     const registeredUsers = await response.json();
     store.dispatch(updateRegisteredUsers(registeredUsers));
+  };
+
+  const onOpen = store => async event => {
+    await wait(500);
+    console.log('Websocket has connected');
+    await getThenUpdateRegisteredUsers(store);
     store.dispatch(updateLoaded(true));
   };
 
@@ -34,11 +38,16 @@ const prodMiddleware = () => {
     const payload = JSON.parse(event.data);
     const { router } = store.getState();
     switch (payload.Type) {
-      case 'newMessage':
+      case 'newMessage': {
         if (router.location.pathname === `${PathConfig.inboxPath}/page/1`) {
           store.dispatch(getInbox({ page: 1, showLoader: false }));
         }
         break;
+      }
+      case 'newUser': {
+        getThenUpdateRegisteredUsers(store);
+        break;
+      }
       default:
         break;
     }

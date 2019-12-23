@@ -3,7 +3,8 @@ syntax = "proto3";
 package pb;
 
 service Messenger {
-  rpc Notify (NotifyMessage) returns (NotifyResponse) {}
+  rpc Notify (NotifyMessage) returns (Response) {}
+  rpc Broadcast (BroadcastMessage) returns (Response) {}
 }
 
 message NotifyMessage {
@@ -12,6 +13,11 @@ message NotifyMessage {
   string Notification = 3;
 }
 
-message NotifyResponse {
-  bool Notified = 1;
+message BroadcastMessage {
+  string Type = 1;
+  string Notification = 2;
+}
+
+message Response {
+  bool Success = 1;
 }
