@@ -142,7 +142,6 @@ export class PanelController extends BaseController {
       const result = await PanelRepository.getRegisteredUsers();
       response.json(result);
     } catch (error) {
-      console.log(error);
       next(new HttpError({ status: 400, message: error.message }));
     }
   };
