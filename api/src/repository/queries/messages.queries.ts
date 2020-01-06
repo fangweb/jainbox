@@ -6,7 +6,7 @@ export const createMessage = `WITH receiver AS (
                              VALUES ($[createdById], ( SELECT id FROM receiver ), $[title], $[createdAt], $[messageText])
                              RETURNING *;`;
 
-export const viewMessage = `SELECT messages.id as message_id, messages.created_at, messages.message_text, users.username
+export const viewMessage = `SELECT messages.id as message_id, messages.created_at, messages.title, messages.message_text, users.username
                             FROM jainbox_schema.messages
                               LEFT JOIN jainbox_schema.users ON users.id = messages.created_by_id
                             WHERE messages.id = $[messageId]

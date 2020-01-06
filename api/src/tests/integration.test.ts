@@ -172,32 +172,32 @@ test("Directly test messages and panel repository calls", async () => {
   }
 
   try {
-    const msg1 = await MessagesRepository.compose({
+    const msg1 = await MessagesRepository.composeMessage({
       createdById: payloadC.username_id,
       receiverName: "testUserD",
       title: "test title 1",
       messageText: "test message 1"
     });
     expect(msg1).not.toBeNaN();
-    const msg2 = await MessagesRepository.compose({
+    const msg2 = await MessagesRepository.composeMessage({
       createdById: payloadC.username_id,
       receiverName: "testUserD",
       title: "test title 2",
       messageText: "test message 2"
     });
-    const msg3 = await MessagesRepository.compose({
+    const msg3 = await MessagesRepository.composeMessage({
       createdById: payloadC.username_id,
       receiverName: "testUserD",
       title: "test title 3",
       messageText: "test message 3"
     });
-    const msg4 = await MessagesRepository.compose({
+    const msg4 = await MessagesRepository.composeMessage({
       createdById: payloadD.username_id,
       receiverName: "testUserC",
       title: "test title 4",
       messageText: "test message 4"
     });
-    const msg5 = await MessagesRepository.compose({
+    const msg5 = await MessagesRepository.composeMessage({
       createdById: payloadD.username_id,
       receiverName: "testUserC",
       title: "test title 5",
@@ -256,6 +256,7 @@ test("Directly test messages and panel repository calls", async () => {
     });
     expect(inboxC.length).toEqual(1);
   } catch (error) {
+    console.error(error.trace);
     throw error;
   }
 });
@@ -367,7 +368,7 @@ test("Send and retrieve a message through the user endpoint", async done => {
       .expect(200);
 
     const viewMessage = await request(application)
-      .get(`/messages/view?id=${inboxComposeUserB.body[0].message_id}`)
+      .get(`/messages/view?message_id=${inboxComposeUserB.body[0].message_id}`)
       .set("Authorization", createdUserB.body.Authorization)
       .expect(200);
 
@@ -379,6 +380,7 @@ test("Send and retrieve a message through the user endpoint", async done => {
 
     done();
   } catch (error) {
+    console.log(error.stack);
     done(error);
   }
 });

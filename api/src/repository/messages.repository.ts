@@ -4,7 +4,7 @@ import * as panelQueries from "./queries/panel.queries";
 import { Db } from "../db";
 
 export class MessagesRepository {
-  public static compose({
+  public static composeMessage({
     createdById,
     receiverName,
     title,

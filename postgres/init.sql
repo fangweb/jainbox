@@ -39,6 +39,7 @@ message_id integer NOT NULL REFERENCES jainbox_schema.messages (id) ON DELETE CA
 archive_level integer DEFAULT 0 NOT NULL,
 show_inbox boolean DEFAULT false NOT NULL,
 show_sent boolean DEFAULT false NOT NULL,
+is_viewed boolean DEFAULT false NOT NULL,
 CHECK ( archive_level BETWEEN 0 AND 2 )
 );
 

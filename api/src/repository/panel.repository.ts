@@ -86,7 +86,8 @@ export class PanelRepository {
           messageId,
           showInbox: false,
           showSent: false,
-          archiveLevel: 1
+          archiveLevel: 1,
+          isViewed: undefined
         });
         resolve(result);
       } catch (error) {
@@ -110,7 +111,8 @@ export class PanelRepository {
           messageId,
           showInbox: true,
           showSent: false,
-          archiveLevel: 0
+          archiveLevel: 0,
+          isViewed: undefined
         });
         resolve(result);
       } catch (error) {
@@ -133,7 +135,8 @@ export class PanelRepository {
           messageId,
           showInbox: false,
           showSent: false,
-          archiveLevel: 2
+          archiveLevel: 2,
+          isViewed: undefined
         });
         resolve(result);
       } catch (error) {
@@ -146,6 +149,32 @@ export class PanelRepository {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await Db.any(panelQueries.getRegisteredUsers);
+        resolve(result);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  public static updateIsViewed({
+    messageId,
+    usernameId,
+    isViewed
+  }: {
+    messageId: number;
+    usernameId: number;
+    isViewed: boolean;
+  }): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await Db.one(panelQueries.updatePanelMessage, {
+          usernameId,
+          messageId,
+          showInbox: undefined,
+          showSent: undefined,
+          archiveLevel: undefined,
+          isViewed
+        });
         resolve(result);
       } catch (error) {
         reject(error);

@@ -5,12 +5,13 @@ export const createPanelMessages = `INSERT INTO jainbox_schema.panel(username_id
 export const updatePanelMessage = `UPDATE jainbox_schema.panel
                                    SET show_inbox = COALESCE($[showInbox], show_inbox),
                                        show_sent = COALESCE($[showSent], show_sent),
-                                       archive_level = COALESCE($[archiveLevel], archive_level)
+                                       archive_level = COALESCE($[archiveLevel], archive_level),
+                                       is_viewed = COALESCE($[isViewed], is_viewed)
                                    WHERE username_id = $[usernameId]
                                    AND message_id = $[messageId]
                                    RETURNING *`;
 
-export const getPanelInboxMessages = `SELECT panel.id as panel_id, panel.message_id, panel.archive_level,
+export const getPanelInboxMessages = `SELECT panel.id as panel_id, panel.message_id, panel.archive_level, panel.is_viewed,
                                        messages.created_at, messages.title, users.username as from
                                       FROM jainbox_schema.panel
                                         LEFT JOIN jainbox_schema.messages ON panel.message_id = messages.id
