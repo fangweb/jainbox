@@ -94,16 +94,28 @@
   padding: 10px;
 }
 
-.messages-panel .messages .message .view i.viewIcon {
-
+.messages-panel .messages .message .messages-right-section {
+  display: flex;
+  flex: 1;
+  cursor: pointer;
+  outline: 0;
 }
-.messages-panel .messages .message .flex-auto {
+
+.messages-panel .messages .message .messages-right-section .view {
+  padding: 0 1em;
+}
+
+.messages-panel .messages .message .messages-right-section .view i.viewIcon.unread {
+  color: rgb(41, 148, 70);
+}
+
+.messages-panel .messages .message .messages-right-section .flex-auto {
   flex: 1;
 }
 
-.messages-panel .messages .message .time-sent {}
+.messages-panel .messages .message .messages-right-section .time-sent {}
 
-.messages-panel .messages .message .bold-view {
+.messages-panel .messages .message .messages-right-section .bold-view {
   font-weight: bold;
 }
 

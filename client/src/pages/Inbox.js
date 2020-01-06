@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { push } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { bindActionCreators } from 'redux';
@@ -121,6 +122,10 @@ class Inbox extends Component {
     this.props.history.push(`/inbox/page/${prevPage}`);
   };
 
+  onNavigateToMessage = messageLink => {
+    this.props.push(messageLink);
+  };
+
   displayInboxMessages(inboxMessages, loading, notice) {
     const { page } = this.props.inbox;
 
@@ -136,10 +141,9 @@ class Inbox extends Component {
         <div className="messages">
           <React.Fragment>
             {inboxMessages.map(message => {
-              const e = new Date(message.created_at);
-              const timeSent = e.toLocaleTimeString();
+              const event = new Date(message.created_at);
+              const timeSent = event.toLocaleString();
               const messageLink = `/view-message/${message.message_id}`;
-              const prevLink = `/inbox/page/${page}`;
               return (
                 <div key={message.panel_id} className="message">
                   <div className="checkbox">
@@ -149,41 +153,41 @@ class Inbox extends Component {
                       selectSingle={this.selectSingle}
                     />
                   </div>
-                  <div className="view">
-                    <Link
-                      to={{
-                        pathname: messageLink,
-                        state: { prevLink }
-                      }}
-                      style={{
-                        color: message.viewed
-                          ? 'rgb(163, 163, 163)'
-                          : 'rgb(25, 127, 37)'
-                      }}
+                  <div
+                    role="button"
+                    tabIndex="0"
+                    className="messages-right-section"
+                    onClick={() => this.onNavigateToMessage(messageLink)}
+                    onKeyDown={() => this.onNavigateToMessage(messageLink)}
+                  >
+                    <div className="view">
+                      <i
+                        className={`fas fa-eye viewIcon ${
+                          !message.viewed ? 'unread' : ''
+                        }`}
+                      />
+                    </div>
+                    <div
+                      className={`username flex-auto ${
+                        !message.viewed ? 'bold-view' : ''
+                      }`}
                     >
-                      <i className="fas fa-eye viewIcon" />
-                    </Link>
-                  </div>
-                  <div
-                    className={`username flex-auto ${
-                      !message.viewed ? 'bold-view' : ''
-                    }`}
-                  >
-                    {message.from}
-                  </div>
-                  <div
-                    className={`title flex-auto ${
-                      !message.viewed ? 'bold-view' : ''
-                    }`}
-                  >
-                    {message.title}
-                  </div>
-                  <div
-                    className={`time-sent flex-auto ${
-                      !message.viewed ? 'bold-view' : ''
-                    }`}
-                  >
-                    {timeSent}
+                      {message.from}
+                    </div>
+                    <div
+                      className={`title flex-auto ${
+                        !message.viewed ? 'bold-view' : ''
+                      }`}
+                    >
+                      {message.title}
+                    </div>
+                    <div
+                      className={`time-sent flex-auto ${
+                        !message.viewed ? 'bold-view' : ''
+                      }`}
+                    >
+                      {timeSent}
+                    </div>
                   </div>
                 </div>
               );
@@ -276,7 +280,8 @@ const mapDispatchToProps = dispatch =>
       selectAllUnread,
       selectSingle,
       reset,
-      toggleError
+      toggleError,
+      push
     },
     dispatch
   );

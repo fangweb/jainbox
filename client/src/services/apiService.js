@@ -75,11 +75,18 @@ export class ApiService {
   }
 
   static async sendMessage({ to, title, messageText }) {
-    console.log(to, title, messageText);
     const response = await HttpClient.post(
       this.getAuthHeaders(),
       `${ApiConfig.basePath}/messages/compose`,
       { receiver_name: to, title, message_text: messageText }
+    );
+    return response;
+  }
+
+  static async viewMessage({ messageId }) {
+    const response = await HttpClient.get(
+      this.getAuthHeaders(),
+      `${ApiConfig.basePath}/messages/view?id=${messageId}`
     );
     return response;
   }

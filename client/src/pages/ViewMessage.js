@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { goBack } from 'connected-react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import { PathConfig } from '../config';
 import { ServiceContainer } from '../services';
@@ -23,14 +26,23 @@ class ViewMessage extends Component {
     const api = ServiceContainer.api();
     const { messageId } = this.props.match.params;
     await wait(300);
-    let apiResult;
     try {
-      apiResult = await api.getMessage({ messageId });
-      this.setState({ message: { ...apiResult }, loading: false });
+      const response = await api.viewMessage({ messageId });
+      const body = await response.json();
+      const event = new Date(body.created_at);
+      const time = event.toLocaleTimeString();
+      const date = event.toLocaleDateString();
+
+      this.setState({ message: { ...body, time, date }, loading: false });
     } catch (e) {
+      console.error(e);
       this.setState({ error: true, loading: false });
     }
   }
+
+  onNavigateBack = () => {
+    this.props.goBack();
+  };
 
   render() {
     const { loading, message, error } = this.state;
@@ -54,15 +66,18 @@ class ViewMessage extends Component {
     return (
       <div className="view-message">
         <div className="top-bar">
-          <div className="handler message-segment">{message.username}</div>
-          <div className="right">
-            <div className="view-message-time message-segment">4:36 PM</div>
-            <div className="go-back message-segment">
-              <Link
-                to={this.props.location.state.prevLink || PathConfig.inboxPath}
-              >
-                <i className="fas fa-backward backwardsIcon" />
-              </Link>
+          <div className="username message-segment">{message.username}</div>
+          <div className="right-control">
+            <div className="time message-segment">{message.time}</div>
+            <div className="date message-segment">{message.date}</div>
+            <div
+              role="button"
+              tabIndex="0"
+              onClick={this.onNavigateBack}
+              onKeyDown={this.onNavigateBack}
+              className="back-btn message-segment"
+            >
+              <i className="fas fa-backward backwardsIcon" />
             </div>
           </div>
         </div>
@@ -75,4 +90,15 @@ class ViewMessage extends Component {
   }
 }
 
-export default ViewMessage;
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      goBack
+    },
+    dispatch
+  );
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(ViewMessage);

@@ -7,19 +7,25 @@
   justify-content: space-between;
 }
 
-.view-message .top-bar .right {
+.view-message .top-bar .right-control {
   display: flex;
 }
 
-.view-message .top-bar .right .view-message-time {
+.view-message .top-bar .right-control .time {
   margin-right: 5px;
 }
 
-.view-message .top-bar .right .go-back i.backwardsIcon {
- color: rgb(188, 24, 24);
+.view-message .top-bar .right-control .date {
+  margin-right: 5px;
 }
 
-.view-message .top-bar .handler {
+
+.view-message .top-bar .right-control .back-btn i.backwardsIcon {
+ color: rgb(188, 24, 24);
+ cursor: pointer;
+}
+
+.view-message .top-bar .username {
   font-weight: bold;
 }
 
