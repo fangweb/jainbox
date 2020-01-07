@@ -86,7 +86,7 @@ export class ApiService {
   static async viewMessage({ messageId }) {
     const response = await HttpClient.get(
       this.getAuthHeaders(),
-      `${ApiConfig.basePath}/messages/view?id=${messageId}`
+      `${ApiConfig.basePath}/messages/view?message_id=${messageId}`
     );
     return response;
   }

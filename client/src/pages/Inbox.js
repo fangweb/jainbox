@@ -163,27 +163,27 @@ class Inbox extends Component {
                     <div className="view">
                       <i
                         className={`fas fa-eye viewIcon ${
-                          !message.viewed ? 'unread' : ''
+                          !message.is_viewed ? 'unread' : ''
                         }`}
                       />
                     </div>
                     <div
                       className={`username flex-auto ${
-                        !message.viewed ? 'bold-view' : ''
+                        !message.is_viewed ? 'bold-view' : ''
                       }`}
                     >
                       {message.from}
                     </div>
                     <div
                       className={`title flex-auto ${
-                        !message.viewed ? 'bold-view' : ''
+                        !message.is_viewed ? 'bold-view' : ''
                       }`}
                     >
                       {message.title}
                     </div>
                     <div
                       className={`time-sent flex-auto ${
-                        !message.viewed ? 'bold-view' : ''
+                        !message.is_viewed ? 'bold-view' : ''
                       }`}
                     >
                       {timeSent}
@@ -212,6 +212,8 @@ class Inbox extends Component {
       totalResults,
       error
     } = this.props.inbox;
+
+    console.log(inboxMessages);
 
     if (error) {
       return <PanelError message="The inbox page does not exist" />;

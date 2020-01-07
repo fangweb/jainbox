@@ -120,6 +120,7 @@ export const getInbox = ({ page, showLoader }) => {
     try {
       const apiCall = await api.getInbox({ page });
       apiResult = await apiCall.json();
+      console.log(apiResult);
     } catch (e) {
       return dispatch(toggleError());
     }
