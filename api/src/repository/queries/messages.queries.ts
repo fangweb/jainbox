@@ -8,7 +8,7 @@ export const createMessage = `WITH receiver AS (
 
 export const viewMessage = `SELECT messages.id as message_id, messages.created_at, messages.title, messages.message_text, users.username
                             FROM jainbox_schema.messages
-                              LEFT JOIN jainbox_schema.users ON users.id = messages.created_by_id
+                              INNER JOIN jainbox_schema.users ON users.id = messages.created_by_id
                             WHERE messages.id = $[messageId]
                             AND messages.receiver_id = $[usernameId]
                             LIMIT 1;`;

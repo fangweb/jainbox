@@ -14,8 +14,8 @@ export const updatePanelMessage = `UPDATE jainbox_schema.panel
 export const getPanelInboxMessages = `SELECT panel.id as panel_id, panel.message_id, panel.archive_level, panel.is_viewed,
                                        messages.created_at, messages.title, users.username as from
                                       FROM jainbox_schema.panel
-                                        LEFT JOIN jainbox_schema.messages ON panel.message_id = messages.id
-                                        LEFT JOIN jainbox_schema.users ON messages.created_by_id = users.id
+                                        INNER JOIN jainbox_schema.messages ON panel.message_id = messages.id
+                                        INNER JOIN jainbox_schema.users ON messages.created_by_id = users.id
                                       WHERE panel.username_id = $[usernameId]
                                         AND panel.show_inbox = true
                                         AND panel.show_sent = false
@@ -26,8 +26,8 @@ export const getPanelInboxMessages = `SELECT panel.id as panel_id, panel.message
 export const getPanelSentMessages = `SELECT panel.id as panel_id, panel.message_id, panel.archive_level,
                                        messages.created_at, messages.title, users.username as to
                                      FROM jainbox_schema.panel
-                                       LEFT JOIN jainbox_schema.messages ON panel.message_id = messages.id
-                                       LEFT JOIN jainbox_schema.users ON messages.receiver_id = users.id
+                                       INNER JOIN jainbox_schema.messages ON panel.message_id = messages.id
+                                       INNER JOIN jainbox_schema.users ON messages.receiver_id = users.id
                                      WHERE panel.username_id = $[usernameId]
                                        AND panel.show_inbox = false
                                        AND panel.show_sent = true
@@ -38,8 +38,8 @@ export const getPanelSentMessages = `SELECT panel.id as panel_id, panel.message_
 export const getPanelTrashMessages = `SELECT panel.id as panel_id, panel.message_id, panel.archive_level,
                                        messages.created_at, messages.title, users.username as from
                                       FROM jainbox_schema.panel
-                                        LEFT JOIN jainbox_schema.messages ON panel.message_id = messages.id
-                                        LEFT JOIN jainbox_schema.users ON messages.created_by_id = users.id
+                                        INNER JOIN jainbox_schema.messages ON panel.message_id = messages.id
+                                        INNER JOIN jainbox_schema.users ON messages.created_by_id = users.id
                                       WHERE panel.username_id = $[usernameId]
                                         AND panel.show_inbox = false
                                         AND panel.show_sent = false
