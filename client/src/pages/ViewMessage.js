@@ -20,6 +20,7 @@ class ViewMessage extends Component {
       message: null,
       error: false
     };
+    this.auth = ServiceContainer.auth();
   }
 
   async componentDidMount() {
@@ -44,6 +45,13 @@ class ViewMessage extends Component {
     this.props.goBack();
   };
 
+  renderUsernameSegment = (createdBy, receiver) => {
+    if (this.auth.getAuth().username === receiver) {
+      return <div className="username message-segment">From: {createdBy}</div>;
+    }
+    return <div className="username message-segment">To: {receiver}</div>;
+  };
+
   render() {
     const { loading, message, error } = this.state;
 
@@ -66,7 +74,7 @@ class ViewMessage extends Component {
     return (
       <div className="view-message">
         <div className="top-bar">
-          <div className="username message-segment">{message.username}</div>
+          {this.renderUsernameSegment(message.created_by, message.receiver)}
           <div className="right-control">
             <div className="time message-segment">{message.time}</div>
             <div className="date message-segment">{message.date}</div>

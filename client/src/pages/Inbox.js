@@ -213,8 +213,6 @@ class Inbox extends Component {
       error
     } = this.props.inbox;
 
-    console.log(inboxMessages);
-
     if (error) {
       return <PanelError message="The inbox page does not exist" />;
     }

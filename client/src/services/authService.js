@@ -4,15 +4,20 @@ import { HttpClient } from '../lib/httpClient';
 import Cookies from '../lib/cookies';
 
 export class AuthService {
-  static isAuthenticated() {
-    return Session.get('jwt') !== null;
-  }
-
-  static storeJwt({ token }) {
+  static setAuth({ username, token }) {
+    Session.set('username', username);
     Session.set('jwt', token);
   }
 
-  static clearJwt() {
+  static getAuth() {
+    return {
+      username: Session.get('username'),
+      jwt: Session.get('jwt')
+    };
+  }
+
+  static clearAuth() {
+    Session.remove('username');
     Session.remove('jwt');
   }
 
@@ -40,7 +45,7 @@ export class AuthService {
     Cookies.set('X-Authorization', `Bearer ${token}`, {
       path: '/subscriber/ws'
     });
-    AuthService.storeJwt({ token });
+    AuthService.setAuth({ username, token });
 
     return response;
   }
@@ -62,6 +67,6 @@ export class AuthService {
   }
 
   static signOut() {
-    AuthService.clearJwt();
+    AuthService.clearAuth();
   }
 }

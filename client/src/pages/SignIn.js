@@ -55,7 +55,8 @@ class SignIn extends Component {
 
   componentDidMount() {
     const { application } = this.props;
-    this.props.updateAuthenticated(this.auth.isAuthenticated());
+    const isAuthenticated = this.auth.getAuth().jwt !== null;
+    this.props.updateAuthenticated(isAuthenticated);
     this.setState({ loadingPage: false });
   }
 

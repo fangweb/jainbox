@@ -33,9 +33,10 @@ class ApplicationLoader extends Component {
   async initialize() {
     const { application } = this.props;
     const auth = ServiceContainer.auth();
-    this.props.updateAuthenticated(auth.isAuthenticated());
+    const isAuthenticated = auth.getAuth().jwt !== null;
+    this.props.updateAuthenticated(isAuthenticated);
     this.setState({ bootstrappingApplication: false });
-    if (application.loaded || !auth.isAuthenticated()) {
+    if (application.loaded || !isAuthenticated) {
       return;
     }
     this.props.wsConnect();
