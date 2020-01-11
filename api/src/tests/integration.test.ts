@@ -376,7 +376,7 @@ test("Send and retrieve a message through the user endpoint", async done => {
       inboxComposeUserB.body[0].message_id
     );
     expect(viewMessage.body.message_text).toEqual(message_text);
-    expect(viewMessage.body.username).toEqual("composeUserA");
+    expect(viewMessage.body.created_by).toEqual("composeUserA");
 
     done();
   } catch (error) {
