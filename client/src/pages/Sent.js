@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { push } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { bindActionCreators } from 'redux';
@@ -111,6 +112,10 @@ class Sent extends Component {
     this.props.history.push(`/sent/page/${prevPage}`);
   };
 
+  onNavigateToMessage = messageLink => {
+    this.props.push(messageLink);
+  };
+
   displaySentMessages(sentMessages, loading, notice) {
     const { page } = this.props.sent;
 
@@ -126,10 +131,9 @@ class Sent extends Component {
         <div className="messages">
           <React.Fragment>
             {sentMessages.map(message => {
-              const e = new Date(message.created_at);
-              const timeSent = e.toLocaleTimeString();
+              const event = new Date(message.created_at);
+              const timeSent = event.toLocaleString();
               const messageLink = `/view-message/${message.message_id}`;
-              const prevLink = `/sent/page/${page}`;
               return (
                 <div key={message.panel_id} className="message">
                   <div className="checkbox">
@@ -139,24 +143,34 @@ class Sent extends Component {
                       selectSingle={this.selectSingle}
                     />
                   </div>
-                  <div className="view">
-                    <Link
-                      to={{
-                        pathname: messageLink,
-                        state: { prevLink }
-                      }}
-                      style={{
-                        color: message.viewed
-                          ? 'rgb(163, 163, 163)'
-                          : 'rgb(25, 127, 37)'
-                      }}
+                  <div
+                    role="button"
+                    tabIndex="0"
+                    className="messages-right-section"
+                    onClick={() => this.onNavigateToMessage(messageLink)}
+                    onKeyDown={() => this.onNavigateToMessage(messageLink)}
+                  >
+                    <div className="view">
+                      <i
+                        className="fas fa-eye viewIcon"
+                      />
+                    </div>
+                    <div
+                      className="username flex-auto"
                     >
-                      <i className="fas fa-eye viewIcon" />
-                    </Link>
+                      {message.to}
+                    </div>
+                    <div
+                      className="title flex-auto"
+                    >
+                      {message.title}
+                    </div>
+                    <div
+                      className="time-sent flex-auto"
+                    >
+                      {timeSent}
+                    </div>
                   </div>
-                  <div className="username flex-auto">{message.to}</div>
-                  <div className="title flex-auto">{message.title}</div>
-                  <div className="time-sent flex-auto">{timeSent}</div>
                 </div>
               );
             })}
@@ -241,7 +255,8 @@ const mapDispatchToProps = dispatch =>
       selectNone,
       selectSingle,
       reset,
-      toggleError
+      toggleError,
+      push
     },
     dispatch
   );
