@@ -11,5 +11,4 @@ export const viewMessage = `SELECT messages.id as message_id, messages.created_a
                               INNER JOIN jainbox_schema.users u1 ON u1.id = messages.created_by_id
                               INNER JOIN jainbox_schema.users u2 ON u2.id = messages.receiver_id
                             WHERE messages.id = $[messageId]
-                            AND messages.receiver_id = $[usernameId]
                             LIMIT 1;`;

@@ -70,6 +70,7 @@ export class MessagesController extends BaseController {
 
       response.json(result);
     } catch (error) {
+      console.error(error);
       next(new HttpError({ status: 400, message: error.message }));
     }
   };
