@@ -61,7 +61,7 @@ export class AuthService {
     Cookies.set('X-Authorization', `Bearer ${token}`, {
       path: '/subscriber/ws'
     });
-    AuthService.storeJwt({ token });
+    AuthService.setAuth({ username, token });
 
     return response;
   }

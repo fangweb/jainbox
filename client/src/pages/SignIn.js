@@ -107,6 +107,7 @@ class SignIn extends Component {
       await this.auth.signUp({ ...this.state.formSignup });
       this.props.updateAuthenticated(true);
     } catch (error) {
+      console.error(error);
       this.setState({ formError: true, formSubmitting: false });
     }
   };
