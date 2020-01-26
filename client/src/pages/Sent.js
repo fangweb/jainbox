@@ -103,13 +103,13 @@ class Sent extends Component {
   onNextPage = async () => {
     const { page } = this.props.sent;
     const nextPage = page + 1;
-    this.props.history.push(`/sent/page/${nextPage}`);
+    this.props.push(`/sent/page/${nextPage}`);
   };
 
   onPreviousPage = async () => {
     const { page } = this.props.sent;
     const prevPage = page - 1;
-    this.props.history.push(`/sent/page/${prevPage}`);
+    this.props.push(`/sent/page/${prevPage}`);
   };
 
   onNavigateToMessage = messageLink => {
@@ -151,25 +151,11 @@ class Sent extends Component {
                     onKeyDown={() => this.onNavigateToMessage(messageLink)}
                   >
                     <div className="view">
-                      <i
-                        className="fas fa-eye viewIcon"
-                      />
+                      <i className="fas fa-eye viewIcon" />
                     </div>
-                    <div
-                      className="username flex-auto"
-                    >
-                      {message.to}
-                    </div>
-                    <div
-                      className="title flex-auto"
-                    >
-                      {message.title}
-                    </div>
-                    <div
-                      className="time-sent flex-auto"
-                    >
-                      {timeSent}
-                    </div>
+                    <div className="username flex-auto">{message.to}</div>
+                    <div className="title flex-auto">{message.title}</div>
+                    <div className="time-sent flex-auto">{timeSent}</div>
                   </div>
                 </div>
               );

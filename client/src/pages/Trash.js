@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { push } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { bindActionCreators } from 'redux';
@@ -103,13 +104,13 @@ class Trash extends Component {
   onNextPage = async () => {
     const { page } = this.props.sent;
     const nextPage = page + 1;
-    this.props.history.push(`/trash/page/${nextPage}`);
+    this.props.push(`/trash/page/${nextPage}`);
   };
 
   onPreviousPage = async () => {
     const { page } = this.props.sent;
     const prevPage = page - 1;
-    this.props.history.push(`/trash/page/${prevPage}`);
+    this.props.push(`/trash/page/${prevPage}`);
   };
 
   displayTrashMessages(trashMessages, loading, notice) {
@@ -238,7 +239,8 @@ const mapDispatchToProps = dispatch =>
       selectNone,
       selectSingle,
       reset,
-      toggleError
+      toggleError,
+      push
     },
     dispatch
   );

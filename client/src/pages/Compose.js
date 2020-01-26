@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { push } from 'connected-react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Dropdown } from '../pkg/dropdown';
@@ -18,7 +19,7 @@ class Compose extends Component {
   }
 
   onSendForm = e => {
-    this.props.sendMessage(this.props.history);
+    this.props.sendMessage(this.props.push);
     e.preventDefault();
   };
 
@@ -105,7 +106,8 @@ const mapDispatchToProps = dispatch =>
     {
       setForm,
       clearForm,
-      sendMessage
+      sendMessage,
+      push
     },
     dispatch
   );

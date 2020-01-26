@@ -65,7 +65,7 @@ const validateMessage = form => {
   }
 };
 
-export const sendMessage = history => {
+export const sendMessage = push => {
   return async (dispatch, getState) => {
     const api = ServiceContainer.api();
     const { composeReducer } = getState();
@@ -75,7 +75,7 @@ export const sendMessage = history => {
       validateMessage(form);
       const sent = await api.sendMessage({ ...form });
       dispatch(activateToast('success', { message: 'Message sent' }));
-      history.push('/sent');
+      push('/sent');
       dispatch({ type: CLEAR_FORM });
     } catch (e) {
       if (e.validationErrorMessage) {

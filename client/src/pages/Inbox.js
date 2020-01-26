@@ -113,13 +113,13 @@ class Inbox extends Component {
   onNextPage = async () => {
     const { page } = this.props.inbox;
     const nextPage = page + 1;
-    this.props.history.push(`/inbox/page/${nextPage}`);
+    this.props.push(`/inbox/page/${nextPage}`);
   };
 
   onPreviousPage = async () => {
     const { page } = this.props.inbox;
     const prevPage = page - 1;
-    this.props.history.push(`/inbox/page/${prevPage}`);
+    this.props.push(`/inbox/page/${prevPage}`);
   };
 
   onNavigateToMessage = messageLink => {
