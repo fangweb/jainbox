@@ -1,37 +1,23 @@
 import { RequestHandler } from "express";
 import { BaseController } from "./base.controller";
-import { AuthenticationHandler } from "../handlers";
+import { AuthenticationHandler, ValidatePageHandler } from "../handlers";
 import { getOffsetLimit } from "../common/helpers";
 import { CouldNotProcessRequest } from "../common/const";
 import { PanelRepository } from "../repository";
 import { TokenPayload } from "../services";
 import { HttpError } from "../common/errors";
 
-const validatePage = (request, response, next) => {
-  let { page } = request.query;
-
-  page = parseInt(page, 10);
-  if (isNaN(page)) {
-    return next(
-      new HttpError({ status: 401, message: CouldNotProcessRequest })
-    );
-  }
-
-  response.locals.page = page;
-  next();
-};
-
 export class PanelController extends BaseController {
   public constructor() {
     super();
     this.router.use(AuthenticationHandler);
 
-    this.router.route("/inbox").get([validatePage, this.getInboxMessages]);
-    this.router.route("/sent").get([validatePage, this.getSentMessages]);
-    this.router.route("/trash").get([validatePage, this.getTrashedMessages]);
+    this.router.route("/inbox").get([ValidatePageHandler, this.getInboxMessages]);
+    this.router.route("/sent").get([ValidatePageHandler, this.getSentMessages]);
+    this.router.route("/trash").get([ValidatePageHandler, this.getTrashedMessages]);
     this.router.route("/registered-users").get(this.getRegisteredUsers);
-    this.router.route("/message").delete(this.softDeleteMessage);
-    this.router.route("/message").put(this.putMessageIntoInbox);
+    this.router.route("/message").delete(this.softDeleteMessages);
+    this.router.route("/message").put(this.putMessagesIntoInbox);
   }
 
   public static get router() {
@@ -75,7 +61,7 @@ export class PanelController extends BaseController {
     }
   };
 
-  private putMessageIntoInbox: RequestHandler = async (
+  private putMessagesIntoInbox: RequestHandler = async (
     request,
     response,
     next
@@ -84,7 +70,7 @@ export class PanelController extends BaseController {
     const { message_id } = request.body;
 
     try {
-      const result = await PanelRepository.putMessageIntoInbox({
+      const result = await PanelRepository.putMessagesIntoInbox({
         usernameId: tokenPayload.username_id,
         messageId: message_id
       });
@@ -114,7 +100,27 @@ export class PanelController extends BaseController {
     }
   };
 
-  private softDeleteMessage: RequestHandler = async (
+  private putMessagesIntoTrash: RequstHandler = async (
+    request,
+    response,
+    next
+  ) => {
+    const { tokenPayload } = response.locals;
+    const [offset, limit] = getOffsetLimit(page);
+    const { message_ids } = request.body;
+    
+    try {
+      const result = await PanelRepository.putMessagesIntoTrash({
+        usernameId: tokenPayload.username_id,
+        messageIds: message_ids
+      });
+      response.json(result);
+    } catch (error) {
+      next(new HttpError({ status: 400, message: error.message }));
+    }
+  };
+
+  private softDeleteMessages: RequestHandler = async (
     request,
     response,
     next
@@ -123,7 +129,7 @@ export class PanelController extends BaseController {
     const { message_id } = request.body;
 
     try {
-      const result = await PanelRepository.softDeleteMessage({
+      const result = await PanelRepository.softDeleteMessages({
         usernameId: tokenPayload.username_id,
         messageId: message_id
       });
