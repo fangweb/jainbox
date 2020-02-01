@@ -4,7 +4,7 @@ import { wait } from '../helpers';
 export const LOADING = 'inbox/LOADING';
 export const RESET = 'inbox/RESET';
 export const ERROR = 'inbox/ERROR';
-export const GET_INBOX = 'inbox/GET_INBOX';
+export const SET_INBOX_MESSAGES = 'inbox/SET_INBOX_MESSAGES';
 export const SELECT_ALL = 'inbox/SELECT_ALL';
 export const SELECT_ALL_UNREAD = 'inbox/SELECT_ALL_UNREAD';
 export const SELECT_NONE = 'inbox/SELECT_NONE';
@@ -38,7 +38,7 @@ export default (state = initialState, action) => {
         error: !state.error
       };
     }
-    case GET_INBOX: {
+    case SET_INBOX_MESSAGES: {
       return {
         ...action.payload,
         loading: false,
@@ -134,7 +134,7 @@ export const getInbox = ({ page, showLoader }) => {
     }
     await wait(300);
     return dispatch({
-      type: GET_INBOX,
+      type: SET_INBOX_MESSAGES,
       payload: {
         inboxMessages,
         page,

@@ -4,7 +4,7 @@ import { wait } from '../helpers';
 export const LOADING = 'trash/LOADING';
 export const RESET = 'trash/RESET';
 export const ERROR = 'trash/ERROR';
-export const GET_TRASH = 'trash/GET_TRASH';
+export const SET_TRASH_MESSAGES = 'trash/SET_TRASH_MESSAGES';
 export const SELECT_ALL = 'trash/SELECT_ALL';
 export const SELECT_NONE = 'trash/SELECT_NONE';
 export const SELECT_SINGLE = 'trash/SELECT_SINGLE';
@@ -37,7 +37,7 @@ export default (state = initialState, action) => {
         error: !state.error
       };
     }
-    case GET_TRASH: {
+    case SET_TRASH_MESSAGES: {
       return {
         ...action.payload,
         loading: false,
@@ -113,7 +113,7 @@ export const getTrash = ({ page }) => {
     }
     await wait(300);
     return dispatch({
-      type: GET_TRASH,
+      type: SET_TRASH_MESSAGES,
       payload: {
         trashMessages,
         page,

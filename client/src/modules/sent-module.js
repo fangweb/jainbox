@@ -4,7 +4,7 @@ import { wait } from '../helpers';
 export const LOADING = 'sent/LOADING';
 export const RESET = 'sent/RESET';
 export const ERROR = 'sent/ERROR';
-export const GET_SENT = 'sent/GET_SENT';
+export const SET_SENT_MESSAGES = 'sent/SET_SENT_MESSAGES';
 export const SELECT_ALL = 'sent/SELECT_ALL';
 export const SELECT_NONE = 'sent/SELECT_NONE';
 export const SELECT_SINGLE = 'sent/SELECT_SINGLE';
@@ -37,7 +37,7 @@ export default (state = initialState, action) => {
         error: !state.error
       };
     }
-    case GET_SENT: {
+    case SET_SENT_MESSAGES: {
       return {
         ...action.payload,
         loading: false,
@@ -112,7 +112,7 @@ export const getSent = ({ page }) => {
     }
     await wait(300);
     return dispatch({
-      type: GET_SENT,
+      type: SET_SENT_MESSAGES,
       payload: {
         sentMessages,
         page,
