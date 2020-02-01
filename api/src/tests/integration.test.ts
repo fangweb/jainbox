@@ -230,13 +230,13 @@ test("Directly test messages and panel repository calls", async () => {
     expect(sentC.length).toEqual(3);
     expect(sentD.length).toEqual(2);
 
-    await PanelRepository.putMessageIntoTrash({
+    await PanelRepository.putMessagesIntoTrash({
       usernameId: payloadD.username_id,
-      messageId: msg1.id
+      messageIds: [msg1.id]
     });
-    await PanelRepository.putMessageIntoTrash({
+    await PanelRepository.putMessagesIntoTrash({
       usernameId: payloadD.username_id,
-      messageId: msg2.id
+      messageIds: [msg2.id]
     });
     inboxD = await PanelRepository.getInboxMessages({
       usernameId: payloadD.username_id,
@@ -245,9 +245,9 @@ test("Directly test messages and panel repository calls", async () => {
     });
     expect(inboxD.length).toEqual(1);
 
-    await PanelRepository.putMessageIntoTrash({
+    await PanelRepository.putMessagesIntoTrash({
       usernameId: payloadC.username_id,
-      messageId: msg4.id
+      messageIds: [msg4.id]
     });
     inboxC = await PanelRepository.getInboxMessages({
       usernameId: payloadC.username_id,

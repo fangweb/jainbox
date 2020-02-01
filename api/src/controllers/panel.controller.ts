@@ -2,7 +2,6 @@ import { RequestHandler } from "express";
 import { BaseController } from "./base.controller";
 import { AuthenticationHandler, ValidatePageHandler } from "../handlers";
 import { getOffsetLimit } from "../common/helpers";
-import { CouldNotProcessRequest } from "../common/const";
 import { PanelRepository } from "../repository";
 import { TokenPayload } from "../services";
 import { HttpError } from "../common/errors";
@@ -12,9 +11,13 @@ export class PanelController extends BaseController {
     super();
     this.router.use(AuthenticationHandler);
 
-    this.router.route("/inbox").get([ValidatePageHandler, this.getInboxMessages]);
+    this.router
+      .route("/inbox")
+      .get([ValidatePageHandler, this.getInboxMessages]);
     this.router.route("/sent").get([ValidatePageHandler, this.getSentMessages]);
-    this.router.route("/trash").get([ValidatePageHandler, this.getTrashedMessages]);
+    this.router
+      .route("/trash")
+      .get([ValidatePageHandler, this.getTrashedMessages]);
     this.router.route("/registered-users").get(this.getRegisteredUsers);
     this.router.route("/message").delete(this.softDeleteMessages);
     this.router.route("/message").put(this.putMessagesIntoInbox);
@@ -67,12 +70,15 @@ export class PanelController extends BaseController {
     next
   ) => {
     const { tokenPayload } = response.locals;
-    const { message_id } = request.body;
+    const { message_ids } = request.body;
 
     try {
+      if (message_ids.some(isNaN)) {
+        throw new Error("Invalid page body.");
+      }
       const result = await PanelRepository.putMessagesIntoInbox({
         usernameId: tokenPayload.username_id,
-        messageId: message_id
+        messageIds: message_ids
       });
       response.json(result);
     } catch (error) {
@@ -100,16 +106,18 @@ export class PanelController extends BaseController {
     }
   };
 
-  private putMessagesIntoTrash: RequstHandler = async (
+  private putMessagesIntoTrash: RequestHandler = async (
     request,
     response,
     next
   ) => {
     const { tokenPayload } = response.locals;
-    const [offset, limit] = getOffsetLimit(page);
     const { message_ids } = request.body;
-    
+
     try {
+      if (message_ids.some(isNaN)) {
+        throw new Error("Invalid page body.");
+      }
       const result = await PanelRepository.putMessagesIntoTrash({
         usernameId: tokenPayload.username_id,
         messageIds: message_ids
@@ -126,12 +134,12 @@ export class PanelController extends BaseController {
     next
   ) => {
     const { tokenPayload } = response.locals;
-    const { message_id } = request.body;
+    const { message_ids } = request.body;
 
     try {
       const result = await PanelRepository.softDeleteMessages({
         usernameId: tokenPayload.username_id,
-        messageId: message_id
+        messageIds: message_ids
       });
       response.json(result);
     } catch (error) {

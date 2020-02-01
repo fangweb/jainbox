@@ -72,23 +72,27 @@ export class PanelRepository {
     });
   }
 
-  public static putMessageIntoTrash({
+  public static putMessagesIntoTrash({
     usernameId,
-    messageId
+    messageIds
   }: {
     usernameId: number;
-    messageId: number;
+    messageIds: number[];
   }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await Db.any(panelQueries.updatePanelMessage, {
-          usernameId,
-          messageId,
-          showInbox: false,
-          showSent: false,
-          archiveLevel: 1,
-          isViewed: undefined
-        });
+        if (messageIds.length < 1) {
+          return resolve([]);
+        }
+        const data = messageIds.map(messageId => ({
+          username_id: usernameId,
+          message_id: messageId,
+          show_inbox: false,
+          show_sent: false,
+          archive_level: 1
+        }));
+        console.log(data);
+        const result = await Db.any(panelQueries.updatePanelMessageQuery(data));
         resolve(result);
       } catch (error) {
         reject(error);
@@ -96,24 +100,26 @@ export class PanelRepository {
     });
   }
 
-  /** such is an undo action from trash */
-  public static putMessageIntoInbox({
+  public static putMessagesIntoInbox({
     usernameId,
-    messageId
+    messageIds
   }: {
     usernameId: number;
-    messageId: number;
+    messageIds: number[];
   }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await Db.any(panelQueries.updatePanelMessage, {
-          usernameId,
-          messageId,
-          showInbox: true,
-          showSent: false,
-          archiveLevel: 0,
-          isViewed: undefined
-        });
+        if (messageIds.length < 1) {
+          return resolve([]);
+        }
+        const data = messageIds.map(messageId => ({
+          username_id: usernameId,
+          message_id: messageId,
+          show_inbox: true,
+          show_sent: false,
+          archive_level: 0
+        }));
+        const result = await Db.any(panelQueries.updatePanelMessageQuery(data));
         resolve(result);
       } catch (error) {
         reject(error);
@@ -121,23 +127,27 @@ export class PanelRepository {
     });
   }
 
-  public static softDeleteMessage({
+  public static softDeleteMessages({
     usernameId,
-    messageId
+    messageIds
   }: {
     usernameId: number;
-    messageId: number;
+    messageIds: number[];
   }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await Db.any(panelQueries.updatePanelMessage, {
-          usernameId,
-          messageId,
-          showInbox: false,
-          showSent: false,
-          archiveLevel: 2,
-          isViewed: undefined
-        });
+        if (messageIds.length < 1) {
+          return resolve([]);
+        }
+        const data = messageIds.map(messageId => ({
+          username_id: usernameId,
+          message_id: messageId,
+          show_inbox: false,
+          show_sent: false,
+          archive_level: 2
+        }));
+
+        const result = await Db.any(panelQueries.updatePanelMessageQuery(data));
         resolve(result);
       } catch (error) {
         reject(error);
@@ -157,24 +167,22 @@ export class PanelRepository {
   }
 
   public static updateIsViewed({
-    messageId,
     usernameId,
+    messageId,
     isViewed
   }: {
-    messageId: number;
     usernameId: number;
+    messageId: number;
     isViewed: boolean;
   }): Promise<any> {
     return new Promise(async (resolve, reject) => {
+      const single = {
+        username_id: usernameId,
+        message_id: messageId,
+        is_viewed: isViewed
+      };
       try {
-        const result = await Db.one(panelQueries.updatePanelMessage, {
-          usernameId,
-          messageId,
-          showInbox: undefined,
-          showSent: undefined,
-          archiveLevel: undefined,
-          isViewed
-        });
+        const result = await Db.one(panelQueries.updateIsViewedQuery(single));
         resolve(result);
       } catch (error) {
         reject(error);

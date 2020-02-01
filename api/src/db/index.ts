@@ -6,7 +6,8 @@ const options: any = {
   database: Config.pg.database,
   port: Config.pg.port,
   user: Config.pg.user,
-  password: Config.pg.password
+  password: Config.pg.password,
+  capSQL: true
 };
 
 export const Db = pgPromise()(options);
