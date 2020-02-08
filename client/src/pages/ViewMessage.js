@@ -106,7 +106,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(ViewMessage);
+export default connect(null, mapDispatchToProps)(ViewMessage);

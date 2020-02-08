@@ -9,7 +9,6 @@ export const SELECT_ALL = 'inbox/SELECT_ALL';
 export const SELECT_ALL_UNREAD = 'inbox/SELECT_ALL_UNREAD';
 export const SELECT_NONE = 'inbox/SELECT_NONE';
 export const SELECT_SINGLE = 'inbox/SELECT_SINGLE';
-export const TRASH_SELECTED = 'inbox/TRASH_SELECTED';
 
 const initialState = {
   inboxMessages: [],
@@ -172,9 +171,23 @@ export const selectSingle = (panelId, isSelected) => {
   };
 };
 
-export const trashSelected = () => {
-  return {
-    type: TRASH_SELECTED
+export const trashSelectedMessages = ({ currentPage, selectedIds }) => {
+  return async dispatch => {
+    const api = ServiceContainer.api();
+    dispatch({ type: LOADING });
+
+    try {
+      await api.putMessagesIntoTrash({
+        messageIds: selectedIds
+      });
+      const result = await getInbox({ page: currentPage, showLoader: false })(
+        dispatch
+      );
+      return result;
+    } catch (e) {
+      console.error(e);
+      return dispatch(toggleError());
+    }
   };
 };
 

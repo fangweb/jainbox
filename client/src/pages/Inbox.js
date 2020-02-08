@@ -13,6 +13,7 @@ import {
   selectNone,
   selectAllUnread,
   selectSingle,
+  trashSelectedMessages,
   reset,
   toggleError
 } from '../modules/inbox-module';
@@ -102,13 +103,28 @@ class Inbox extends Component {
     this.props.selectSingle(panelId, isSelected);
   };
 
-  /* TODO:
   handleTrashAction = () => {
-    const { loading } = this.props.inbox;
-    if (loading) {
+    const { inboxMessages, page } = this.props.inbox;
+    if (inboxMessages.length < 1) {
+      return;
     }
+    console.log(inboxMessages);
+    const messageIds = inboxMessages.filter(inboxMessage => {
+      if (inboxMessage.selected) {
+        return true;
+      }
+      return false;
+    });
+    console.log(messageIds);
+
+    const selectedIds = messageIds.map(inboxMessage => inboxMessage.message_id);
+    console.log(messageIds);
+    console.log(page, selectedIds);
+    if (selectedIds.length < 1) {
+      return;
+    }
+    this.props.trashSelectedMessages({ currentPage: page, selectedIds });
   };
-  */
 
   onNextPage = async () => {
     const { page } = this.props.inbox;
@@ -279,6 +295,7 @@ const mapDispatchToProps = dispatch =>
       selectNone,
       selectAllUnread,
       selectSingle,
+      trashSelectedMessages,
       reset,
       toggleError,
       push
@@ -286,7 +303,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Inbox);
+export default connect(mapStateToProps, mapDispatchToProps)(Inbox);
