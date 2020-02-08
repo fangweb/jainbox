@@ -108,7 +108,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export const TestArea = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TestAreaC);
+export const TestArea = connect(mapStateToProps, mapDispatchToProps)(TestAreaC);

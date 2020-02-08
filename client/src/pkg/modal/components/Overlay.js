@@ -51,7 +51,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export const Overlay = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(OverlayC);
+export const Overlay = connect(mapStateToProps, mapDispatchToProps)(OverlayC);
