@@ -18,6 +18,7 @@ export class PanelController extends BaseController {
     this.router
       .route("/trash")
       .get([ValidatePageHandler, this.getTrashedMessages]);
+    this.router.route("/trash").put(this.putMessagesIntoTrash);
     this.router.route("/registered-users").get(this.getRegisteredUsers);
     this.router.route("/message").delete(this.softDeleteMessages);
     this.router.route("/message").put(this.putMessagesIntoInbox);
@@ -73,7 +74,7 @@ export class PanelController extends BaseController {
     const { message_ids } = request.body;
 
     try {
-      if (message_ids.some(isNaN)) {
+      if (message_ids === undefined || message_ids.some(isNaN)) {
         throw new Error("Invalid page body.");
       }
       const result = await PanelRepository.putMessagesIntoInbox({
@@ -115,7 +116,7 @@ export class PanelController extends BaseController {
     const { message_ids } = request.body;
 
     try {
-      if (message_ids.some(isNaN)) {
+      if (message_ids === undefined || message_ids.some(isNaN)) {
         throw new Error("Invalid page body.");
       }
       const result = await PanelRepository.putMessagesIntoTrash({
@@ -137,6 +138,10 @@ export class PanelController extends BaseController {
     const { message_ids } = request.body;
 
     try {
+      if (message_ids === undefined || message_ids.some(isNaN)) {
+        throw new Error("Invalid page body.");
+      }
+
       const result = await PanelRepository.softDeleteMessages({
         usernameId: tokenPayload.username_id,
         messageIds: message_ids
