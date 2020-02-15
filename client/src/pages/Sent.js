@@ -13,7 +13,8 @@ import {
   selectNone,
   selectSingle,
   reset,
-  toggleError
+  toggleError,
+  softDeleteMessagesInSent
 } from '../modules/sent-module';
 import Checkbox from '../components/Checkbox';
 import PanelError from '../components/PanelError';
@@ -92,13 +93,27 @@ class Sent extends Component {
     this.props.selectSingle(panelId, isSelected);
   };
 
-  /* TODO:
   handleTrashAction = () => {
-    const { loading } = this.props.sent;
-    if (loading) {
+    const { sentMessages, page } = this.props.sent;
+    if (sentMessages.length < 1) {
+      return;
     }
+    const messageIds = sentMessages.filter(sentMessage => {
+      if (sentMessage.selected) {
+        return true;
+      }
+      return false;
+    });
+
+    const selectedIds = messageIds.map(sentMessage => sentMessage.message_id);
+    if (selectedIds.length < 1) {
+      return;
+    }
+    this.props.softDeleteMessagesInSent({
+      currentPage: page,
+      selectedIds
+    });
   };
-  */
 
   onNextPage = async () => {
     const { page } = this.props.sent;
@@ -207,7 +222,7 @@ class Sent extends Component {
               </div>
             </OutsideClickHandler>
           </div>
-          <button className="control__btn">
+          <button className="control__btn" onClick={this.handleTrashAction}>
             <i className="fas fa-trash-alt" />
           </button>
           <div className="divider" />
@@ -242,7 +257,8 @@ const mapDispatchToProps = dispatch =>
       selectSingle,
       reset,
       toggleError,
-      push
+      push,
+      softDeleteMessagesInSent
     },
     dispatch
   );

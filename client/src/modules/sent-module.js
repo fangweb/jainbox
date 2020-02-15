@@ -90,10 +90,12 @@ export default (state = initialState, action) => {
   }
 };
 
-export const getSent = ({ page }) => {
+export const getSent = ({ page, showLoader }) => {
   return async dispatch => {
     const api = ServiceContainer.api();
-    dispatch({ type: LOADING });
+    if (showLoader) {
+      dispatch({ type: LOADING });
+    }
     let apiResult;
     try {
       const apiCall = await api.getSent({ page });
@@ -119,6 +121,25 @@ export const getSent = ({ page }) => {
         totalResults: apiResult.length
       }
     });
+  };
+};
+
+export const softDeleteMessagesInSent = ({ currentPage, selectedIds }) => {
+  return async dispatch => {
+    const api = ServiceContainer.api();
+
+    try {
+      await api.softDeleteMessages({
+        messageIds: selectedIds
+      });
+      const result = await getSent({ page: currentPage, showLoader: false })(
+        dispatch
+      );
+      return result;
+    } catch (e) {
+      console.error(e);
+      return dispatch(toggleError());
+    }
   };
 };
 

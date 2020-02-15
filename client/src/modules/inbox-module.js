@@ -111,7 +111,6 @@ export default (state = initialState, action) => {
 export const getInbox = ({ page, showLoader }) => {
   return async dispatch => {
     const api = ServiceContainer.api();
-
     if (showLoader) {
       dispatch({ type: LOADING });
     }
@@ -177,7 +176,6 @@ export const moveMessagesFromInboxIntoTrash = ({
 }) => {
   return async dispatch => {
     const api = ServiceContainer.api();
-    dispatch({ type: LOADING });
 
     try {
       await api.moveMessagesFromInboxIntoTrash({

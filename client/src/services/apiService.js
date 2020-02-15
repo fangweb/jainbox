@@ -58,7 +58,7 @@ export class ApiService {
     const response = await HttpClient.post(
       this.getAuthHeaders(),
       `${ApiConfig.basePath}/panel/soft-delete`,
-      { message_id: messageIds }
+      { message_ids: messageIds }
     );
     return response;
   }
@@ -68,7 +68,7 @@ export class ApiService {
       this.getAuthHeaders(),
       `${ApiConfig.basePath}/panel/trash/restore`,
       {
-        message_id: messageIds
+        message_ids: messageIds
       }
     );
     return response;
