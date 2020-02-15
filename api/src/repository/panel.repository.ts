@@ -72,7 +72,18 @@ export class PanelRepository {
     });
   }
 
-  public static putMessagesIntoTrash({
+  public static getRegisteredUsers(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await Db.any(panelQueries.getRegisteredUsers);
+        resolve(result);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  public static moveMessagesFromInboxIntoTrash({
     usernameId,
     messageIds
   }: {
@@ -90,34 +101,6 @@ export class PanelRepository {
           show_inbox: false,
           show_sent: false,
           archive_level: 1
-        }));
-        console.log(data);
-        const result = await Db.any(panelQueries.updatePanelMessageQuery(data));
-        resolve(result);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  }
-
-  public static putMessagesIntoInbox({
-    usernameId,
-    messageIds
-  }: {
-    usernameId: number;
-    messageIds: number[];
-  }): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        if (messageIds.length < 1) {
-          return resolve([]);
-        }
-        const data = messageIds.map(messageId => ({
-          username_id: usernameId,
-          message_id: messageId,
-          show_inbox: true,
-          show_sent: false,
-          archive_level: 0
         }));
         const result = await Db.any(panelQueries.updatePanelMessageQuery(data));
         resolve(result);
@@ -155,10 +138,26 @@ export class PanelRepository {
     });
   }
 
-  public static getRegisteredUsers(): Promise<any> {
+  public static restoreMessagesInTrash({
+    usernameId,
+    messageIds
+  }: {
+    usernameId: number;
+    messageIds: number[];
+  }): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await Db.any(panelQueries.getRegisteredUsers);
+        if (messageIds.length < 1) {
+          return resolve([]);
+        }
+        const data = messageIds.map(messageId => ({
+          username_id: usernameId,
+          message_id: messageId,
+          show_inbox: true,
+          show_sent: false,
+          archive_level: 0
+        }));
+        const result = await Db.any(panelQueries.updatePanelMessageQuery(data));
         resolve(result);
       } catch (error) {
         reject(error);

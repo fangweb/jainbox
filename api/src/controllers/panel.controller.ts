@@ -18,10 +18,10 @@ export class PanelController extends BaseController {
     this.router
       .route("/trash")
       .get([ValidatePageHandler, this.getTrashedMessages]);
-    this.router.route("/trash").put(this.putMessagesIntoTrash);
     this.router.route("/registered-users").get(this.getRegisteredUsers);
-    this.router.route("/message").delete(this.softDeleteMessages);
-    this.router.route("/message").put(this.putMessagesIntoInbox);
+    this.router.route("/inbox/trash").post(this.moveMessagesFromInboxIntoTrash);
+    this.router.route("/soft-delete").post(this.softDeleteMessages);
+    this.router.route("/trash/restore").post(this.restoreMessagesInTrash);
   }
 
   public static get router() {
@@ -65,28 +65,6 @@ export class PanelController extends BaseController {
     }
   };
 
-  private putMessagesIntoInbox: RequestHandler = async (
-    request,
-    response,
-    next
-  ) => {
-    const { tokenPayload } = response.locals;
-    const { message_ids } = request.body;
-
-    try {
-      if (message_ids === undefined || message_ids.some(isNaN)) {
-        throw new Error("Invalid page body.");
-      }
-      const result = await PanelRepository.putMessagesIntoInbox({
-        usernameId: tokenPayload.username_id,
-        messageIds: message_ids
-      });
-      response.json(result);
-    } catch (error) {
-      next(new HttpError({ status: 400, message: error.message }));
-    }
-  };
-
   private getTrashedMessages: RequestHandler = async (
     request,
     response,
@@ -107,7 +85,20 @@ export class PanelController extends BaseController {
     }
   };
 
-  private putMessagesIntoTrash: RequestHandler = async (
+  private getRegisteredUsers: RequestHandler = async (
+    request,
+    response,
+    next
+  ) => {
+    try {
+      const result = await PanelRepository.getRegisteredUsers();
+      response.json(result);
+    } catch (error) {
+      next(new HttpError({ status: 400, message: error.message }));
+    }
+  };
+
+  private moveMessagesFromInboxIntoTrash: RequestHandler = async (
     request,
     response,
     next
@@ -119,7 +110,7 @@ export class PanelController extends BaseController {
       if (message_ids === undefined || message_ids.some(isNaN)) {
         throw new Error("Invalid page body.");
       }
-      const result = await PanelRepository.putMessagesIntoTrash({
+      const result = await PanelRepository.moveMessagesFromInboxIntoTrash({
         usernameId: tokenPayload.username_id,
         messageIds: message_ids
       });
@@ -152,13 +143,22 @@ export class PanelController extends BaseController {
     }
   };
 
-  private getRegisteredUsers: RequestHandler = async (
+  private restoreMessagesInTrash: RequestHandler = async (
     request,
     response,
     next
   ) => {
+    const { tokenPayload } = response.locals;
+    const { message_ids } = request.body;
+
     try {
-      const result = await PanelRepository.getRegisteredUsers();
+      if (message_ids === undefined || message_ids.some(isNaN)) {
+        throw new Error("Invalid page body.");
+      }
+      const result = await PanelRepository.restoreMessagesInTrash({
+        usernameId: tokenPayload.username_id,
+        messageIds: message_ids
+      });
       response.json(result);
     } catch (error) {
       next(new HttpError({ status: 400, message: error.message }));
