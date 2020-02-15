@@ -147,16 +147,23 @@ export const selectSingle = (panelId, isSelected) => {
   };
 };
 
-export const softDeleteSelectedMessages = ({ currentPage, selectedIds }) => {
+export const reset = () => ({
+  type: RESET
+});
+
+export const toggleError = () => ({
+  type: ERROR
+});
+
+export const softDeleteMessagesInTrash = ({ currentPage, selectedIds }) => {
   return async dispatch => {
     const api = ServiceContainer.api();
-    dispatch({ type: LOADING });
 
     try {
-      await api.putMessagesIntoTrash({
+      await api.softDeleteMessages({
         messageIds: selectedIds
       });
-      const result = await getTrash({ page: currentPage, showLoader: false })(
+      const result = await getTrash({ page: currentPage, showLoader: true })(
         dispatch
       );
       return result;
@@ -167,10 +174,21 @@ export const softDeleteSelectedMessages = ({ currentPage, selectedIds }) => {
   };
 };
 
-export const reset = () => ({
-  type: RESET
-});
+export const restoreMessagesInTrash = ({ currentPage, selectedIds }) => {
+  return async dispatch => {
+    const api = ServiceContainer.api();
 
-export const toggleError = () => ({
-  type: ERROR
-});
+    try {
+      await api.restoreMessagesInTrash({
+        messageIds: selectedIds
+      });
+      const result = await getTrash({ page: currentPage, showLoader: true })(
+        dispatch
+      );
+      return result;
+    } catch (e) {
+      console.error(e);
+      return dispatch(toggleError());
+    }
+  };
+};

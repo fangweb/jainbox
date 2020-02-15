@@ -13,7 +13,9 @@ import {
   selectNone,
   selectSingle,
   reset,
-  toggleError
+  toggleError,
+  softDeleteMessagesInTrash,
+  restoreMessagesInTrash
 } from '../modules/trash-module';
 import Checkbox from '../components/Checkbox';
 import PanelError from '../components/PanelError';
@@ -93,11 +95,12 @@ class Trash extends Component {
     this.props.selectSingle(panelId, isSelected);
   };
 
-  handleSoftDeleteAction = () => {
+  handleTrashAction = () => {
     const { trashMessages, page } = this.props.trash;
     if (trashMessages.length < 1) {
       return;
     }
+
     const selectedMessages = trashMessages.filter(trashMessage => {
       if (trashMessage.selected) {
         return true;
@@ -111,7 +114,37 @@ class Trash extends Component {
     if (selectedIds.length < 1) {
       return;
     }
-    this.props.softDeleteSelectedMessages({ currentPage: page, selectedIds });
+
+    this.props.softDeleteMessagesInTrash({
+      currentPage: page,
+      selectedIds
+    });
+  };
+
+  handleRestoreAction = () => {
+    const { trashMessages, page } = this.props.trash;
+    if (trashMessages.length < 1) {
+      return;
+    }
+
+    const selectedMessages = trashMessages.filter(trashMessage => {
+      if (trashMessage.selected) {
+        return true;
+      }
+      return false;
+    });
+
+    const selectedIds = selectedMessages.map(
+      selectedMessage => selectedMessage.message_id
+    );
+    if (selectedIds.length < 1) {
+      return;
+    }
+
+    this.props.restoreMessagesInTrash({
+      currentPage: page,
+      selectedIds
+    });
   };
 
   onNextPage = async () => {
@@ -244,10 +277,10 @@ class Trash extends Component {
               </div>
             </OutsideClickHandler>
           </div>
-          <button className="control__btn">
+          <button className="control__btn" onClick={this.handleTrashAction}>
             <i className="fas fa-trash-alt" />
           </button>
-          <button className="control__btn">
+          <button className="control__btn" onClick={this.handleRestoreAction}>
             <i className="fas fa-trash-restore"></i>
           </button>
           <div className="divider" />
@@ -278,7 +311,9 @@ const mapDispatchToProps = dispatch =>
       selectSingle,
       reset,
       toggleError,
-      push
+      push,
+      softDeleteMessagesInTrash,
+      restoreMessagesInTrash
     },
     dispatch
   );

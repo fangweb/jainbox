@@ -33,7 +33,7 @@ class Sent extends Component {
   componentDidMount() {
     try {
       const page = getPage(this.props.match.params.page);
-      this.props.getSent({ page });
+      this.props.getSent({ page, showLoader: true });
     } catch (e) {
       this.props.toggleError();
     }
@@ -43,7 +43,7 @@ class Sent extends Component {
     if (prevProps.match.params.page !== this.props.match.params.page) {
       try {
         const currentPage = getPage(this.props.match.params.page);
-        this.props.getSent({ page: currentPage });
+        this.props.getSent({ page: currentPage, showLoader: true });
       } catch (e) {
         this.props.toggleError();
       }

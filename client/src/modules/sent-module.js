@@ -124,25 +124,6 @@ export const getSent = ({ page, showLoader }) => {
   };
 };
 
-export const softDeleteMessagesInSent = ({ currentPage, selectedIds }) => {
-  return async dispatch => {
-    const api = ServiceContainer.api();
-
-    try {
-      await api.softDeleteMessages({
-        messageIds: selectedIds
-      });
-      const result = await getSent({ page: currentPage, showLoader: false })(
-        dispatch
-      );
-      return result;
-    } catch (e) {
-      console.error(e);
-      return dispatch(toggleError());
-    }
-  };
-};
-
 export const selectAll = () => {
   return {
     type: SELECT_ALL
@@ -178,3 +159,22 @@ export const reset = () => ({
 export const toggleError = () => ({
   type: ERROR
 });
+
+export const softDeleteMessagesInSent = ({ currentPage, selectedIds }) => {
+  return async dispatch => {
+    const api = ServiceContainer.api();
+
+    try {
+      await api.softDeleteMessages({
+        messageIds: selectedIds
+      });
+      const result = await getSent({ page: currentPage, showLoader: true })(
+        dispatch
+      );
+      return result;
+    } catch (e) {
+      console.error(e);
+      return dispatch(toggleError());
+    }
+  };
+};

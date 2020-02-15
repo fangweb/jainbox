@@ -181,7 +181,7 @@ export const moveMessagesFromInboxIntoTrash = ({
       await api.moveMessagesFromInboxIntoTrash({
         messageIds: selectedIds
       });
-      const result = await getInbox({ page: currentPage, showLoader: false })(
+      const result = await getInbox({ page: currentPage, showLoader: true })(
         dispatch
       );
       return result;
