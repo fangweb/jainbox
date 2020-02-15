@@ -171,13 +171,16 @@ export const selectSingle = (panelId, isSelected) => {
   };
 };
 
-export const trashSelectedMessages = ({ currentPage, selectedIds }) => {
+export const moveMessagesFromInboxIntoTrash = ({
+  currentPage,
+  selectedIds
+}) => {
   return async dispatch => {
     const api = ServiceContainer.api();
     dispatch({ type: LOADING });
 
     try {
-      await api.putMessagesIntoTrash({
+      await api.moveMessagesFromInboxIntoTrash({
         messageIds: selectedIds
       });
       const result = await getInbox({ page: currentPage, showLoader: false })(

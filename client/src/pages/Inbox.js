@@ -13,7 +13,7 @@ import {
   selectNone,
   selectAllUnread,
   selectSingle,
-  trashSelectedMessages,
+  moveMessagesFromInboxIntoTrash,
   reset,
   toggleError
 } from '../modules/inbox-module';
@@ -119,7 +119,10 @@ class Inbox extends Component {
     if (selectedIds.length < 1) {
       return;
     }
-    this.props.trashSelectedMessages({ currentPage: page, selectedIds });
+    this.props.moveMessagesFromInboxIntoTrash({
+      currentPage: page,
+      selectedIds
+    });
   };
 
   onNextPage = async () => {
@@ -291,7 +294,7 @@ const mapDispatchToProps = dispatch =>
       selectNone,
       selectAllUnread,
       selectSingle,
-      trashSelectedMessages,
+      moveMessagesFromInboxIntoTrash,
       reset,
       toggleError,
       push

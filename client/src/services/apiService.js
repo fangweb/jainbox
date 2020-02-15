@@ -55,18 +55,18 @@ export class ApiService {
   }
 
   static async softDeleteMessages({ messageIds }) {
-    const response = await HttpClient.delete(
+    const response = await HttpClient.post(
       this.getAuthHeaders(),
-      `${ApiConfig.basePath}/panel/message`,
+      `${ApiConfig.basePath}/panel/soft-delete`,
       { message_id: messageIds }
     );
     return response;
   }
 
-  static async putMessageIntoInbox({ messageIds }) {
-    const response = await HttpClient.put(
+  static async restoreMessagesInTrash({ messageIds }) {
+    const response = await HttpClient.post(
       this.getAuthHeaders(),
-      `${ApiConfig.basePath}/panel/message`,
+      `${ApiConfig.basePath}/panel/trash/restore`,
       {
         message_id: messageIds
       }
@@ -74,10 +74,10 @@ export class ApiService {
     return response;
   }
 
-  static async putMessagesIntoTrash({ messageIds }) {
-    const response = await HttpClient.put(
+  static async moveMessagesFromInboxIntoTrash({ messageIds }) {
+    const response = await HttpClient.post(
       this.getAuthHeaders(),
-      `${ApiConfig.basePath}/panel/trash`,
+      `${ApiConfig.basePath}/panel/inbox/trash`,
       {
         message_ids: messageIds
       }
