@@ -90,10 +90,13 @@ export default (state = initialState, action) => {
   }
 };
 
-export const getTrash = ({ page }) => {
+export const getTrash = ({ page, showLoader }) => {
   return async dispatch => {
     const api = ServiceContainer.api();
-    dispatch({ type: LOADING });
+
+    if (showLoader) {
+      dispatch({ type: LOADING });
+    }
     let apiResult;
     try {
       const apiCall = await api.getTrash({ page });
@@ -104,7 +107,6 @@ export const getTrash = ({ page }) => {
 
     let trashMessages;
     if (apiResult.length > 0) {
-      console.log(apiResult);
       trashMessages = apiResult.map(message =>
         Object.assign(message, { selected: false })
       );
@@ -145,9 +147,23 @@ export const selectSingle = (panelId, isSelected) => {
   };
 };
 
-export const deleteSelected = () => {
-  return {
-    type: DELETE_SELECTED
+export const softDeleteSelectedMessages = ({ currentPage, selectedIds }) => {
+  return async dispatch => {
+    const api = ServiceContainer.api();
+    dispatch({ type: LOADING });
+
+    try {
+      await api.putMessagesIntoTrash({
+        messageIds: selectedIds
+      });
+      const result = await getTrash({ page: currentPage, showLoader: false })(
+        dispatch
+      );
+      return result;
+    } catch (e) {
+      console.error(e);
+      return dispatch(toggleError());
+    }
   };
 };
 

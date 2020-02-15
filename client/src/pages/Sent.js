@@ -207,7 +207,7 @@ class Sent extends Component {
               </div>
             </OutsideClickHandler>
           </div>
-          <button className="trash">
+          <button className="control__btn">
             <i className="fas fa-trash-alt" />
           </button>
           <div className="divider" />

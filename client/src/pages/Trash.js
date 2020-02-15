@@ -33,7 +33,7 @@ class Trash extends Component {
   componentDidMount() {
     try {
       const page = getPage(this.props.match.params.page);
-      this.props.getTrash({ page });
+      this.props.getTrash({ page, showLoader: true });
     } catch (e) {
       this.props.toggleError();
     }
@@ -43,7 +43,7 @@ class Trash extends Component {
     if (prevProps.match.params.page !== this.props.match.params.page) {
       try {
         const currentPage = getPage(this.props.match.params.page);
-        this.props.getTrash({ page: currentPage });
+        this.props.getTrash({ page: currentPage, showLoader: true });
       } catch (e) {
         this.props.toggleError();
       }
@@ -93,13 +93,26 @@ class Trash extends Component {
     this.props.selectSingle(panelId, isSelected);
   };
 
-  /* TODO
-  handleDeleteAction = () => {
-    const { loading } = this.props.trash;
-    if (loading) {
+  handleSoftDeleteAction = () => {
+    const { trashMessages, page } = this.props.trash;
+    if (trashMessages.length < 1) {
+      return;
     }
+    const selectedMessages = trashMessages.filter(trashMessage => {
+      if (trashMessage.selected) {
+        return true;
+      }
+      return false;
+    });
+
+    const selectedIds = selectedMessages.map(
+      selectedMessage => selectedMessage.message_id
+    );
+    if (selectedIds.length < 1) {
+      return;
+    }
+    this.props.softDeleteSelectedMessages({ currentPage: page, selectedIds });
   };
-  */
 
   onNextPage = async () => {
     const { page } = this.props.sent;
@@ -113,6 +126,10 @@ class Trash extends Component {
     this.props.push(`/trash/page/${prevPage}`);
   };
 
+  onNavigateToMessage = messageLink => {
+    this.props.push(messageLink);
+  };
+
   displayTrashMessages(trashMessages, loading, notice) {
     const { page } = this.props.trash;
 
@@ -123,15 +140,15 @@ class Trash extends Component {
         </div>
       );
     }
+
     if (trashMessages.length >= 1) {
       return (
         <div className="messages">
           <React.Fragment>
             {trashMessages.map(message => {
-              const e = new Date(message.created_at);
-              const timeSent = e.toLocaleTimeString();
+              const event = new Date(message.created_at);
+              const timeSent = event.toLocaleString();
               const messageLink = `/view-message/${message.message_id}`;
-              const prevLink = `/sent/page/${page}`;
               return (
                 <div key={message.panel_id} className="message">
                   <div className="checkbox">
@@ -141,24 +158,42 @@ class Trash extends Component {
                       selectSingle={this.selectSingle}
                     />
                   </div>
-                  <div className="view">
-                    <Link
-                      to={{
-                        pathname: messageLink,
-                        state: { prevLink }
-                      }}
-                      style={{
-                        color: message.viewed
-                          ? 'rgb(163, 163, 163)'
-                          : 'rgb(25, 127, 37)'
-                      }}
+                  <div
+                    role="button"
+                    tabIndex="0"
+                    className="messages-right-section"
+                    onClick={() => this.onNavigateToMessage(messageLink)}
+                    onKeyDown={() => this.onNavigateToMessage(messageLink)}
+                  >
+                    <div className="view">
+                      <i
+                        className={`fas fa-eye viewIcon ${
+                          !message.is_viewed ? 'unread' : ''
+                        }`}
+                      />
+                    </div>
+                    <div
+                      className={`username flex-auto ${
+                        !message.is_viewed ? 'bold-view' : ''
+                      }`}
                     >
-                      <i className="fas fa-eye viewIcon" />
-                    </Link>
+                      {message.from}
+                    </div>
+                    <div
+                      className={`title flex-auto ${
+                        !message.is_viewed ? 'bold-view' : ''
+                      }`}
+                    >
+                      {message.title}
+                    </div>
+                    <div
+                      className={`time-sent flex-auto ${
+                        !message.is_viewed ? 'bold-view' : ''
+                      }`}
+                    >
+                      {timeSent}
+                    </div>
                   </div>
-                  <div className="username flex-auto">{message.from}</div>
-                  <div className="title flex-auto">{message.title}</div>
-                  <div className="time-sent flex-auto">{timeSent}</div>
                 </div>
               );
             })}
@@ -209,8 +244,11 @@ class Trash extends Component {
               </div>
             </OutsideClickHandler>
           </div>
-          <button className="trash">
+          <button className="control__btn">
             <i className="fas fa-trash-alt" />
+          </button>
+          <button className="control__btn">
+            <i className="fas fa-trash-restore"></i>
           </button>
           <div className="divider" />
           <Pagination

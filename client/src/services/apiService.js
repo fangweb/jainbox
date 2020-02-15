@@ -54,7 +54,7 @@ export class ApiService {
     return response;
   }
 
-  static async softDeleteMessage({ messageIds }) {
+  static async softDeleteMessages({ messageIds }) {
     const response = await HttpClient.delete(
       this.getAuthHeaders(),
       `${ApiConfig.basePath}/panel/message`,

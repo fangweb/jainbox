@@ -44,7 +44,7 @@ class Inbox extends Component {
     if (prevProps.match.params.page !== this.props.match.params.page) {
       try {
         const currentPage = getPage(this.props.match.params.page);
-        this.props.getInbox({ page: currentPage });
+        this.props.getInbox({ page: currentPage, showLoader: true });
       } catch (e) {
         this.props.toggleError();
       }
@@ -108,18 +108,14 @@ class Inbox extends Component {
     if (inboxMessages.length < 1) {
       return;
     }
-    console.log(inboxMessages);
     const messageIds = inboxMessages.filter(inboxMessage => {
       if (inboxMessage.selected) {
         return true;
       }
       return false;
     });
-    console.log(messageIds);
 
     const selectedIds = messageIds.map(inboxMessage => inboxMessage.message_id);
-    console.log(messageIds);
-    console.log(page, selectedIds);
     if (selectedIds.length < 1) {
       return;
     }
@@ -261,7 +257,7 @@ class Inbox extends Component {
               </div>
             </OutsideClickHandler>
           </div>
-          <button className="trash" onClick={this.handleTrashAction}>
+          <button className="control__btn" onClick={this.handleTrashAction}>
             <i className="fas fa-trash-alt" />
           </button>
           <div className="divider" />
