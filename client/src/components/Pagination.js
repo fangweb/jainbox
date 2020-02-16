@@ -23,7 +23,7 @@ function Pagination({
   if (endDisplayOfResults > totalResults) {
     endDisplayOfResults = totalResults;
   }
-  
+
   let displayString;
   if (totalResults > 0) {
     displayString = `Displaying ${startDisplayOfResults}-${endDisplayOfResults} of ${totalResults} result(s).`;
