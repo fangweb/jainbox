@@ -23,7 +23,13 @@ function Pagination({
   if (endDisplayOfResults > totalResults) {
     endDisplayOfResults = totalResults;
   }
-  const displayString = `Displaying ${startDisplayOfResults}-${endDisplayOfResults} of ${totalResults}`;
+  
+  let displayString;
+  if (totalResults > 0) {
+    displayString = `Displaying ${startDisplayOfResults}-${endDisplayOfResults} of ${totalResults} result(s).`;
+  } else {
+    displayString = '';
+  }
   const nextPage = () => {
     if (disableNextPage) {
       return;
@@ -39,7 +45,7 @@ function Pagination({
 
   return (
     <div className="pagination">
-      <span>{!loading && !bothButtonsDisabled && displayString}</span>
+      <span>{!loading && displayString}</span>
       <button
         disabled={disablePrevPage}
         onClick={prevPage}
