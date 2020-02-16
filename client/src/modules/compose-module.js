@@ -83,7 +83,7 @@ export const sendMessage = push => {
       } else {
         dispatch(activateToast('error', { message: 'Could not send message' }));
       }
-      console.log(e);
+      console.error(e);
     }
   };
 };

@@ -16,6 +16,7 @@ import {
   toggleError,
   softDeleteMessagesInSent
 } from '../modules/sent-module';
+import { openModal, closeModal } from '../pkg/modal';
 import Checkbox from '../components/Checkbox';
 import PanelError from '../components/PanelError';
 import NoMessages from '../components/NoMessages';
@@ -109,9 +110,18 @@ class Sent extends Component {
     if (selectedIds.length < 1) {
       return;
     }
-    this.props.softDeleteMessagesInSent({
-      currentPage: page,
-      selectedIds
+
+    this.props.openModal('CONFIRMATION_MODAL', {
+      title: `Continue deleting ${selectedIds.length} message(s)?`,
+      onConfirm: confirm => {
+        this.props.closeModal();
+        if (confirm) {
+          this.props.softDeleteMessagesInSent({
+            currentPage: page,
+            selectedIds
+          });
+        }
+      }
     });
   };
 
@@ -258,7 +268,9 @@ const mapDispatchToProps = dispatch =>
       reset,
       toggleError,
       push,
-      softDeleteMessagesInSent
+      softDeleteMessagesInSent,
+      openModal,
+      closeModal
     },
     dispatch
   );

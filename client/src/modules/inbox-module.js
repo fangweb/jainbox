@@ -1,4 +1,5 @@
 import { ServiceContainer } from '../services';
+import { activateToast } from '../pkg/toast/toast-module';
 import { wait } from '../helpers';
 
 export const LOADING = 'inbox/LOADING';
@@ -184,7 +185,11 @@ export const moveMessagesFromInboxIntoTrash = ({
       const result = await getInbox({ page: currentPage, showLoader: true })(
         dispatch
       );
-      return result;
+      return dispatch(
+        activateToast('success', {
+          message: `${selectedIds.length} item(s) were moved into trash`
+        })
+      );
     } catch (e) {
       console.error(e);
       return dispatch(toggleError());

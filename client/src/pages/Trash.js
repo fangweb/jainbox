@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { getPage } from '../helpers';
 import Pagination from '../components/Pagination';
 import Loader from '../components/Loader';
+import { openModal, closeModal } from '../pkg/modal';
 import {
   getTrash,
   selectAll,
@@ -115,9 +116,17 @@ class Trash extends Component {
       return;
     }
 
-    this.props.softDeleteMessagesInTrash({
-      currentPage: page,
-      selectedIds
+    this.props.openModal('CONFIRMATION_MODAL', {
+      title: `Continue deleting ${selectedIds.length} message(s)?`,
+      onConfirm: confirm => {
+        this.props.closeModal();
+        if (confirm) {
+          this.props.softDeleteMessagesInTrash({
+            currentPage: page,
+            selectedIds
+          });
+        }
+      }
     });
   };
 
@@ -313,7 +322,9 @@ const mapDispatchToProps = dispatch =>
       toggleError,
       push,
       softDeleteMessagesInTrash,
-      restoreMessagesInTrash
+      restoreMessagesInTrash,
+      openModal,
+      closeModal
     },
     dispatch
   );
