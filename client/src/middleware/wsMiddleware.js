@@ -3,7 +3,7 @@ import * as actions from '../modules/ws-module';
 import { getInbox } from '../modules/inbox-module';
 
 import { wait } from '../helpers';
-import { ApiService } from '../services/apiService';
+import { ServiceContainer } from '../services';
 import {
   updateRegisteredUsers,
   updateLoaded
@@ -14,8 +14,13 @@ const prodMiddleware = () => {
   let socket = null;
 
   const getThenUpdateRegisteredUsers = async store => {
-    const response = await ApiService.getRegisteredUsers();
-    const registeredUsers = await response.json();
+    const apiService = ServiceContainer.api();
+    const { username: currentUser } = ServiceContainer.auth().getAuth();
+    const response = await apiService.getRegisteredUsers();
+    const arrayResponse = await response.json();
+    const registeredUsers = arrayResponse.filter(
+      r => r.username !== currentUser
+    );
     store.dispatch(updateRegisteredUsers(registeredUsers));
   };
 
