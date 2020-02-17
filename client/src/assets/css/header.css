@@ -3,7 +3,7 @@ header {
   height: 2.5em;
   background: rgb(48, 49, 51);
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 header ul.menu {
@@ -13,7 +13,7 @@ header ul.menu {
 header ul.menu li {
   display: flex;
   align-items: center;
-  padding-right: 1.5em;
+  padding: 0 1em;
 }
 
 header ul.menu li a {
@@ -25,4 +25,12 @@ header ul.menu li button {
 
 header ul.menu span:before {
   content: " ";
+}
+
+header ul.menu.profile {
+  color: #fff;
+}
+
+header ul.menu.profile i {
+  margin-right: 5px;
 }

@@ -24,16 +24,11 @@ export default connect(
   mapDispatchToProps
 )(
   class extends Component {
-    constructor(props) {
-      super(props);
-
-      this.auth = ServiceContainer.auth();
-    }
-
     onConfirmModal = confirm => {
       this.props.closeModal();
       if (confirm) {
-        this.auth.signOut();
+        const auth = ServiceContainer.auth();
+        auth.signOut();
         this.props.wsDisconnect();
         this.props.reset();
       }
@@ -47,8 +42,15 @@ export default connect(
     };
 
     render() {
+      const { username } = ServiceContainer.auth().getAuth();
       return (
         <header>
+          <ul className="menu profile">
+            <li>
+              <i className="fas fa-id-card" />
+              <span>{username}</span>
+            </li>
+          </ul>
           <ul className="menu">
             <li>
               <Link to="/testarea">
