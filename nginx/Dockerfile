@@ -114,4 +114,5 @@ EXPOSE 80
 
 STOPSIGNAL SIGTERM
 
+COPY ./nginx/build/. /usr/share/nginx/html
 CMD /bin/sh -c "envsubst '\$API_SERVER_PORT \$SUBSCRIBER_SERVER_PORT' < /etc/nginx/conf.d/cfg.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
