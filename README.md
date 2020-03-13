@@ -35,8 +35,8 @@ $ cp env.template .env
 - Install with Docker
 ```shell
 $ cd jainbox
-$ docker-compose build
-$ docker-compose up
+$ make build
+$ make run
 ```
 You can then navigate to to the default listening address at http://localhost:3000
 
