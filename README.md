@@ -8,7 +8,7 @@ Jainbox
 </h1>
 
 ## Motivation
-Jainbox is a websocket based inbox messaging demo. It was created to apply Go, Typescript, and React together as a multi-service application. 
+Jainbox is a websocket based inbox messaging demo. It was created as a way to learn Go, Typescript, PostgreSQL, and React by building a multi-service application. 
 
 The architecture is comprised of various docker containers which communicate through gRPC. 
 The database schema was designed from the ground up without the use of ORMs. 
@@ -25,7 +25,7 @@ All HTML and CSS were written without the use of frameworks.
 ### Prerequisites
 - Docker and docker-compose is required
 
-### Quick Start
+### Quick Start using Makefile (Linux)
 
 - Set up environmental variables
 ```shell
@@ -38,10 +38,37 @@ $ cd jainbox
 $ docker-compose build
 $ docker-compose up
 ```
-You can then navigate to to the default listening address at http://localhost:3000
 
+Navigate to the default listening address http://localhost:3000
+
+### Long way
+
+- Set up environmental variables from root folder
+```shell
+$ cp env.template .env
+```
+
+- Build production react app
+```shell
+$ cd jainbox/client
+$ npm run build
+```
+
+- Once a build/ folder is generated, move into nginx/build
+```shell
+$ mv build/ ../nginx/
+```
+
+- Run docker-compose in the root folder
+```shell
+docker-compose build
+docker-compose up
+```
+
+Navigate to the default listening address http://localhost:3000
 
 ### Usage
+
 - Starting the application 
 ```shell
 $ docker-compose up
@@ -63,6 +90,7 @@ $ docker system prune
 - Golang
 - Typescript
 - Node
+- PostgreSQL
 - React / Redux
 - Docker
 - gRPC / Protobuf
