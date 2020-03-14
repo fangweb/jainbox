@@ -14,7 +14,7 @@ WORKDIR /usr/api
 
 RUN mkdir -p /usr/api/src 
 
-COPY ./postgres/init.sql ./wait-for/ ./api/jest.config.json ./api/nodemon.json ./api/tsconfig.json ./api/tslint.json ./
+COPY ./postgres/init.sql ./api/jest.config.json ./api/nodemon.json ./api/tsconfig.json ./api/tslint.json ./
 
 ENTRYPOINT ["npm", "run"]
 

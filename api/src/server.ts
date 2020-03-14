@@ -53,23 +53,24 @@ export class Server {
   }
 
   private initializeGrpc(): void {
-    const packageDefinition = Protoloader.loadSync(
-      Path.resolve(__dirname, "../messenger.proto"),
-      {
-        keepCase: true,
-        longs: String,
-        enums: String,
-        defaults: true,
-        oneofs: true
-      }
-    );
-    const messengerProto = Grpc.loadPackageDefinition(packageDefinition).pb;
-
     try {
-      const grpcClient = new messengerProto.Messenger(
+      const packageDefinition = Protoloader.loadSync(
+        Path.resolve(__dirname, "../messenger.proto"),
+        {
+          keepCase: true,
+          longs: String,
+          enums: String,
+          defaults: true,
+          oneofs: true
+        }
+      );
+      const messengerProto = Grpc.loadPackageDefinition(packageDefinition).pb;
+
+      const grpcClient = new messengerProto["Messenger"](
         `subscriber:${Config.grpcPort}`,
         Grpc.credentials.createInsecure()
       );
+
       this.application.set("grpcClient", grpcClient);
     } catch (error) {
       console.error(error);
