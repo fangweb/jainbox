@@ -8,13 +8,13 @@ Jainbox
 </h1>
 
 ## Motivation
-Jainbox is a websocket based inbox messaging demo. It was created to learn learn Go, Typescript, PostgreSQL, and React by building a multi-service application. 
+Jainbox is a demo project created to show how various users can communicate with each other in an interface similar to an email application. 
+Another intention of the project was learning Go, Typescript, PostgreSQL, and React by applying them in one setting. 
 
-The architecture is comprised of various docker containers which communicate through gRPC. 
+The architecture is multi-service application comprised of various docker containers which communicate through gRPC. 
 The database schema was designed from the ground up without the use of ORMs. 
-
 Users have the ability to create accounts, send and view messages, move messages to different panels, and delete messages. 
-A Go service was created to allow real-time communication and updates. 
+A Go service was created to allow real-time communication and updates through websockets. 
 React packages such as toast and modal were written from the ground up. 
 All HTML and CSS were written without the use of frameworks. 
 
@@ -32,16 +32,16 @@ All HTML and CSS were written without the use of frameworks.
 $ cp env.template .env
 ```
 
-- Install with Docker
+- Run make
 ```shell
 $ cd jainbox
-$ docker-compose build
-$ docker-compose up
+$ make build
+$ make run
 ```
 
 Navigate to the default listening address http://localhost:3000
 
-### The long way
+### Manual Installation
 
 - Set up environmental variables from root folder
 ```shell
@@ -89,13 +89,13 @@ $ docker system prune
 ---
 ## Stack
 
-- Golang
+- Go
 - Typescript
 - Node
 - PostgreSQL
-- React / Redux
+- React with Redux
 - Docker
-- gRPC / Protobuf
+- gRPC with Protobuf
 
 ---
 
