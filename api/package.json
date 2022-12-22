@@ -48,7 +48,7 @@
     "google-protobuf": "^3.9.2",
     "grpc": "^1.24.0",
     "helmet": "^3.15.0",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^9.0.0",
     "morgan": "^1.9.1",
     "pg": "^7.7.1",
     "pg-promise": "^8.5.3"
